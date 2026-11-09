@@ -1,0 +1,19 @@
+{
+  "name": "ilustrador-juridico",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Estúdio de vídeos jurídicos verticais (Reels/Shorts/TikTok) operado pelo Claude Code ou Codex.",
+  "type": "module",
+  "scripts": {
+    "render": "node motor/render.mjs",
+    "preview": "node motor/preview.mjs",
+    "validar": "node motor/validar.mjs",
+    "exemplo": "node motor/render.mjs projetos/exemplo-ferias/roteiro.json --rapido"
+  },
+  "dependencies": {
+    "@fontsource/inter": "5.1.0",
+    "@fontsource/playfair-display": "5.1.0",
+    "playwright": "1.63.0",
+    "three": "0.169.0"
+  }
+}

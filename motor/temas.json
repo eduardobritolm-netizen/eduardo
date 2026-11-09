@@ -1,0 +1,38 @@
+{
+  "toga": {
+    "descricao": "Azul-marinho e dourado. Sóbrio, de escritório.",
+    "bg": ["#0b1626", "#16263f"], "texto": "#f4efe3", "suave": "#9fb0c8",
+    "destaque": "#d4af37", "textoSobreDestaque": "#0b1626", "marcaTexto": "#f2d45c",
+    "papel": "#f6f0e1", "tinta": "#1d1a16", "cartao": "#1b2d48", "bloco": "#2a3d5c",
+    "alerta": "#e2553f", "ok": "#4fbf8b", "metal": "#c9a227", "madeira": "#6b3b22",
+    "livro1": "#7a1f2b", "livro2": "#1f3a5f", "livro3": "#2f4a3a",
+    "fonteTitulo": "Playfair Display", "fonteTexto": "Inter", "padrao": "linhas", "vinheta": 0.4
+  },
+  "vade-mecum": {
+    "descricao": "Papel creme, tinta preta e vermelho de código. Cara de livro de lei.",
+    "bg": ["#efe6d2", "#e2d5b8"], "texto": "#1d1a16", "suave": "#5f5444",
+    "destaque": "#b3261e", "textoSobreDestaque": "#ffffff", "marcaTexto": "#f5d742",
+    "papel": "#fbf7ee", "tinta": "#1d1a16", "cartao": "#fbf7ee", "bloco": "#d6c8a8",
+    "alerta": "#b3261e", "ok": "#2e7d4f", "metal": "#a8842c", "madeira": "#5a3520",
+    "livro1": "#8c1d18", "livro2": "#1d1a16", "livro3": "#3b4a2f",
+    "fonteTitulo": "Playfair Display", "fonteTexto": "Inter", "padrao": "grade", "vinheta": 0.12
+  },
+  "tribunal": {
+    "descricao": "Verde-escuro de plenário com dourado.",
+    "bg": ["#0d241d", "#163a2f"], "texto": "#f3efe4", "suave": "#a7c1b4",
+    "destaque": "#e0b866", "textoSobreDestaque": "#0d241d", "marcaTexto": "#f2d45c",
+    "papel": "#f5f0e3", "tinta": "#1b1a16", "cartao": "#1b4236", "bloco": "#2a5547",
+    "alerta": "#e46a4b", "ok": "#7fd1a5", "metal": "#d2a94f", "madeira": "#5a3520",
+    "livro1": "#6d1f24", "livro2": "#e0b866", "livro3": "#1f3a5f",
+    "fonteTitulo": "Playfair Display", "fonteTexto": "Inter", "padrao": "linhas", "vinheta": 0.4
+  },
+  "noir": {
+    "descricao": "Preto, branco e um vermelho. Alto contraste, ritmo de notícia.",
+    "bg": ["#0a0a0a", "#171717"], "texto": "#ffffff", "suave": "#a3a3a3",
+    "destaque": "#ff3b30", "textoSobreDestaque": "#ffffff", "marcaTexto": "#ffe14d",
+    "papel": "#f4f4f4", "tinta": "#111111", "cartao": "#1f1f1f", "bloco": "#303030",
+    "alerta": "#ff9f0a", "ok": "#30d158", "metal": "#d9d9d9", "madeira": "#3a2a20",
+    "livro1": "#ff3b30", "livro2": "#2b2b2b", "livro3": "#e5e5e5",
+    "fonteTitulo": "Playfair Display", "fonteTexto": "Inter", "padrao": "grade", "vinheta": 0.5
+  }
+}

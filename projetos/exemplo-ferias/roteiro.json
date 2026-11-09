@@ -1,0 +1,106 @@
+{
+  "titulo": "Dá para dividir as férias em 3 partes?",
+  "pedido": "Faz um vídeo sobre dividir as férias em até três períodos",
+  "objetivo": "explicar",
+  "area": "Direito do Trabalho",
+  "tema": "toga",
+  "voz": { "provedor": "nenhuma" },
+  "fontes": [
+    {
+      "afirmacao": "Férias podem ser usufruídas em até três períodos, com concordância do empregado; um com no mínimo 14 dias corridos e os demais com no mínimo 5 dias corridos cada.",
+      "fonte": "CLT, art. 134, § 1º (redação da Lei 13.467/2017)",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "É vedado o início das férias no período de dois dias que antecede feriado ou dia de repouso semanal remunerado.",
+      "fonte": "CLT, art. 134, § 3º",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "O pagamento das férias é feito até 2 dias antes do início do período.",
+      "fonte": "CLT, art. 145",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "Férias anuais remuneradas com, pelo menos, um terço a mais do que o salário normal.",
+      "fonte": "Constituição Federal, art. 7º, XVII",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+      "conferido_em": null
+    }
+  ],
+  "legenda_post": "Férias em 3 partes pode, mas tem regra: um período de pelo menos 14 dias, os outros de pelo menos 5, e só com a sua concordância. Salve para não esquecer.",
+  "hashtags": ["direitodotrabalho", "clt", "ferias", "direitos", "advocacia"],
+  "cenas": [
+    {
+      "tipo": "abertura",
+      "kicker": "Direito do Trabalho",
+      "titulo": "Dá para dividir suas férias em 3 partes?",
+      "destaque": "3 partes?",
+      "fala": "Dá para dividir as suas férias em três partes? Dá, mas tem regra."
+    },
+    {
+      "tipo": "artigo",
+      "lei": "CLT · Consolidação das Leis do Trabalho",
+      "artigo": "Art. 134, § 1º",
+      "texto": "Desde que haja concordância do empregado, as férias poderão ser usufruídas em até três períodos, sendo que um deles não poderá ser inferior a quatorze dias corridos e os demais não poderão ser inferiores a cinco dias corridos, cada um.",
+      "destaque": "em até três períodos",
+      "fala": "Desde a Reforma Trabalhista, a CLT permite dividir as férias em até três períodos, desde que o empregado concorde."
+    },
+    {
+      "tipo": "numero",
+      "numero": 14,
+      "unidade": "dias corridos",
+      "legenda": "é o mínimo do período mais longo",
+      "fala": "Um dos períodos precisa ter pelo menos quatorze dias corridos."
+    },
+    {
+      "tipo": "numero",
+      "numero": 5,
+      "unidade": "dias corridos",
+      "legenda": "é o mínimo de cada um dos outros",
+      "fala": "E cada um dos outros, no mínimo cinco dias."
+    },
+    {
+      "tipo": "linha_do_tempo",
+      "titulo": "Um jeito de dividir 30 dias",
+      "etapas": [
+        { "titulo": "Janeiro", "detalhe": "14 dias" },
+        { "titulo": "Julho", "detalhe": "10 dias" },
+        { "titulo": "Dezembro", "detalhe": "6 dias" }
+      ],
+      "fala": "Por exemplo: quatorze dias em janeiro, dez em julho e seis em dezembro. Total, trinta."
+    },
+    {
+      "tipo": "alerta",
+      "titulo": "Não pode começar",
+      "texto": "nos 2 dias antes de um feriado ou do descanso semanal remunerado",
+      "fala": "Atenção: as férias não podem começar nos dois dias antes de um feriado ou do descanso semanal."
+    },
+    {
+      "tipo": "balanca",
+      "esquerda": "A empresa decide sozinha",
+      "direita": "Com a sua concordância",
+      "pende": "direita",
+      "fala": "E a divisão em partes depende da sua concordância. A empresa não pode impor sozinha."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "Em cada período",
+      "estilo": "certo",
+      "itens": [
+        "Pagamento até 2 dias antes",
+        "Com o terço constitucional",
+        "Nada de começar antes de feriado"
+      ],
+      "fala": "E em cada período, o pagamento sai até dois dias antes, com o terço constitucional."
+    },
+    {
+      "tipo": "encerramento",
+      "titulo": "Salve para as próximas férias",
+      "fala": "Salve este vídeo e mande para quem vai tirar férias."
+    }
+  ]
+}
