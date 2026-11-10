@@ -93,7 +93,23 @@ async function fish(texto, destino) {
   return null;
 }
 
-const PROVEDORES = { elevenlabs, fish };
+/** Voz neural local (Kokoro): roda no computador, sem chave. Configure KOKORO_* no .env. */
+async function kokoro(texto, destino) {
+  const py = process.env.KOKORO_PYTHON || 'python3';
+  const modelo = process.env.KOKORO_MODELO, vozes = process.env.KOKORO_VOZES;
+  if (!modelo || !vozes) throw new Error('Defina KOKORO_MODELO e KOKORO_VOZES no .env (veja .env.exemplo)');
+  const bruto = destino.replace(/\.mp3$/, '.bruto.wav');
+  const script = path.join(path.dirname(new URL(import.meta.url).pathname), 'tts_local.py');
+  execFileSync(py, [script, modelo, vozes, process.env.KOKORO_VOZ || 'pm_alex', process.env.KOKORO_VELOCIDADE || '1.0', bruto], { input: texto });
+  // tratamento de locução: tira graves inúteis, dá presença, comprime e nivela para Reels
+  execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', bruto, '-af',
+    'highpass=f=70,equalizer=f=180:t=q:w=1:g=2,equalizer=f=3200:t=q:w=1.2:g=2.5,acompressor=threshold=-20dB:ratio=3:attack=8:release=120,loudnorm=I=-16:TP=-1.5:LRA=9',
+    '-ar', '44100', '-ac', '1', '-b:a', '192k', destino]);
+  fs.rmSync(bruto);
+  return null;
+}
+
+const PROVEDORES = { elevenlabs, fish, kokoro };
 
 /**
  * Gera (ou reaproveita) o áudio da fala. Devolve { arquivo, duracao, palavras } com
@@ -102,9 +118,9 @@ const PROVEDORES = { elevenlabs, fish };
 export async function narrar(texto, provedor, pastaAudio) {
   if (!provedor || provedor === 'nenhuma') return null;
   const gerar = PROVEDORES[provedor];
-  if (!gerar) throw new Error(`Provedor de voz desconhecido: ${provedor} (use elevenlabs, fish ou nenhuma)`);
+  if (!gerar) throw new Error(`Provedor de voz desconhecido: ${provedor} (use elevenlabs, fish, kokoro ou nenhuma)`);
   fs.mkdirSync(pastaAudio, { recursive: true });
-  const id = hash(provedor, process.env.ELEVENLABS_VOICE_ID || '', process.env.FISH_VOICE_ID || '', texto);
+  const id = hash(provedor, process.env.ELEVENLABS_VOICE_ID || '', process.env.FISH_VOICE_ID || '', process.env.KOKORO_VOZ || '', process.env.KOKORO_VELOCIDADE || '', texto);
   const mp3 = path.join(pastaAudio, `${id}.mp3`);
   const meta = path.join(pastaAudio, `${id}.json`);
   if (!fs.existsSync(mp3)) {
