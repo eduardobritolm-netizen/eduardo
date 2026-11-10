@@ -307,6 +307,7 @@ function ilustraPredio(c, cx, y, tam) {
 }
 
 const ILUSTRACOES = { documento: ilustraDocumento, predio: ilustraPredio };
+let REFLEXO; // canvas de apoio para o reflexo dourado da logo
 
 // ---------- cenas ----------
 
@@ -817,7 +818,7 @@ export const CENAS = {
       const faladas = (p.grupos || []).flatMap((g) => g.palavras);
       const usaFala = faladas.length === palavras.length;
       const quando = (i) => (usaFala ? faladas[i].t0 - p.inicio : 0.2 + i * 0.22);
-      const grande = 128 * S, pequeno = 62 * S;
+      const grande = 116 * S, pequeno = 62 * S;
       let escala = 1;
       const montar = () => {
         const linhas = [];
@@ -826,7 +827,7 @@ export const CENAS = {
           const em = enf.has(limpa(w));
           const px = (em ? grande : pequeno) * escala;
           fonte(ctx, px, em ? 800 : 400, em ? TITULO(tema) : TEXTO(tema));
-          const pw = ctx.measureText(em ? w.toUpperCase() : w).width;
+          const pw = ctx.measureText(w).width;
           const esp = ctx.measureText(' ').width;
           // troca de grande para pequeno (ou o contrário) abre linha nova
           const quebra = atual.itens.length && (em !== atual.itens[atual.itens.length - 1].em || atual.w + esp + pw > area.w);
@@ -843,6 +844,8 @@ export const CENAS = {
       const altura = () => linhas.reduce((a, l) => a + l.h, 0);
       while (altura() > area.h * 0.95 && escala > 0.5) { escala -= 0.05; linhas = montar(); }
       let y = area.y + Math.max(0, (area.h - altura()) / 2) - 20 * S;
+      const blocos = [];
+      let bloco = null;
       linhas.forEach((l) => {
         const x0 = area.x + (area.w - l.w) / 2;
         const base = y + l.h * 0.82;
@@ -854,17 +857,14 @@ export const CENAS = {
           ctx.textBaseline = 'alphabetic';
           ctx.textAlign = 'left';
           fonte(ctx, it.px, it.em ? 800 : 400, it.em ? TITULO(tema) : TEXTO(tema));
-          const txt = it.em ? it.w.toUpperCase() : it.w;
+          const txt = it.w;
           if (it.em) {
-            const e = 1.3 - 0.3 * clamp(k);
-            ctx.translate(x0 + it.x + it.pw / 2, base - it.px * 0.35);
-            ctx.scale(e, e);
-            ctx.translate(-(x0 + it.x + it.pw / 2), -(base - it.px * 0.35));
-            if (tema.destaqueEstilo === 'marca') {
-              ctx.fillStyle = comAlpha(tema.marcaTexto, 0.95);
-              ctx.fillRect(x0 + it.x - 12 * S, base - it.px * 0.78, (it.pw + 24 * S) * entrada(u, quando(it.i) + 0.1, 0.35), it.px * 0.9);
-            }
-            ctx.fillStyle = tema.destaqueEstilo === 'marca' ? tema.texto : tema.destaque;
+            // entra subindo de trás de uma linha invisível, como tinta saindo do papel
+            ctx.beginPath();
+            ctx.rect(x0 + it.x - 20 * S, base - it.px * 1.1, it.pw + 40 * S, it.px * 1.35);
+            ctx.clip();
+            ctx.translate(0, (1 - clamp(k)) * it.px * 0.9);
+            ctx.fillStyle = tema.fundoPapel ? tema.destaque : tracoDourado(c, x0 + it.x, x0 + it.x + it.pw);
           } else {
             ctx.translate(0, (1 - k) * 24 * S);
             ctx.fillStyle = tema.texto;
@@ -872,7 +872,28 @@ export const CENAS = {
           ctx.fillText(txt, x0 + it.x, base);
           ctx.restore();
         });
+        // junta linhas de ênfase seguidas num bloco só (os colchetes envolvem o bloco)
+        if (l.itens[0].em) {
+          const ult = l.itens[l.itens.length - 1];
+          if (!bloco) bloco = { x0, x1: x0 + l.w, y0: y, y1: y + l.h, fim: ult.i };
+          else Object.assign(bloco, { x0: Math.min(bloco.x0, x0), x1: Math.max(bloco.x1, x0 + l.w), y1: y + l.h, fim: ult.i });
+        } else if (bloco) { blocos.push(bloco); bloco = null; }
         y += l.h;
+      });
+      if (bloco) blocos.push(bloco);
+      // colchetes finos do monograma em volta de cada bloco de ênfase
+      blocos.forEach((bl) => {
+        const kc = entrada(u, quando(bl.fim) + 0.15, 0.55, easeInOut);
+        if (kc <= 0) return;
+        const bx = bl.x0 - 34 * S, by = bl.y0 + 6 * S, bw = bl.x1 - bl.x0 + 68 * S, bh = bl.y1 - bl.y0 + 6 * S;
+        const br = Math.min(80 * S, bw * 0.22);
+        ctx.save();
+        ctx.strokeStyle = tema.fundoPapel ? tema.destaque : tracoDourado(c, bx, bx + bw);
+        ctx.lineWidth = 3.5 * S;
+        ctx.lineCap = 'square';
+        tracar(ctx, [[bx + br, by], [bx, by], [bx, by + Math.min(bh * 0.6, 120 * S)]], kc);
+        tracar(ctx, [[bx + bw - br, by + bh], [bx + bw, by + bh], [bx + bw, by + bh - Math.min(bh * 0.6, 120 * S)]], kc);
+        ctx.restore();
       });
     },
   },
@@ -906,18 +927,36 @@ export const CENAS = {
         // logo do escritório no lugar do 3D e do avatar
         const img = marca.imgLogo;
         const lw = Math.min(area.w * 0.62, 640 * S), lh = lw * img.height / img.width;
-        const k = entrada(u, 0, 0.9, easeInOut);
-        // acende como letreiro: duas piscadas e brilho que assenta
-        const pisca = u < 0.55 ? [0.15, 0.9, 0.25, 1, 0.55, 1][Math.floor(u * 11)] ?? 1 : 1;
+        const k = entrada(u, 0.05, 1.0, easeInOut);
+        const lx = cx - lw / 2, ly = y + 20 * S;
+        const rc = (REFLEXO ??= document.createElement('canvas'));
+        rc.width = Math.ceil(lw); rc.height = Math.ceil(lh);
+        const r = rc.getContext('2d');
+        r.drawImage(img, 0, 0, lw, lh);
+        const pr = clamp((u - 0.9) / 0.8);
+        if (pr > 0 && pr < 1) {
+          r.globalCompositeOperation = 'source-atop';
+          const gx = lerp(-lw * 0.3, lw * 1.3, pr);
+          const g = r.createLinearGradient(gx - 90 * S, 0, gx + 90 * S, 0);
+          g.addColorStop(0, 'rgba(255,255,255,0)');
+          g.addColorStop(0.5, 'rgba(255,248,230,0.95)');
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          r.fillStyle = g;
+          r.fillRect(0, 0, lw, lh);
+        }
         ctx.save();
-        ctx.globalAlpha *= k * pisca;
-        ctx.translate(0, (1 - k) * 30 * S);
-        ctx.shadowColor = comAlpha(tema.destaque, 0.85);
-        ctx.shadowBlur = (26 + 10 * Math.sin(u * 3)) * S;
-        ctx.drawImage(img, cx - lw / 2, y + 20 * S, lw, lh);
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha *= 0.85;
-        ctx.drawImage(img, cx - lw / 2, y + 20 * S, lw, lh);
+        ctx.beginPath();
+        ctx.rect(lx - 10 * S, ly - 10 * S, (lw + 20 * S) * k, lh + 20 * S);
+        ctx.clip();
+        ctx.shadowColor = comAlpha(tema.destaque, 0.35);
+        ctx.shadowBlur = 18 * S;
+        ctx.drawImage(rc, lx, ly, lw, lh);
+        ctx.restore();
+        // fio dourado que corre sob a logo
+        ctx.save();
+        ctx.strokeStyle = tracoDourado(c, lx, lx + lw);
+        ctx.lineWidth = 2.5 * S;
+        tracar(ctx, [[lx + lw * 0.2, ly + lh + 40 * S], [lx + lw * 0.8, ly + lh + 40 * S]], entrada(u, 0.6, 0.6, easeInOut));
         ctx.restore();
         y += lh + 90 * S;
         if (p.titulo) y += tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x: area.x, y, w: area.w, max: 72, min: 46, linhas: 3, ini: 0.5 }) + 30 * S;

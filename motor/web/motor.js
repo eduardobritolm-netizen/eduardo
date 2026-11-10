@@ -2,7 +2,7 @@
 // expõe window.estudio para o render (Playwright) e para a prévia no navegador.
 import { criar3D } from './tres.js';
 import { CENAS } from './cenas.js';
-import { clamp, easeOut, fonte, retangulo, comAlpha, aleatorio, quebrar } from './util.js';
+import { clamp, lerp, easeIn, easeOut, fonte, retangulo, comAlpha, aleatorio, quebrar } from './util.js';
 
 const qs = new URLSearchParams(location.search);
 // video | preview | carrossel | embutido (página HTML de revisão, ver motor/html.mjs)
@@ -49,6 +49,7 @@ async function carregarImagem(dado, caminho) {
 marca.imgLogo = await carregarImagem(marca.logoData, marca.logo);
 marca.imgMono = await carregarImagem(marca.monogramaData, marca.monograma);
 marca.imgMonoPapel = await carregarImagem(marca.monogramaPapelData, marca.monograma_papel);
+marca.imgMarcaDagua = await carregarImagem(marca.marcaDaguaData, marca.marca_dagua);
 
 // ---------- canvases ----------
 const saida = document.getElementById('saida');
@@ -76,47 +77,42 @@ grao.width = grao.height = 256;
   g.putImageData(img, 0, 0);
 }
 
-// textura de papel amassado, gerada uma vez (fundo claro: cena.fundo = 'papel')
+// papel timbrado do escritório, gerado uma vez (cena.fundo = 'papel'):
+// folha clara com pauta vergê quase invisível, monograma em marca d'água e faixa dourada no pé
 const papel = document.createElement('canvas');
 papel.width = W;
 papel.height = H;
 {
   const g = papel.getContext('2d');
-  const rnd = aleatorio(31);
-  g.fillStyle = tema.paletaPapel?.bg?.[0] || '#ECEBE7';
+  const pal = tema.paletaPapel || {};
+  const bg = g.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, pal.bg?.[0] || '#F5F4F0');
+  bg.addColorStop(1, pal.bg?.[1] || '#EEECE6');
+  g.fillStyle = bg;
   g.fillRect(0, 0, W, H);
-  // facetas do amassado
-  for (let i = 0; i < 260; i++) {
-    const cx = rnd() * W, cy = rnd() * H, r = (80 + rnd() * 260) * S;
-    g.beginPath();
-    for (let j = 0; j < 3; j++) {
-      const a = rnd() * Math.PI * 2;
-      g[j ? 'lineTo' : 'moveTo'](cx + Math.cos(a) * r, cy + Math.sin(a) * r);
-    }
-    g.closePath();
-    g.fillStyle = rnd() < 0.5 ? `rgba(0,0,0,${rnd() * 0.035})` : `rgba(255,255,255,${rnd() * 0.12})`;
-    g.fill();
-  }
-  // vincos: linha escura com brilho ao lado
-  for (let i = 0; i < 70; i++) {
-    let x = rnd() * W, y = rnd() * H;
-    const pts = [[x, y]];
-    for (let j = 0; j < 3; j++) { x += (rnd() - 0.5) * 380 * S; y += (rnd() - 0.5) * 380 * S; pts.push([x, y]); }
-    for (const [cor, dx] of [[`rgba(0,0,0,${0.04 + rnd() * 0.06})`, 0], [`rgba(255,255,255,${0.25 + rnd() * 0.3})`, 2 * S]]) {
-      g.beginPath();
-      pts.forEach(([px, py], k) => g[k ? 'lineTo' : 'moveTo'](px + dx, py + dx));
-      g.strokeStyle = cor;
-      g.lineWidth = (1 + rnd()) * S;
-      g.stroke();
-    }
+  // vergê: linhas finas horizontais e algumas verticais espaçadas, como papel de carta
+  g.strokeStyle = 'rgba(11,21,48,0.025)';
+  g.lineWidth = 1 * S;
+  for (let y = 0; y < H; y += 7 * S) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+  g.strokeStyle = 'rgba(11,21,48,0.035)';
+  for (let x = 60 * S; x < W; x += 180 * S) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); }
+  // monograma gigante em marca d'água, saindo pelo canto (como no timbrado do pacote da marca)
+  if (marca.imgMarcaDagua) {
+    const mh = H * 0.5, mw = mh * marca.imgMarcaDagua.width / marca.imgMarcaDagua.height;
+    g.globalAlpha = 0.06;
+    g.drawImage(marca.imgMarcaDagua, W - mw * 0.78, H - mh * 0.92, mw, mh);
+    g.globalAlpha = 1;
   }
   g.fillStyle = g.createPattern(grao, 'repeat');
+  g.globalAlpha = 0.5;
   g.fillRect(0, 0, W, H);
-  const v = g.createRadialGradient(W / 2, H * 0.45, H * 0.25, W / 2, H * 0.5, H * 0.85);
-  v.addColorStop(0, 'rgba(0,0,0,0)');
-  v.addColorStop(1, 'rgba(60,50,30,0.22)');
-  g.fillStyle = v;
-  g.fillRect(0, 0, W, H);
+  g.globalAlpha = 1;
+  // faixa dourada no pé
+  const cores = tema.destaqueGradiente || [tema.destaque, tema.destaque];
+  const fx = g.createLinearGradient(0, 0, W, 0);
+  cores.forEach((c, i) => fx.addColorStop(i / (cores.length - 1), c));
+  g.fillStyle = fx;
+  g.fillRect(0, H - 14 * S, W, 14 * S);
 }
 
 const temaBase = tema;
@@ -285,68 +281,68 @@ function moldura(t, tema) {
 
 // ---------- transições ----------
 
-/** Borda de papel rasgado na altura y (determinística por cena). */
-function bordaRasgo(seed, y) {
-  const rnd = aleatorio(seed * 97 + 13);
-  const pts = [];
-  for (let x = -20 * S; x <= W + 20 * S; x += 22 * S) pts.push([x, y + (rnd() - 0.5) * 34 * S + Math.sin(x / (140 * S) + seed) * 14 * S]);
-  return pts;
-}
+const gradienteOuro = (c2, x0, x1) => {
+  const cores = tema.destaqueGradiente || [tema.destaque, tema.destaque];
+  const g = c2.createLinearGradient(x0, 0, x1, 0);
+  cores.forEach((c, i) => g.addColorStop(i / (cores.length - 1), c));
+  return g;
+};
 
-function rasgo(i, ant, cena, u, dur) {
-  const k = easeInOut(u / dur);
-  const y = H * 1.06 - k * H * 1.2;
-  // cena anterior, inteira
+/** Folha nova: a próxima cena sobe como uma página posta sobre os autos, com a faixa dourada na borda. */
+function folha(ant, cena, u, dur) {
+  const k = easeOut(u / dur);
+  const y = H * (1 - k);
   desenharCena(ctx, ant, ant.dur + u, true);
-  // cena nova sobe por baixo da borda rasgada
+  // a cena anterior escurece um pouco por baixo
+  ctx.fillStyle = `rgba(5,10,25,${0.35 * k})`;
+  ctx.fillRect(0, 0, W, H);
   cctx.clearRect(0, 0, W, H);
   desenharCena(cctx, cena, u, true);
-  const borda = bordaRasgo(i, y);
   ctx.save();
-  ctx.beginPath();
-  borda.forEach(([x, yy], j) => ctx[j ? 'lineTo' : 'moveTo'](x, yy));
-  ctx.lineTo(W + 20 * S, H + 20 * S);
-  ctx.lineTo(-20 * S, H + 20 * S);
-  ctx.closePath();
-  ctx.clip();
+  ctx.translate(W / 2, y + H);
+  ctx.rotate((1 - k) * 0.03);
+  ctx.translate(-W / 2, -H);
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 50 * S;
+  ctx.shadowOffsetY = -12 * S;
   ctx.drawImage(camada, 0, 0);
-  ctx.restore();
-  // faixa de fibra branca na borda, com sombra
-  const rnd = aleatorio(i * 31 + 7);
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.35)';
-  ctx.shadowBlur = 24 * S;
-  ctx.shadowOffsetY = -6 * S;
-  ctx.beginPath();
-  borda.forEach(([x, yy], j) => ctx[j ? 'lineTo' : 'moveTo'](x, yy));
-  for (let j = borda.length - 1; j >= 0; j--) ctx.lineTo(borda[j][0], borda[j][1] + (8 + rnd() * 16) * S);
-  ctx.closePath();
-  ctx.fillStyle = '#F6F4EF';
-  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.globalAlpha = 1 - easeIn(clamp((u - dur * 0.6) / (dur * 0.4)));
+  ctx.fillStyle = gradienteOuro(ctx, 0, W);
+  ctx.fillRect(0, 0, W, 12 * S);
   ctx.restore();
 }
 
-/** Clarão de luz (vazamento de filme). v = segundos em relação ao corte (negativo = antes). */
-function clarao(v) {
-  const a = v < 0 ? Math.exp(-Math.pow(v / 0.18, 2)) : Math.exp(-v / 0.22);
-  if (a < 0.01) return;
+/** Brilho dourado: reflexo de folha de ouro que cruza a tela. v = segundos em relação ao corte. */
+function brilho(v) {
+  const p = (v + 0.4) / 0.8;
+  if (p <= 0 || p >= 1) return;
+  const a = Math.sin(Math.PI * p);
+  const cx = lerp(-W * 0.5, W * 1.5, p);
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
-  const g = ctx.createRadialGradient(W * 0.85, H * 0.25, 0, W * 0.85, H * 0.25, H * 0.95);
-  g.addColorStop(0, `rgba(255,236,190,${a})`);
-  g.addColorStop(0.35, `rgba(255,170,80,${a * 0.85})`);
-  g.addColorStop(0.7, `rgba(210,80,60,${a * 0.5})`);
+  ctx.fillStyle = `rgba(217,184,108,${0.12 * a})`;
+  ctx.fillRect(0, 0, W, H);
+  ctx.translate(cx, H / 2);
+  ctx.rotate(-0.35);
+  const larg = 340 * S;
+  const g = ctx.createLinearGradient(-larg, 0, larg, 0);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(0.42, `rgba(212,180,136,${0.35 * a})`);
+  g.addColorStop(0.5, `rgba(255,240,210,${0.85 * a})`);
+  g.addColorStop(0.58, `rgba(212,180,136,${0.35 * a})`);
   g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g;
-  ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = `rgba(255,238,205,${a * 0.55})`;
-  ctx.fillRect(0, 0, W, H);
+  ctx.fillRect(-larg, -H, larg * 2, H * 2);
   ctx.restore();
 }
+
+const APELIDOS = { rasgo: 'folha', luz: 'brilho' };
 
 function tipoTransicao(ant, cena) {
   if (!ant) return 'nenhuma';
-  return cena.transicao || (fundoDe(ant) !== fundoDe(cena) ? 'rasgo' : 'padrao');
+  const t = cena.transicao ? (APELIDOS[cena.transicao] || cena.transicao) : null;
+  return t || (fundoDe(ant) !== fundoDe(cena) ? 'folha' : 'padrao');
 }
 
 /** Desenha o instante t (segundos) do vídeo. */
@@ -357,9 +353,9 @@ function desenhar(t, { comLegenda = true } = {}) {
   const ant = i > 0 ? timeline.cenas[i - 1] : null;
   const prox = timeline.cenas[i + 1];
   const trans = tipoTransicao(ant, cena);
-  const DUR_RASGO = 0.75;
-  if (trans === 'rasgo' && u < DUR_RASGO) {
-    rasgo(i, ant, cena, u, DUR_RASGO);
+  const DUR_FOLHA = 0.7;
+  if (trans === 'folha' && u < DUR_FOLHA) {
+    folha(ant, cena, u, DUR_FOLHA);
   } else {
     fundo(ctx, t, temaDa(cena));
     const mesmoFundo = ant && fundoDe(ant) === fundoDe(cena);
@@ -383,11 +379,11 @@ function desenhar(t, { comLegenda = true } = {}) {
     ctx.drawImage(camada, 0, 0);
     ctx.restore();
   }
-  if (trans === 'luz') clarao(u);
-  if (prox && tipoTransicao(cena, prox) === 'luz') clarao(-(cena.dur - u));
-  // durante o rasgo, o topo ainda é da cena anterior até a borda passar
-  const bordaY = H * 1.06 - easeInOut(u / DUR_RASGO) * H * 1.2;
-  const temaTopo = trans === 'rasgo' && u < DUR_RASGO && bordaY > 170 * S ? temaDa(ant) : temaDa(cena);
+  if (trans === 'brilho') brilho(u);
+  if (prox && tipoTransicao(cena, prox) === 'brilho') brilho(-(cena.dur - u));
+  // enquanto a folha sobe, o topo ainda é da cena anterior
+  const bordaY = H * (1 - easeOut(u / DUR_FOLHA));
+  const temaTopo = trans === 'folha' && u < DUR_FOLHA && bordaY > 170 * S ? temaDa(ant) : temaDa(cena);
   moldura(t, temaTopo);
   if (comLegenda) legendas(t);
 }

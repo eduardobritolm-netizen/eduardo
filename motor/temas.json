@@ -145,20 +145,20 @@
     ],
     "paletaPapel": {
       "bg": [
-        "#ECEBE7",
-        "#E2E0DA"
+        "#F5F4F0",
+        "#EEECE6"
       ],
       "texto": "#0B1530",
       "suave": "#4A5573",
       "destaque": "#8A6A2B",
       "textoSobreDestaque": "#FFFFFF",
-      "marcaTexto": "#E8CC7E",
+      "marcaTexto": "#EAD7A0",
       "cartao": "#FFFFFF",
       "bloco": "#D3D0C8",
       "alerta": "#B83A2B",
       "papel": "#FFFFFF",
       "tinta": "#0B1530",
-      "destaqueEstilo": "marca",
+      "destaqueEstilo": "colchete",
       "vinheta": 0
     }
   }

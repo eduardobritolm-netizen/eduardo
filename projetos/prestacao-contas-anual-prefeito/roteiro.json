@@ -88,7 +88,7 @@
         }
       ],
       "fala": "O caminho é este: o prefeito presta as contas, o Tribunal de Contas emite um parecer prévio, e a Câmara Municipal julga.",
-      "transicao": "luz"
+      "transicao": "brilho"
     },
     {
       "tipo": "numero",
@@ -114,7 +114,7 @@
       "titulo": "Contas rejeitadas?",
       "texto": "Irregularidade insanável que configure ato doloso de improbidade, com decisão irrecorrível, gera inelegibilidade por 8 anos",
       "fala": "Atenção: contas rejeitadas por irregularidade insanável, que configure ato doloso de improbidade, podem deixar o gestor inelegível por oito anos.",
-      "transicao": "luz"
+      "transicao": "brilho"
     },
     {
       "tipo": "tipografia",
@@ -130,7 +130,7 @@
       "titulo": "Salve e envie para quem está na gestão pública.",
       "cta": "Salve e envie",
       "fala": "Salve e envie para quem está na gestão pública.",
-      "transicao": "luz"
+      "transicao": "brilho"
     }
   ]
 }
