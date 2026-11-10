@@ -5,8 +5,9 @@ import { CENAS } from './cenas.js';
 import { clamp, easeOut, fonte, retangulo, comAlpha, aleatorio, quebrar } from './util.js';
 
 const qs = new URLSearchParams(location.search);
-const modo = qs.get('modo') || 'video'; // video | preview | carrossel
-const timeline = await (await fetch(qs.get('timeline'), { cache: 'no-store' })).json();
+// video | preview | carrossel | embutido (página HTML de revisão, ver motor/html.mjs)
+const modo = window.__MODO__ || qs.get('modo') || 'video';
+const timeline = window.__TIMELINE__ ?? await (await fetch(qs.get('timeline'), { cache: 'no-store' })).json();
 const { tema, marca } = timeline;
 
 const W = modo === 'carrossel' ? timeline.carrossel.w : timeline.w;
@@ -26,10 +27,15 @@ const fontes = [
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-800-normal.woff2`, '800', 'normal'],
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-400-italic.woff2`, '400', 'italic'],
 ];
-await Promise.all(fontes.map(async ([fam, url, weight, style]) => {
-  const f = new FontFace(fam, `url(${url})`, { weight, style });
-  document.fonts.add(await f.load());
-}));
+if (window.__FONTES_EXTERNAS__) {
+  // página de revisão: as fontes vêm do Google Fonts, só espera carregarem
+  await Promise.all(fontes.map(([fam, , weight, style]) => document.fonts.load(`${style} ${weight} 40px "${fam}"`)));
+} else {
+  await Promise.all(fontes.map(async ([fam, url, weight, style]) => {
+    const f = new FontFace(fam, `url(${url})`, { weight, style });
+    document.fonts.add(await f.load());
+  }));
+}
 
 // ---------- canvases ----------
 const saida = document.getElementById('saida');
@@ -278,37 +284,49 @@ window.estudio = {
   pronto: true,
 };
 
-// ---------- prévia no navegador ----------
-if (modo === 'preview' || modo === 'carrossel-preview') {
-  document.body.style.background = '#111';
-  const ajustarTela = () => {
-    const k = Math.min(innerWidth / W, innerHeight / H);
-    saida.style.transform = `scale(${k})`;
-    saida.style.marginLeft = `${(innerWidth - W * k) / 2}px`;
-  };
-  addEventListener('resize', ajustarTela);
-  ajustarTela();
+// ---------- reprodução ao vivo (prévia e página de revisão) ----------
+if (modo === 'preview' || modo === 'embutido') {
+  if (modo === 'preview') {
+    document.body.style.background = '#111';
+    const ajustarTela = () => {
+      const k = Math.min(innerWidth / W, innerHeight / H);
+      saida.style.transform = `scale(${k})`;
+      saida.style.marginLeft = `${(innerWidth - W * k) / 2}px`;
+    };
+    addEventListener('resize', ajustarTela);
+    ajustarTela();
+  } else {
+    saida.style.width = '100%';
+    saida.style.height = 'auto';
+  }
   const audio = timeline.audio ? new Audio(timeline.audio) : null;
-  let inicio = performance.now(), pausado = false, tPausa = 0;
+  const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let inicio = performance.now(), pausado = modo === 'embutido' && reduzido, tPausa = 0;
+  const ouvintes = [];
   const agora = () => (pausado ? tPausa : ((performance.now() - inicio) / 1000) % timeline.duracao);
-  saida.addEventListener('click', () => {
-    if (pausado) { inicio = performance.now() - tPausa * 1000; pausado = false; audio?.play(); }
-    else { tPausa = agora(); pausado = true; audio?.pause(); }
-  });
+  const tocar = () => { if (!pausado) return; inicio = performance.now() - tPausa * 1000; pausado = false; audio?.play().catch(() => {}); };
+  const pausar = () => { if (pausado) return; tPausa = agora(); pausado = true; audio?.pause(); };
+  const irPara = (t) => {
+    t = clamp(t, 0, timeline.duracao - 0.01);
+    inicio = performance.now() - t * 1000;
+    tPausa = t;
+    if (audio) audio.currentTime = t;
+  };
+  Object.assign(window.estudio, { tocar, pausar, irPara, aoTempo(fn) { ouvintes.push(fn); } });
+  Object.defineProperty(window.estudio, 'pausado', { get: () => pausado });
+  saida.addEventListener('click', () => (pausado ? tocar() : pausar()));
   addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      const t = clamp(agora() + (e.key === 'ArrowRight' ? 2 : -2), 0, timeline.duracao - 0.01);
-      inicio = performance.now() - t * 1000;
-      tPausa = t;
-      if (audio) audio.currentTime = t;
-    }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') irPara(agora() + (e.key === 'ArrowRight' ? 2 : -2));
   });
+  let ultimo = -1;
   const laco = () => {
     const t = agora();
     if (audio && !pausado && Math.abs(audio.currentTime - t) > 0.25) audio.currentTime = t;
-    desenhar(t);
+    if (t !== ultimo) { desenhar(t); ultimo = t; }
+    ouvintes.forEach((fn) => fn(t, pausado));
     requestAnimationFrame(laco);
   };
-  audio?.play().catch(() => {});
+  if (modo === 'preview') audio?.play().catch(() => {});
+  if (pausado) tPausa = Math.min(2.6, timeline.cenas[0].dur - 0.05);
   laco();
 }

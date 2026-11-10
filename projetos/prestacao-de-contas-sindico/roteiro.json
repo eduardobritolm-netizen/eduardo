@@ -1,0 +1,104 @@
+{
+  "titulo": "O síndico tem que prestar contas todo ano?",
+  "pedido": "Roteiro de prestação de contas anual",
+  "objetivo": "explicar",
+  "area": "Direito Condominial",
+  "publico": "moradores e condôminos leigos",
+  "tema": "toga",
+  "voz": { "provedor": "nenhuma" },
+  "fontes": [
+    {
+      "afirmacao": "Compete ao síndico prestar contas à assembleia, anualmente e quando exigidas.",
+      "fonte": "Código Civil (Lei 10.406/2002), art. 1.348, VIII",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "O síndico convoca, todo ano, a assembleia dos condôminos para aprovar o orçamento das despesas, as contribuições dos condôminos e a prestação de contas.",
+      "fonte": "Código Civil, art. 1.350, caput",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "Se o síndico não convocar a assembleia, um quarto dos condôminos pode convocá-la.",
+      "fonte": "Código Civil, art. 1.350, § 1º",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "A assembleia pode destituir, pelo voto da maioria absoluta de seus membros, o síndico que praticar irregularidades, não prestar contas ou não administrar convenientemente o condomínio.",
+      "fonte": "Código Civil, art. 1.349",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm",
+      "conferido_em": null
+    }
+  ],
+  "legenda_post": "Prestar contas todo ano é dever do síndico, e a aprovação é da assembleia. Se ninguém convocar, um quarto dos condôminos pode convocar. Mande para o grupo do seu prédio.",
+  "hashtags": ["direitocondominial", "condominio", "sindico", "prestacaodecontas", "codigocivil"],
+  "cenas": [
+    {
+      "tipo": "abertura",
+      "kicker": "Direito Condominial",
+      "titulo": "O síndico tem que prestar contas todo ano?",
+      "destaque": "todo ano?",
+      "fala": "O síndico do seu prédio tem que prestar contas todo ano? Tem. E está na lei."
+    },
+    {
+      "tipo": "artigo",
+      "lei": "Código Civil · Lei 10.406/2002",
+      "artigo": "Art. 1.348, VIII",
+      "texto": "Compete ao síndico: (...) prestar contas à assembléia, anualmente e quando exigidas;",
+      "destaque": "anualmente e quando exigidas",
+      "fala": "O Código Civil diz que cabe ao síndico prestar contas à assembleia uma vez por ano, e sempre que for exigido."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "A assembleia anual aprova",
+      "estilo": "numerada",
+      "itens": [
+        "O orçamento das despesas",
+        "O valor das contribuições",
+        "A prestação de contas"
+      ],
+      "fala": "Todo ano, o síndico convoca a assembleia para aprovar o orçamento, as contribuições e a prestação de contas."
+    },
+    {
+      "tipo": "numero",
+      "titulo": "Se o síndico não convocar",
+      "numero": 25,
+      "sufixo": "%",
+      "cubos": false,
+      "unidade": "um quarto dos condôminos",
+      "legenda": "pode convocar a assembleia",
+      "fala": "E se o síndico não convocar? Um quarto dos condôminos pode convocar a assembleia."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "Na prática, peça para ver",
+      "estilo": "certo",
+      "itens": [
+        "Balancetes do período",
+        "Extratos da conta do condomínio",
+        "Notas fiscais e recibos",
+        "Contratos com fornecedores"
+      ],
+      "fala": "Na prática, peça para ver os balancetes, os extratos da conta, as notas fiscais e os contratos."
+    },
+    {
+      "tipo": "alerta",
+      "titulo": "Não prestou contas?",
+      "texto": "A assembleia pode destituir o síndico pelo voto da maioria absoluta",
+      "fala": "Atenção: o síndico que não presta contas pode ser destituído pela assembleia, pelo voto da maioria absoluta."
+    },
+    {
+      "tipo": "frase",
+      "texto": "Transparência não é favor. É dever do síndico.",
+      "destaque": "dever do síndico.",
+      "fala": "Transparência não é favor. É dever do síndico, previsto em lei."
+    },
+    {
+      "tipo": "encerramento",
+      "titulo": "Mande para o grupo do condomínio",
+      "fala": "Mande este vídeo para o grupo do seu condomínio."
+    }
+  ]
+}

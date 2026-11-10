@@ -22,7 +22,11 @@ Direito, não programadora: não peça para ela rodar comandos; rode você.
 4. **Revisão ética e jurídica**: rode `npm run validar -- projetos/<slug>/roteiro.json` e a
    checklist da skill `revisao` (publicidade da advocacia: Código de Ética e Disciplina da OAB e
    Provimento 205/2021). Corrija erros; explique avisos.
-5. **Prévia** (opcional): `npm run preview -- projetos/<slug>/roteiro.json` abre no navegador.
+5. **Página de revisão em HTML**: `npm run html -- projetos/<slug>/roteiro.json` gera
+   `saida/roteiro.html`, um arquivo só com a animação rodando no navegador, a narração e o que
+   aparece na tela em cada cena, as fontes com status, o texto do post e os avisos do validador.
+   Entregue esta página para aprovação antes de renderizar (pode publicar como Artifact).
+   Prévia ao vivo alternativa: `npm run preview -- projetos/<slug>/roteiro.json`.
 6. **Render**: `npm run render -- projetos/<slug>/roteiro.json`. Use `--rapido` para rascunho.
    Saída em `projetos/<slug>/saida/`. Skill: `video`.
 7. **Entrega**: diga onde estão os arquivos, mostre `post.txt` e lembre de revisar antes de postar.

@@ -142,7 +142,9 @@ function iconeCheck(c, cx, cy, r, k, tipo = 'certo') {
   ctx.lineJoin = 'round';
   ctx.strokeStyle = corIcone;
   const kt = clamp((k - 0.3) / 0.7);
-  if (tipo === 'errado') {
+  if (tipo === 'numerada') {
+    // o número é desenhado pela própria cena
+  } else if (tipo === 'errado') {
     tracar(ctx, [[cx - r * 0.35, cy - r * 0.35], [cx + r * 0.35, cy + r * 0.35]], kt * 2);
     tracar(ctx, [[cx + r * 0.35, cy - r * 0.35], [cx - r * 0.35, cy + r * 0.35]], kt * 2 - 1);
   } else {

@@ -32,6 +32,7 @@ Temas visuais: `toga`, `vade-mecum`, `tribunal`, `noir` (em `motor/temas.json`).
 | comando | o que faz |
 |---|---|
 | `npm run validar -- projetos/x/roteiro.json` | confere estrutura, fontes e alertas de publicidade (OAB) |
+| `npm run html -- projetos/x/roteiro.json` | página HTML de revisão (animação, cenas, fontes, post) antes do render |
 | `npm run preview -- projetos/x/roteiro.json` | prévia ao vivo no navegador |
 | `npm run render -- projetos/x/roteiro.json` | vídeo + capa + carrossel + post |
 | `… --rapido` / `--sem-voz` / `--sem-carrossel` / `--so-carrossel` | variações do render |
