@@ -249,10 +249,23 @@ function moldura(t, tema) {
   // barra de progresso e @ no topo
   ctx.save();
   const mono = tema.fundoPapel && marca.imgMonoPapel ? marca.imgMonoPapel : marca.imgMono;
-  ctx.fillStyle = comAlpha(tema.texto, 0.12);
-  ctx.fillRect(80 * S, 70 * S, W - 160 * S, 6 * S);
-  ctx.fillStyle = tema.destaque;
-  ctx.fillRect(80 * S, 70 * S, (W - 160 * S) * clamp(t / timeline.duracao), 6 * S);
+  // barra em segmentos, um por cena (como nos carrosséis do perfil): vistos em dourado, o atual enchendo
+  const cenas = timeline.cenas;
+  const gap = 10 * S, x0 = 80 * S, larg = W - 160 * S;
+  const seg = (larg - gap * (cenas.length - 1)) / cenas.length;
+  const atual = cenaEm(t);
+  cenas.forEach((c, i) => {
+    const x = x0 + i * (seg + gap);
+    ctx.fillStyle = comAlpha(tema.texto, 0.16);
+    retangulo(ctx, x, 68 * S, seg, 6 * S, 3 * S);
+    ctx.fill();
+    const k = i < atual ? 1 : i > atual ? 0 : clamp((t - c.inicio) / c.dur);
+    if (k > 0) {
+      ctx.fillStyle = tema.destaque;
+      retangulo(ctx, x, 68 * S, seg * k, 6 * S, 3 * S);
+      ctx.fill();
+    }
+  });
   fonte(ctx, 30 * S, 700, tema.fonteTexto);
   ctx.fillStyle = comAlpha(tema.texto, 0.75);
   ctx.textBaseline = 'top';
