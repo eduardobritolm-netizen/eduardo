@@ -57,9 +57,14 @@ Cada cena tem `tipo`, `fala` (o que a voz diz e vira legenda) e os campos do tip
 | `alerta` | `titulo`, `texto` | o erro comum, o "cuidado" |
 | `comparacao` | `titulo`, `esquerda{titulo,itens}`, `direita{titulo,itens}` | CLT x PJ, antes x depois |
 | `frase` | `texto`, `destaque` | uma ideia forte, sem ilustração |
+| `tipografia` | `fala`, `enfase[]` (trechos da fala) | tipografia cinética: cada palavra entra quando é falada; as de `enfase` entram grandes, em caixa alta e com marca-texto. Não mostra legenda (o texto já é a legenda) |
 | `encerramento` | `titulo`, `cta` | fecho com a marca e o aviso legal |
 
-Opcionais em qualquer cena: `duracao` (mínimo em segundos), `apoio` (texto do slide do carrossel).
+Opcionais em qualquer cena: `duracao` (mínimo em segundos), `apoio` (texto do slide do carrossel),
+`fundo: "papel"` (papel amassado claro; o tema troca para a paleta clara) e `transicao`
+(`padrao`, `rasgo` = papel rasgado, `luz` = clarão de filme, `corte`). Entre fundos diferentes a
+transição padrão já é o rasgo. Ritmo recomendado: alternar escuro e papel, com `luz` nas viradas de
+assunto, e no máximo dois efeitos fortes por vídeo (regra do guia de edição do escritório).
 
 ## Regras de roteiro
 

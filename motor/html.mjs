@@ -71,7 +71,7 @@ const dataUri = (rel) => {
 };
 const tlPagina = {
   ...tl, trilhas: [], audio: null,
-  marca: { ...tl.marca, logoData: dataUri(tl.marca.logo), monogramaData: dataUri(tl.marca.monograma) },
+  marca: { ...tl.marca, logoData: dataUri(tl.marca.logo), monogramaData: dataUri(tl.marca.monograma), monogramaPapelData: dataUri(tl.marca.monograma_papel) },
 };
 
 const fontes = roteiro.fontes || [];

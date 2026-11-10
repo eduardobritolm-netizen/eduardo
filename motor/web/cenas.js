@@ -72,9 +72,15 @@ function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas
       ctx.textAlign = 'left';
       const em = alvo.has(p.i);
       fonte(ctx, px, pesoDe(p.i), TITULO(tema));
-      ctx.fillStyle = em ? tema.destaque : (cor || tema.texto);
+      const comMarca = em && tema.destaqueEstilo === 'marca';
+      if (comMarca) {
+        const km = entrada(u, ini + 0.15 + p.i * 0.07, 0.4);
+        ctx.fillStyle = comAlpha(tema.marcaTexto, 0.95);
+        ctx.fillRect(x0 + p.x - 10 * S, y + px * 0.22 + li * lh, (p.w + 20 * S) * km, px * 0.98);
+      }
+      ctx.fillStyle = comMarca ? tema.texto : em ? tema.destaque : (cor || tema.texto);
       ctx.fillText(p.txt, x0 + p.x, y + px + li * lh);
-      if (em && tema.sublinhado !== false) {
+      if (em && tema.sublinhado !== false && !comMarca) {
         const ks = entrada(u, ini + 0.35 + p.i * 0.07, 0.5);
         ctx.fillStyle = tema.destaque;
         ctx.fillRect(x0 + p.x, y + px + li * lh + 12 * S, p.w * ks, 7 * S);
@@ -418,7 +424,7 @@ export const CENAS = {
           contador += pl.txt.length + 1;
           if (!visivel) return;
           ctx.fillStyle = tema.tinta;
-          fonte(ctx, pxT, alvo.has(pl.i) && kMarca > 0 ? 700 : 400, TITULO(tema));
+          fonte(ctx, pxT, 400, TITULO(tema));
           ctx.textBaseline = 'top';
           ctx.fillText(pl.txt.slice(0, visivel), x + pad + pl.x, by + pxT * 0.2);
         });
@@ -799,6 +805,78 @@ export const CENAS = {
     },
   },
 
+  /** Tipografia cinética: a fala aparece palavra por palavra; as de `enfase` entram grandes. {texto, enfase[]} */
+  tipografia: {
+    obrigatorios: [],
+    desenhar(c) {
+      const { ctx, u, p, S, area, tema } = c;
+      const texto = p.texto || p.fala || '';
+      const limpa = (w) => w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+      const enf = new Set((p.enfase || []).flatMap((e) => String(e).split(/\s+/)).map(limpa));
+      const palavras = texto.split(/\s+/).filter(Boolean);
+      const faladas = (p.grupos || []).flatMap((g) => g.palavras);
+      const usaFala = faladas.length === palavras.length;
+      const quando = (i) => (usaFala ? faladas[i].t0 - p.inicio : 0.2 + i * 0.22);
+      const grande = 128 * S, pequeno = 62 * S;
+      let escala = 1;
+      const montar = () => {
+        const linhas = [];
+        let atual = { itens: [], w: 0, h: 0 };
+        palavras.forEach((w, i) => {
+          const em = enf.has(limpa(w));
+          const px = (em ? grande : pequeno) * escala;
+          fonte(ctx, px, em ? 800 : 400, em ? TITULO(tema) : TEXTO(tema));
+          const pw = ctx.measureText(em ? w.toUpperCase() : w).width;
+          const esp = ctx.measureText(' ').width;
+          // troca de grande para pequeno (ou o contrário) abre linha nova
+          const quebra = atual.itens.length && (em !== atual.itens[atual.itens.length - 1].em || atual.w + esp + pw > area.w);
+          if (quebra) { linhas.push(atual); atual = { itens: [], w: 0, h: 0 }; }
+          const x = atual.itens.length ? atual.w + esp : 0;
+          atual.itens.push({ w, i, em, px, x, pw });
+          atual.w = x + pw;
+          atual.h = Math.max(atual.h, px * (em ? 1.0 : 1.25));
+        });
+        if (atual.itens.length) linhas.push(atual);
+        return linhas;
+      };
+      let linhas = montar();
+      const altura = () => linhas.reduce((a, l) => a + l.h, 0);
+      while (altura() > area.h * 0.95 && escala > 0.5) { escala -= 0.05; linhas = montar(); }
+      let y = area.y + Math.max(0, (area.h - altura()) / 2) - 20 * S;
+      linhas.forEach((l) => {
+        const x0 = area.x + (area.w - l.w) / 2;
+        const base = y + l.h * 0.82;
+        l.itens.forEach((it) => {
+          const k = entrada(u, quando(it.i) - 0.04, it.em ? 0.45 : 0.3, it.em ? easeBack : easeOut);
+          if (k <= 0) return;
+          ctx.save();
+          ctx.globalAlpha *= clamp(k * 1.6);
+          ctx.textBaseline = 'alphabetic';
+          ctx.textAlign = 'left';
+          fonte(ctx, it.px, it.em ? 800 : 400, it.em ? TITULO(tema) : TEXTO(tema));
+          const txt = it.em ? it.w.toUpperCase() : it.w;
+          if (it.em) {
+            const e = 1.3 - 0.3 * clamp(k);
+            ctx.translate(x0 + it.x + it.pw / 2, base - it.px * 0.35);
+            ctx.scale(e, e);
+            ctx.translate(-(x0 + it.x + it.pw / 2), -(base - it.px * 0.35));
+            if (tema.destaqueEstilo === 'marca') {
+              ctx.fillStyle = comAlpha(tema.marcaTexto, 0.95);
+              ctx.fillRect(x0 + it.x - 12 * S, base - it.px * 0.78, (it.pw + 24 * S) * entrada(u, quando(it.i) + 0.1, 0.35), it.px * 0.9);
+            }
+            ctx.fillStyle = tema.destaqueEstilo === 'marca' ? tema.texto : tema.destaque;
+          } else {
+            ctx.translate(0, (1 - k) * 24 * S);
+            ctx.fillStyle = tema.texto;
+          }
+          ctx.fillText(txt, x0 + it.x, base);
+          ctx.restore();
+        });
+        y += l.h;
+      });
+    },
+  },
+
   /** Uma frase forte, centralizada. {texto, destaque} */
   frase: {
     obrigatorios: ['texto'],
@@ -829,9 +907,16 @@ export const CENAS = {
         const img = marca.imgLogo;
         const lw = Math.min(area.w * 0.62, 640 * S), lh = lw * img.height / img.width;
         const k = entrada(u, 0, 0.9, easeInOut);
+        // acende como letreiro: duas piscadas e brilho que assenta
+        const pisca = u < 0.55 ? [0.15, 0.9, 0.25, 1, 0.55, 1][Math.floor(u * 11)] ?? 1 : 1;
         ctx.save();
-        ctx.globalAlpha *= k;
+        ctx.globalAlpha *= k * pisca;
         ctx.translate(0, (1 - k) * 30 * S);
+        ctx.shadowColor = comAlpha(tema.destaque, 0.85);
+        ctx.shadowBlur = (26 + 10 * Math.sin(u * 3)) * S;
+        ctx.drawImage(img, cx - lw / 2, y + 20 * S, lw, lh);
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha *= 0.85;
         ctx.drawImage(img, cx - lw / 2, y + 20 * S, lw, lh);
         ctx.restore();
         y += lh + 90 * S;

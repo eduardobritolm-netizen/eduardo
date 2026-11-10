@@ -142,6 +142,24 @@
       "#D4B488",
       "#957649",
       "#6E4C1F"
-    ]
+    ],
+    "paletaPapel": {
+      "bg": [
+        "#ECEBE7",
+        "#E2E0DA"
+      ],
+      "texto": "#0B1530",
+      "suave": "#4A5573",
+      "destaque": "#8A6A2B",
+      "textoSobreDestaque": "#FFFFFF",
+      "marcaTexto": "#E8CC7E",
+      "cartao": "#FFFFFF",
+      "bloco": "#D3D0C8",
+      "alerta": "#B83A2B",
+      "papel": "#FFFFFF",
+      "tinta": "#0B1530",
+      "destaqueEstilo": "marca",
+      "vinheta": 0
+    }
   }
 }

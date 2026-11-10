@@ -48,6 +48,7 @@ async function carregarImagem(dado, caminho) {
 }
 marca.imgLogo = await carregarImagem(marca.logoData, marca.logo);
 marca.imgMono = await carregarImagem(marca.monogramaData, marca.monograma);
+marca.imgMonoPapel = await carregarImagem(marca.monogramaPapelData, marca.monograma_papel);
 
 // ---------- canvases ----------
 const saida = document.getElementById('saida');
@@ -75,12 +76,66 @@ grao.width = grao.height = 256;
   g.putImageData(img, 0, 0);
 }
 
+// textura de papel amassado, gerada uma vez (fundo claro: cena.fundo = 'papel')
+const papel = document.createElement('canvas');
+papel.width = W;
+papel.height = H;
+{
+  const g = papel.getContext('2d');
+  const rnd = aleatorio(31);
+  g.fillStyle = tema.paletaPapel?.bg?.[0] || '#ECEBE7';
+  g.fillRect(0, 0, W, H);
+  // facetas do amassado
+  for (let i = 0; i < 260; i++) {
+    const cx = rnd() * W, cy = rnd() * H, r = (80 + rnd() * 260) * S;
+    g.beginPath();
+    for (let j = 0; j < 3; j++) {
+      const a = rnd() * Math.PI * 2;
+      g[j ? 'lineTo' : 'moveTo'](cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+    }
+    g.closePath();
+    g.fillStyle = rnd() < 0.5 ? `rgba(0,0,0,${rnd() * 0.035})` : `rgba(255,255,255,${rnd() * 0.12})`;
+    g.fill();
+  }
+  // vincos: linha escura com brilho ao lado
+  for (let i = 0; i < 70; i++) {
+    let x = rnd() * W, y = rnd() * H;
+    const pts = [[x, y]];
+    for (let j = 0; j < 3; j++) { x += (rnd() - 0.5) * 380 * S; y += (rnd() - 0.5) * 380 * S; pts.push([x, y]); }
+    for (const [cor, dx] of [[`rgba(0,0,0,${0.04 + rnd() * 0.06})`, 0], [`rgba(255,255,255,${0.25 + rnd() * 0.3})`, 2 * S]]) {
+      g.beginPath();
+      pts.forEach(([px, py], k) => g[k ? 'lineTo' : 'moveTo'](px + dx, py + dx));
+      g.strokeStyle = cor;
+      g.lineWidth = (1 + rnd()) * S;
+      g.stroke();
+    }
+  }
+  g.fillStyle = g.createPattern(grao, 'repeat');
+  g.fillRect(0, 0, W, H);
+  const v = g.createRadialGradient(W / 2, H * 0.45, H * 0.25, W / 2, H * 0.5, H * 0.85);
+  v.addColorStop(0, 'rgba(0,0,0,0)');
+  v.addColorStop(1, 'rgba(60,50,30,0.22)');
+  g.fillStyle = v;
+  g.fillRect(0, 0, W, H);
+}
+
+const temaBase = tema;
+const temaPapel = { ...tema, ...(tema.paletaPapel || {}), fundoPapel: true };
+const temaDa = (cena) => (cena.fundo === 'papel' ? temaPapel : tema);
+const fundoDe = (cena) => (cena.fundo === 'papel' ? 'papel' : 'escuro');
+
 function area() {
   if (modo === 'carrossel') return { x: 90 * S, y: 130 * S, w: W - 180 * S, h: H * 0.62 };
   return { x: 80 * S, y: H * 0.115, w: W - 160 * S, h: H * 0.58 };
 }
 
-function fundo(c2, t) {
+function fundo(c2, t, tema = temaBase) {
+  if (tema.fundoPapel) {
+    // papel com leve deriva, para não parecer estático
+    const dx = Math.sin(t * 0.3) * 6 * S, dy = Math.cos(t * 0.25) * 6 * S;
+    c2.drawImage(papel, -10 * S + dx, -10 * S + dy, W + 20 * S, H + 20 * S);
+    return;
+  }
   const g = c2.createLinearGradient(0, 0, W * 0.3, H);
   g.addColorStop(0, tema.bg[0]);
   g.addColorStop(1, tema.bg[1]);
@@ -118,7 +173,7 @@ function fundo(c2, t) {
 
 function contexto(c2, cena, u) {
   const c = {
-    ctx: c2, u, d: cena.dur, p: cena, W, H, S, area: area(), tema, marca, modo,
+    ctx: c2, u, d: cena.dur, p: cena, W, H, S, area: area(), tema: temaDa(cena), marca, modo,
     tres(nome, x, y, tam, extra) {
       const r = g3.render(nome, u, cena.dur, cena, extra);
       c2.drawImage(g3.canvas, x, y, tam, tam);
@@ -131,8 +186,9 @@ function contexto(c2, cena, u) {
   return c;
 }
 
-function desenharCena(c2, cena, u) {
+function desenharCena(c2, cena, u, comFundo = false) {
   const def = CENAS[cena.tipo];
+  if (comFundo) fundo(c2, cena.inicio + u, temaDa(cena));
   c2.save();
   if (!def) {
     fonte(c2, 40 * S, 700, tema.fonteTexto);
@@ -155,6 +211,7 @@ function legendas(t) {
   if (timeline.legenda === false) return;
   const i = cenaEm(t);
   const cena = timeline.cenas[i];
+  if (cena.legenda === false || cena.tipo === 'tipografia') return;
   const grupos = cena.grupos || [];
   const g = grupos.find((gr) => t >= gr.t0 - 0.05 && t < gr.t1 + 0.12) ;
   if (!g) return;
@@ -192,9 +249,10 @@ function legendas(t) {
   ctx.restore();
 }
 
-function moldura(t) {
+function moldura(t, tema) {
   // barra de progresso e @ no topo
   ctx.save();
+  const mono = tema.fundoPapel && marca.imgMonoPapel ? marca.imgMonoPapel : marca.imgMono;
   ctx.fillStyle = comAlpha(tema.texto, 0.12);
   ctx.fillRect(80 * S, 70 * S, W - 160 * S, 6 * S);
   ctx.fillStyle = tema.destaque;
@@ -202,10 +260,10 @@ function moldura(t) {
   fonte(ctx, 30 * S, 700, tema.fonteTexto);
   ctx.fillStyle = comAlpha(tema.texto, 0.75);
   ctx.textBaseline = 'top';
-  if (marca.imgMono) {
-    // monograma à esquerda e @ à direita, como nos posts
-    const mh = 58 * S, mw = mh * marca.imgMono.width / marca.imgMono.height;
-    ctx.drawImage(marca.imgMono, 80 * S, 96 * S, mw, mh);
+  if (mono) {
+    // logo à esquerda e @ à direita, como nos posts
+    const mh = 58 * S, mw = mh * mono.width / mono.height;
+    ctx.drawImage(mono, 80 * S, 96 * S, mw, mh);
     ctx.textAlign = 'right';
     ctx.fillText(marca.arroba || '', W - 80 * S, 114 * S);
   } else {
@@ -225,33 +283,112 @@ function moldura(t) {
   ctx.restore();
 }
 
+// ---------- transições ----------
+
+/** Borda de papel rasgado na altura y (determinística por cena). */
+function bordaRasgo(seed, y) {
+  const rnd = aleatorio(seed * 97 + 13);
+  const pts = [];
+  for (let x = -20 * S; x <= W + 20 * S; x += 22 * S) pts.push([x, y + (rnd() - 0.5) * 34 * S + Math.sin(x / (140 * S) + seed) * 14 * S]);
+  return pts;
+}
+
+function rasgo(i, ant, cena, u, dur) {
+  const k = easeInOut(u / dur);
+  const y = H * 1.06 - k * H * 1.2;
+  // cena anterior, inteira
+  desenharCena(ctx, ant, ant.dur + u, true);
+  // cena nova sobe por baixo da borda rasgada
+  cctx.clearRect(0, 0, W, H);
+  desenharCena(cctx, cena, u, true);
+  const borda = bordaRasgo(i, y);
+  ctx.save();
+  ctx.beginPath();
+  borda.forEach(([x, yy], j) => ctx[j ? 'lineTo' : 'moveTo'](x, yy));
+  ctx.lineTo(W + 20 * S, H + 20 * S);
+  ctx.lineTo(-20 * S, H + 20 * S);
+  ctx.closePath();
+  ctx.clip();
+  ctx.drawImage(camada, 0, 0);
+  ctx.restore();
+  // faixa de fibra branca na borda, com sombra
+  const rnd = aleatorio(i * 31 + 7);
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.35)';
+  ctx.shadowBlur = 24 * S;
+  ctx.shadowOffsetY = -6 * S;
+  ctx.beginPath();
+  borda.forEach(([x, yy], j) => ctx[j ? 'lineTo' : 'moveTo'](x, yy));
+  for (let j = borda.length - 1; j >= 0; j--) ctx.lineTo(borda[j][0], borda[j][1] + (8 + rnd() * 16) * S);
+  ctx.closePath();
+  ctx.fillStyle = '#F6F4EF';
+  ctx.fill();
+  ctx.restore();
+}
+
+/** Clarão de luz (vazamento de filme). v = segundos em relação ao corte (negativo = antes). */
+function clarao(v) {
+  const a = v < 0 ? Math.exp(-Math.pow(v / 0.18, 2)) : Math.exp(-v / 0.22);
+  if (a < 0.01) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'screen';
+  const g = ctx.createRadialGradient(W * 0.85, H * 0.25, 0, W * 0.85, H * 0.25, H * 0.95);
+  g.addColorStop(0, `rgba(255,236,190,${a})`);
+  g.addColorStop(0.35, `rgba(255,170,80,${a * 0.85})`);
+  g.addColorStop(0.7, `rgba(210,80,60,${a * 0.5})`);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = `rgba(255,238,205,${a * 0.55})`;
+  ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
+function tipoTransicao(ant, cena) {
+  if (!ant) return 'nenhuma';
+  return cena.transicao || (fundoDe(ant) !== fundoDe(cena) ? 'rasgo' : 'padrao');
+}
+
 /** Desenha o instante t (segundos) do vídeo. */
 function desenhar(t, { comLegenda = true } = {}) {
-  fundo(ctx, t);
   const i = cenaEm(t);
   const cena = timeline.cenas[i];
   const u = t - cena.inicio;
-  // cena anterior saindo
-  if (i > 0 && u < TRANS) {
-    const ant = timeline.cenas[i - 1];
+  const ant = i > 0 ? timeline.cenas[i - 1] : null;
+  const prox = timeline.cenas[i + 1];
+  const trans = tipoTransicao(ant, cena);
+  const DUR_RASGO = 0.75;
+  if (trans === 'rasgo' && u < DUR_RASGO) {
+    rasgo(i, ant, cena, u, DUR_RASGO);
+  } else {
+    fundo(ctx, t, temaDa(cena));
+    const mesmoFundo = ant && fundoDe(ant) === fundoDe(cena);
+    const suave = mesmoFundo && trans !== 'corte' && u < TRANS;
+    if (suave) {
+      cctx.clearRect(0, 0, W, H);
+      desenharCena(cctx, ant, ant.dur + u);
+      ctx.save();
+      const k = easeOut(u / TRANS);
+      ctx.globalAlpha = 1 - k;
+      ctx.translate(0, -k * 60 * S);
+      ctx.drawImage(camada, 0, 0);
+      ctx.restore();
+    }
     cctx.clearRect(0, 0, W, H);
-    desenharCena(cctx, ant, ant.dur + u);
+    desenharCena(cctx, cena, u);
+    const k = suave ? easeOut(u / TRANS) : 1;
     ctx.save();
-    const k = easeOut(u / TRANS);
-    ctx.globalAlpha = 1 - k;
-    ctx.translate(0, -k * 60 * S);
+    ctx.globalAlpha = k;
+    ctx.translate(0, (1 - k) * 80 * S);
     ctx.drawImage(camada, 0, 0);
     ctx.restore();
   }
-  cctx.clearRect(0, 0, W, H);
-  desenharCena(cctx, cena, u);
-  const k = i === 0 ? 1 : easeOut(u / TRANS);
-  ctx.save();
-  ctx.globalAlpha = k;
-  ctx.translate(0, (1 - k) * 80 * S);
-  ctx.drawImage(camada, 0, 0);
-  ctx.restore();
-  moldura(t);
+  if (trans === 'luz') clarao(u);
+  if (prox && tipoTransicao(cena, prox) === 'luz') clarao(-(cena.dur - u));
+  // durante o rasgo, o topo ainda é da cena anterior até a borda passar
+  const bordaY = H * 1.06 - easeInOut(u / DUR_RASGO) * H * 1.2;
+  const temaTopo = trans === 'rasgo' && u < DUR_RASGO && bordaY > 170 * S ? temaDa(ant) : temaDa(cena);
+  moldura(t, temaTopo);
   if (comLegenda) legendas(t);
 }
 
@@ -259,7 +396,8 @@ function desenhar(t, { comLegenda = true } = {}) {
 function slide(i) {
   const n = timeline.cenas.length;
   const cena = timeline.cenas[i];
-  fundo(ctx, 0);
+  const tema = temaDa(cena);
+  fundo(ctx, 0, tema);
   cctx.clearRect(0, 0, W, H);
   desenharCena(cctx, cena, Math.max(cena.dur, 4));
   ctx.drawImage(camada, 0, 0);

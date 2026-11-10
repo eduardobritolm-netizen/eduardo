@@ -53,12 +53,22 @@
       "carimbo": "Contas"
     },
     {
+      "tipo": "tipografia",
+      "fundo": "papel",
+      "fala": "Quem usa, arrecada ou administra dinheiro público tem que prestar contas.",
+      "enfase": [
+        "prestar contas."
+      ]
+    },
+    {
       "tipo": "artigo",
       "lei": "Constituição Federal",
       "artigo": "Art. 70, parágrafo único",
       "texto": "Prestará contas qualquer pessoa física ou jurídica, pública ou privada, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos ou pelos quais a União responda, ou que, em nome desta, assuma obrigações de natureza pecuniária.",
       "destaque": "dinheiros, bens e valores públicos",
-      "fala": "A Constituição é clara: quem usa, arrecada ou administra dinheiro público presta contas."
+      "fala": "Está no artigo setenta da Constituição, parágrafo único.",
+      "fundo": "papel",
+      "duracao": 7
     },
     {
       "tipo": "linha_do_tempo",
@@ -77,7 +87,8 @@
           "detalhe": "julga as contas"
         }
       ],
-      "fala": "O caminho é este: o prefeito presta as contas, o Tribunal de Contas emite um parecer prévio, e a Câmara Municipal julga."
+      "fala": "O caminho é este: o prefeito presta as contas, o Tribunal de Contas emite um parecer prévio, e a Câmara Municipal julga.",
+      "transicao": "luz"
     },
     {
       "tipo": "numero",
@@ -95,25 +106,31 @@
       "unidade": "dias por ano",
       "legenda": "as contas do município ficam à disposição de qualquer contribuinte",
       "fala": "As contas do município ficam sessenta dias por ano à disposição de qualquer contribuinte, que pode questioná-las.",
-      "cubos": false
+      "cubos": false,
+      "fundo": "papel"
     },
     {
       "tipo": "alerta",
       "titulo": "Contas rejeitadas?",
       "texto": "Irregularidade insanável que configure ato doloso de improbidade, com decisão irrecorrível, gera inelegibilidade por 8 anos",
-      "fala": "Atenção: contas rejeitadas por irregularidade insanável, que configure ato doloso de improbidade, podem deixar o gestor inelegível por oito anos."
+      "fala": "Atenção: contas rejeitadas por irregularidade insanável, que configure ato doloso de improbidade, podem deixar o gestor inelegível por oito anos.",
+      "transicao": "luz"
     },
     {
-      "tipo": "frase",
-      "texto": "Quem administra dinheiro público, presta contas.",
-      "destaque": "presta contas.",
-      "fala": "Quem administra dinheiro público presta contas. É dever constitucional."
+      "tipo": "tipografia",
+      "fundo": "papel",
+      "fala": "Quem administra dinheiro público presta contas. É dever constitucional.",
+      "enfase": [
+        "presta contas.",
+        "dever constitucional."
+      ]
     },
     {
       "tipo": "encerramento",
       "titulo": "Salve e envie para quem está na gestão pública.",
       "cta": "Salve e envie",
-      "fala": "Salve e envie para quem está na gestão pública."
+      "fala": "Salve e envie para quem está na gestão pública.",
+      "transicao": "luz"
     }
   ]
 }

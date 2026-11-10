@@ -15,6 +15,7 @@ export const TIPOS = {
   alerta: ['titulo'],
   comparacao: ['esquerda', 'direita'],
   frase: ['texto'],
+  tipografia: ['fala'],
   encerramento: [],
 };
 
