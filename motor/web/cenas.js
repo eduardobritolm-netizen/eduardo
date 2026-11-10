@@ -437,6 +437,182 @@ function alertaEditorial(c) {
   ctx.restore();
 }
 
+/** Um cartão de documento do leque da capa. */
+function cartaoDoc(c, d, cx, cy, w, h, rot, central) {
+  const { ctx, S, tema, marca } = c;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rot);
+  ctx.shadowColor = 'rgba(11,21,48,0.35)';
+  ctx.shadowBlur = 40 * S;
+  ctx.shadowOffsetY = 18 * S;
+  retangulo(ctx, -w / 2, -h / 2, w, h, 22 * S);
+  if (central) {
+    const g = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+    g.addColorStop(0, '#12224A');
+    g.addColorStop(1, '#0B1530');
+    ctx.fillStyle = g;
+  } else ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  retangulo(ctx, -w / 2, -h / 2, w, h, 22 * S);
+  ctx.clip();
+  const pad = w * 0.1;
+  const x = -w / 2 + pad;
+  let y = -h / 2 + pad;
+  const ouro = central ? '#D9B86C' : tema.destaque;
+  // rótulo
+  fonte(ctx, w * 0.052, 700, TEXTO(tema));
+  ctx.save();
+  ctx.letterSpacing = `${w * 0.008}px`;
+  ctx.fillStyle = ouro;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  ctx.fillText(String(d.rotulo || '').toUpperCase(), x, y);
+  ctx.restore();
+  y += w * 0.11;
+  ctx.fillStyle = ouro;
+  ctx.fillRect(x, y, w * 0.14, 3 * S);
+  y += w * 0.07;
+  // título
+  const corTitulo = central ? '#FFFFFF' : '#0B1530';
+  const pxT = ajustar(ctx, d.titulo || '', w - pad * 2, w * (central ? 0.2 : 0.15), w * 0.07, central ? 3 : 1, 800, TEXTO(tema));
+  const lsT = quebrar(ctx, d.titulo || '', w - pad * 2);
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  lsT.forEach((l, i) => {
+    ctx.fillStyle = central && i === lsT.length - 1 && lsT.length > 1 ? ouro : corTitulo;
+    ctx.fillText(l.palavras.map((q) => q.txt).join(' '), x, y + i * pxT * 1.08);
+  });
+  y += lsT.length * pxT * 1.08 + w * 0.06;
+  // texto
+  if (d.texto) {
+    fonte(ctx, w * 0.058, 400, TEXTO(tema));
+    ctx.fillStyle = central ? 'rgba(255,255,255,0.78)' : '#4A5573';
+    const ls = quebrar(ctx, d.texto, w - pad * 2);
+    ls.forEach((l, i) => ctx.fillText(l.palavras.map((q) => q.txt).join(' '), x, y + i * w * 0.082));
+  }
+  // assinatura do escritório no pé do cartão central
+  if (central && marca.imgMono) {
+    const lh = w * 0.085, lw = lh * marca.imgMono.width / marca.imgMono.height;
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(marca.imgMono, x, h / 2 - pad - lh, lw, lh);
+  }
+  ctx.restore();
+}
+
+/** Capa editorial clara: manchete em serifa, leque de cartões com as fontes do vídeo e frase de apoio. */
+function aberturaCapa(c) {
+  const { ctx, u, p, S, area, tema } = c;
+  const tinta = '#0B1530', ouro = tema.fundoPapel ? tema.destaque : '#8A6A2B';
+  const x = area.x, w = area.w;
+  let y = area.y + 30 * S;
+  // manchete: serifa regular; destaque em negrito itálico dourado
+  const alvo = marcarPalavras(p.titulo, p.destaque);
+  const palavras = String(p.titulo).split(/\s+/).filter(Boolean);
+  const fonteDe = (i, px) => (alvo.has(i) ? fonte(ctx, px, 700, 'Playfair Display', 'italic') : fonte(ctx, px, 400, 'Playfair Display'));
+  let px = 92 * S, linhas;
+  for (;;) {
+    linhas = [];
+    let atual = { itens: [], w: 0 };
+    palavras.forEach((txt, i) => {
+      fonteDe(i, px);
+      const pw = ctx.measureText(txt).width, esp = px * 0.26;
+      if (atual.itens.length && atual.w + esp + pw > w) { linhas.push(atual); atual = { itens: [], w: 0 }; }
+      const px0 = atual.itens.length ? atual.w + esp : 0;
+      atual.itens.push({ txt, i, x: px0 });
+      atual.w = px0 + pw;
+    });
+    if (atual.itens.length) linhas.push(atual);
+    if (linhas.length <= 3 || px <= 60 * S) break;
+    px -= 4 * S;
+  }
+  const lh = px * 1.14;
+  linhas.forEach((l, li) => {
+    const k = entrada(u, 0.1 + li * 0.14, 0.7, easeOut);
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x - 20 * S, y + li * lh, w + 40 * S, lh * 1.12);
+    ctx.clip();
+    ctx.translate(0, (1 - k) * lh * 1.1);
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'left';
+    l.itens.forEach((it) => {
+      fonteDe(it.i, px);
+      ctx.fillStyle = alvo.has(it.i) ? ouro : tinta;
+      ctx.fillText(it.txt, x, y + li * lh + px * 0.92);
+      x; // (alinhado à esquerda)
+      ctx.translate(0, 0);
+      const m = ctx.measureText(it.txt).width;
+      ctx.translate(m + px * 0.26, 0);
+    });
+    ctx.restore();
+  });
+  y += linhas.length * lh + 50 * S;
+
+  // moldura com o leque de cartões
+  const temApoio = p.subtitulo || p.subtitulo_forte;
+  const fh = Math.min(area.y + area.h - y - (temApoio ? 170 * S : 20 * S), 620 * S);
+  const kf = entrada(u, 0.35, 0.7, easeOut);
+  ctx.save();
+  ctx.globalAlpha *= kf;
+  ctx.shadowColor = 'rgba(11,21,48,0.18)';
+  ctx.shadowBlur = 30 * S;
+  ctx.shadowOffsetY = 10 * S;
+  retangulo(ctx, x, y, w, fh, 34 * S);
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.lineWidth = 2.5 * S;
+  ctx.strokeStyle = comAlpha(tinta, 0.55);
+  ctx.stroke();
+  ctx.restore();
+  const cartoes = (p.cartoes || []).slice(0, 3);
+  const ch = fh * 0.8, cw = ch * 0.72;
+  const cx = x + w / 2, cy = y + fh / 2 + 6 * S;
+  const kl = entrada(u, 0.6, 0.8, easeBack);
+  const flut = Math.sin(u * 1.1) * 4 * S;
+  const lados = cartoes.length === 3 ? [[0, -1], [2, 1]] : cartoes.length === 2 ? [[1, 1]] : [];
+  lados.forEach(([idx, lado]) => {
+    cartaoDoc(c, cartoes[idx], cx + lado * cw * 0.72 * kl, cy + 26 * S * kl - flut * lado, cw * 0.9, ch * 0.9, lado * 0.16 * kl, false);
+  });
+  if (cartoes.length) {
+    const centro = cartoes.length === 3 ? cartoes[1] : cartoes[0];
+    const kc = entrada(u, 0.45, 0.6, easeBack);
+    ctx.save();
+    ctx.globalAlpha *= clamp(kc * 1.5);
+    cartaoDoc(c, centro, cx, cy + (1 - kc) * 60 * S + flut, cw, ch, 0, true);
+    ctx.restore();
+  }
+  // selo em serifa itálica sobre o canto da moldura
+  if (p.selo) {
+    const ks = entrada(u, 1.1, 0.5, easeBack);
+    ctx.save();
+    ctx.globalAlpha *= clamp(ks * 1.5);
+    fonte(ctx, 96 * S, 700, 'Playfair Display', 'italic');
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'alphabetic';
+    ctx.translate(x + w - 24 * S, y + 34 * S);
+    ctx.scale(0.8 + 0.2 * ks, 0.8 + 0.2 * ks);
+    ctx.lineWidth = 16 * S;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = tema.bg?.[0] || '#F5F4F0';
+    ctx.strokeText(p.selo, 0, 0);
+    ctx.fillStyle = ouro;
+    ctx.fillText(p.selo, 0, 0);
+    ctx.restore();
+  }
+  y += fh + 44 * S;
+  // frase de apoio
+  const ka = entrada(u, 1.2, 0.6);
+  ctx.save();
+  ctx.globalAlpha *= ka;
+  ctx.translate(0, (1 - ka) * 16 * S);
+  if (p.subtitulo) y += paragrafo(c, p.subtitulo, x + 20 * S, y, w - 40 * S, { px: 38, peso: 400, cor: tinta, lh: 1.3 });
+  if (p.subtitulo_forte) paragrafo(c, p.subtitulo_forte, x + 20 * S, y, w - 40 * S, { px: 38, peso: 800, cor: tinta, lh: 1.3 });
+  ctx.restore();
+}
+
 const ILUSTRACOES = { documento: ilustraDocumento, predio: ilustraPredio };
 let REFLEXO; // canvas de apoio para o reflexo dourado da logo
 
@@ -448,6 +624,7 @@ export const CENAS = {
     obrigatorios: ['titulo'],
     desenhar(c) {
       const { ctx, u, p, S, area, tema } = c;
+      if (p.estilo === 'capa') return aberturaCapa(c);
       if (!p.ilustracao && (p.estilo === 'manchete' || tema.abertura === 'manchete')) return aberturaManchete(c);
       const cx = area.x + area.w / 2;
       let y = area.y;
@@ -947,8 +1124,16 @@ export const CENAS = {
       const { ctx, u, p, S, area, tema } = c;
       const texto = p.texto || p.fala || '';
       const limpa = (w) => w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
-      const enf = new Set((p.enfase || []).flatMap((e) => String(e).split(/\s+/)).map(limpa));
       const palavras = texto.split(/\s+/).filter(Boolean);
+      // ênfase por trecho inteiro (não palavra solta): "Improbidade é outra." não acende o "é" de antes
+      const idxEnf = new Set();
+      (p.enfase || []).forEach((trecho) => {
+        const alvo = String(trecho).split(/\s+/).filter(Boolean).map(limpa);
+        for (let i = 0; i + alvo.length <= palavras.length; i++) {
+          if (alvo.every((a, j) => limpa(palavras[i + j]) === a)) alvo.forEach((_, j) => idxEnf.add(i + j));
+        }
+      });
+      const enf = { has: () => false };
       const faladas = (p.grupos || []).flatMap((g) => g.palavras);
       const usaFala = faladas.length === palavras.length;
       const quando = (i) => (usaFala ? faladas[i].t0 - p.inicio : 0.2 + i * 0.22);
@@ -958,7 +1143,7 @@ export const CENAS = {
         const linhas = [];
         let atual = { itens: [], w: 0, h: 0 };
         palavras.forEach((w, i) => {
-          const em = enf.has(limpa(w));
+          const em = idxEnf.has(i);
           const px = (em ? grande : pequeno) * escala;
           fonte(ctx, px, em ? 800 : 400, em ? TITULO(tema) : TEXTO(tema));
           const pw = ctx.measureText(w).width;
@@ -979,7 +1164,7 @@ export const CENAS = {
       while (altura() > area.h * 0.95 && escala > 0.5) { escala -= 0.05; linhas = montar(); }
       let y = area.y + Math.max(0, (area.h - altura()) / 2) - 20 * S;
       // zoom digital (punch-in) quando entra a primeira palavra de ênfase
-      const primeira = palavras.findIndex((w) => enf.has(limpa(w)));
+      const primeira = palavras.findIndex((w, i) => idxEnf.has(i));
       if (primeira >= 0) {
         const zp = 1 + 0.06 * entrada(u, quando(primeira) - 0.02, 0.22, easeOut);
         ctx.translate(area.x + area.w / 2, area.y + area.h / 2);

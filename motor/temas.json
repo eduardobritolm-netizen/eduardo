@@ -161,6 +161,7 @@
       "destaqueEstilo": "colchete",
       "vinheta": 0
     },
-    "editorial": true
+    "editorial": true,
+    "moldura": false
   }
 }

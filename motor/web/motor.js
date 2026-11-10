@@ -26,6 +26,7 @@ const fontes = [
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-700-normal.woff2`, '700', 'normal'],
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-800-normal.woff2`, '800', 'normal'],
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-400-italic.woff2`, '400', 'italic'],
+  ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-700-italic.woff2`, '700', 'italic'],
   ...['300', '400', '500', '600', '700', '800'].map((w) => ['Montserrat', `${FS}/montserrat/files/montserrat-latin-${w}-normal.woff2`, w, 'normal']),
 ];
 if (window.__FONTES_EXTERNAS__) {
@@ -247,8 +248,9 @@ function legendas(t) {
 }
 
 function moldura(t, tema) {
-  // barra de progresso e @ no topo
+  // barra de progresso e @ no topo (o tema pode desligar: tela limpa, marca só no fecho)
   ctx.save();
+  if (tema.moldura === false) { avisoFinal(t, tema); ctx.restore(); return; }
   const mono = tema.fundoPapel && marca.imgMonoPapel ? marca.imgMonoPapel : marca.imgMono;
   // barra em segmentos, um por cena (como nos carrosséis do perfil): vistos em dourado, o atual enchendo
   const cenas = timeline.cenas;
@@ -280,7 +282,13 @@ function moldura(t, tema) {
     ctx.textAlign = 'center';
     ctx.fillText(marca.arroba || '', W / 2, 100 * S);
   }
-  // aviso jurídico no fim
+  avisoFinal(t, tema);
+  ctx.restore();
+}
+
+/** Aviso jurídico no fim do vídeo. */
+function avisoFinal(t, tema) {
+  ctx.save();
   const ultima = timeline.cenas[timeline.cenas.length - 1];
   if (marca.aviso && t > ultima.inicio + 0.6) {
     ctx.globalAlpha = easeOut((t - ultima.inicio - 0.6) / 0.5);
@@ -465,7 +473,7 @@ function slide(i) {
   fonte(ctx, 28 * S, 700, tema.fonteTexto);
   ctx.fillStyle = comAlpha(tema.texto, 0.75);
   ctx.fillText(marca.arroba || '', W / 2, 50 * S);
-  const apoio = cena.apoio ?? (cena.tipo === 'abertura' || cena.tipo === 'encerramento' ? '' : cena.fala);
+  const apoio = cena.apoio ?? (['abertura', 'encerramento', 'jurisprudencia', 'tipografia'].includes(cena.tipo) ? '' : cena.fala);
   if (apoio) {
     fonte(ctx, 38 * S, 500, tema.fonteTexto);
     ctx.fillStyle = tema.texto;

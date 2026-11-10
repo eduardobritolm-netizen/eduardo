@@ -11,7 +11,7 @@ const arq = process.argv.slice(2).find((a) => !a.startsWith('--'));
 if (!arq) { console.error('Uso: npm run html -- projetos/<tema>/roteiro.json'); process.exit(2); }
 
 const THREE_CDN = 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js';
-const FONTES_CSS = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap';
+const FONTES_CSS = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,800;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap';
 
 const NOMES = {
   abertura: 'Abertura', artigo: 'Texto de lei', numero: 'Número', balanca: 'Balança',

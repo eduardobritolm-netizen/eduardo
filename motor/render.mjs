@@ -67,7 +67,7 @@ try {
     const semAudio = path.join(out, 'video-sem-audio.mp4');
     const ff = spawn('ffmpeg', [
       '-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
-      '-c:v', 'libx264', '-preset', rapido ? 'veryfast' : 'medium', '-crf', rapido ? '23' : '18',
+      '-c:v', 'libx264', '-preset', rapido ? 'veryfast' : 'medium', '-crf', rapido ? '24' : '21', '-maxrate', '14M', '-bufsize', '28M',
       '-pix_fmt', 'yuv420p', '-movflags', '+faststart', semAudio,
     ], { stdio: ['pipe', 'inherit', 'inherit'] });
     const total = Math.ceil(tl.duracao * fps);

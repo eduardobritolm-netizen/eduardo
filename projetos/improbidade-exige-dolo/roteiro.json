@@ -47,9 +47,30 @@
       "tipo": "abertura",
       "kicker": "Direito Administrativo",
       "titulo": "Errou na gestão? Isso não é improbidade.",
-      "destaque": "Isso não é improbidade.",
-      "subtitulo": "O que dizem a Lei nº 14.230/2021, o STF e a LINDB sobre o erro do gestor.",
-      "fala": "Errou na gestão pública? Isso, sozinho, não é improbidade."
+      "destaque": "não é improbidade.",
+      "subtitulo": "A lei, o Supremo e a LINDB dizem a mesma coisa.",
+      "fala": "Errou na gestão pública? Isso, sozinho, não é improbidade.",
+      "estilo": "capa",
+      "fundo": "papel",
+      "selo": "3 fontes",
+      "cartoes": [
+        {
+          "rotulo": "Lei nº 8.429/1992",
+          "titulo": "Art. 1º, § 2º",
+          "texto": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito."
+        },
+        {
+          "rotulo": "Improbidade",
+          "titulo": "Sem dolo, não há.",
+          "texto": "Lei nº 14.230/2021"
+        },
+        {
+          "rotulo": "STF · LINDB",
+          "titulo": "Tema 1.199",
+          "texto": "Art. 28: dolo ou erro grosseiro."
+        }
+      ],
+      "subtitulo_forte": "Erro de gestão não é improbidade."
     },
     {
       "tipo": "tipografia",
