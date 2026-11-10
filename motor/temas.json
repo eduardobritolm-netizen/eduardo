@@ -111,7 +111,7 @@
     "descricao": "Identidade Eduardo Brito Advocacia: azul-marinho #0B1530, dourado #D9B86C, Montserrat, título fino com destaque em negrito dourado.",
     "bg": [
       "#0B1530",
-      "#0E1B3B"
+      "#0A1330"
     ],
     "texto": "#FFFFFF",
     "suave": "#AEB8CC",
@@ -135,6 +135,13 @@
     "vinheta": 0.35,
     "pesoTitulo": 300,
     "sublinhado": false,
-    "quebraDestaque": true
+    "quebraDestaque": true,
+    "abertura": "traco",
+    "destaqueGradiente": [
+      "#FDE9C9",
+      "#D4B488",
+      "#957649",
+      "#6E4C1F"
+    ]
   }
 }

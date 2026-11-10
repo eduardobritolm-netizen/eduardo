@@ -5,7 +5,9 @@
   "area": "Direito Administrativo",
   "publico": "gestores públicos, servidores e eleitores",
   "tema": "eduardo-brito",
-  "voz": { "provedor": "nenhuma" },
+  "voz": {
+    "provedor": "nenhuma"
+  },
   "fontes": [
     {
       "afirmacao": "Presta contas qualquer pessoa física ou jurídica, pública ou privada, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos.",
@@ -33,14 +35,22 @@
     }
   ],
   "legenda_post": "Quem administra dinheiro público presta contas, e o prefeito faz isso todo ano. O Tribunal de Contas dá o parecer prévio, a Câmara julga, e a rejeição por irregularidade insanável pode gerar inelegibilidade. Salve e envie para quem está na gestão pública.",
-  "hashtags": ["direitoadministrativo", "gestaopublica", "prestacaodecontas", "tribunaldecontas", "direitoeleitoral"],
+  "hashtags": [
+    "direitoadministrativo",
+    "gestaopublica",
+    "prestacaodecontas",
+    "tribunaldecontas",
+    "direitoeleitoral"
+  ],
   "cenas": [
     {
       "tipo": "abertura",
       "kicker": "Direito Administrativo",
       "titulo": "Todo ano, o prefeito presta contas.",
       "destaque": "presta contas.",
-      "fala": "Todo ano, o prefeito tem que prestar contas. E quem julga não é o Tribunal de Contas."
+      "fala": "Todo ano, o prefeito tem que prestar contas. E a palavra final é da Câmara Municipal.",
+      "ilustracao": "documento",
+      "carimbo": "Contas"
     },
     {
       "tipo": "artigo",
@@ -54,9 +64,18 @@
       "tipo": "linha_do_tempo",
       "titulo": "O caminho das contas",
       "etapas": [
-        { "titulo": "Prefeito", "detalhe": "presta as contas do ano" },
-        { "titulo": "Tribunal de Contas", "detalhe": "emite o parecer prévio" },
-        { "titulo": "Câmara Municipal", "detalhe": "julga as contas" }
+        {
+          "titulo": "Prefeito",
+          "detalhe": "presta as contas do ano"
+        },
+        {
+          "titulo": "Tribunal de Contas",
+          "detalhe": "emite o parecer prévio"
+        },
+        {
+          "titulo": "Câmara Municipal",
+          "detalhe": "julga as contas"
+        }
       ],
       "fala": "O caminho é este: o prefeito presta as contas, o Tribunal de Contas emite um parecer prévio, e a Câmara Municipal julga."
     },
@@ -75,7 +94,8 @@
       "numero": 60,
       "unidade": "dias por ano",
       "legenda": "as contas do município ficam à disposição de qualquer contribuinte",
-      "fala": "As contas do município ficam sessenta dias por ano à disposição de qualquer contribuinte, que pode questioná-las."
+      "fala": "As contas do município ficam sessenta dias por ano à disposição de qualquer contribuinte, que pode questioná-las.",
+      "cubos": false
     },
     {
       "tipo": "alerta",

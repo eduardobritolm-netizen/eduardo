@@ -3,7 +3,7 @@
 //   c.W, c.H, c.S (escala: 1 = 1080 px de largura), c.area {x,y,w,h} (onde desenhar),
 //   c.tema, c.marca, c.tres(nome, x, y, tamanho, extra) -> projetar(v3) em px.
 import {
-  clamp, lerp, easeOut, easeInOut, easeBack, entrada, fonte, quebrar, ajustar,
+  clamp, lerp, easeOut, easeIn, easeInOut, easeBack, entrada, fonte, quebrar, ajustar,
   retangulo, comAlpha, tracar, formatarNumero,
 } from './util.js';
 
@@ -189,6 +189,119 @@ function ondas(c, x, y, u0, cor) {
   ctx.restore();
 }
 
+// ---------- ilustrações em traço (alternativa ao 3D: tema.abertura = 'traco') ----------
+
+function tracoDourado(c, x0, x1) {
+  const { ctx, tema } = c;
+  const cores = tema.destaqueGradiente;
+  if (!cores) return tema.destaque;
+  const g = ctx.createLinearGradient(x0, 0, x1, 0);
+  cores.forEach((cor, i) => g.addColorStop(i / (cores.length - 1), cor));
+  return g;
+}
+
+const retPontos = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]];
+
+/** Documento de prestação de contas: folha, linhas, gráfico de balanço e carimbo que bate. */
+function ilustraDocumento(c, cx, y, tam) {
+  const { ctx, u, S, tema, p } = c;
+  const w = tam * 0.62, h = tam * 0.8, x = cx - w / 2;
+  const traco = tracoDourado(c, x, x + w);
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = traco;
+  // sombra suave da folha
+  ctx.save();
+  ctx.globalAlpha = 0.5 * entrada(u, 0.1, 0.6);
+  ctx.fillStyle = comAlpha('#000000', 0.25);
+  retangulo(ctx, x + 14 * S, y + 18 * S, w, h, 10 * S);
+  ctx.fill();
+  ctx.restore();
+  ctx.lineWidth = 4 * S;
+  tracar(ctx, retPontos(x, y, w, h), entrada(u, 0, 0.7, easeInOut));
+  // dobra do canto
+  ctx.lineWidth = 3 * S;
+  // cabeçalho e linhas de texto
+  const pad = w * 0.12;
+  ctx.lineWidth = 7 * S;
+  tracar(ctx, [[x + pad, y + pad], [x + w * 0.62, y + pad]], entrada(u, 0.45, 0.35));
+  ctx.lineWidth = 3.5 * S;
+  const larguras = [0.76, 0.7, 0.76, 0.5];
+  larguras.forEach((f, i) => {
+    const yy = y + pad + 50 * S + i * 34 * S;
+    tracar(ctx, [[x + pad, yy], [x + pad + (w - pad * 2) * f, yy]], entrada(u, 0.6 + i * 0.1, 0.3));
+  });
+  // gráfico de balanço (barras)
+  const base = y + h - pad;
+  const bw = (w - pad * 2) * 0.13;
+  [0.45, 0.75, 0.6, 0.9].forEach((f, i) => {
+    const bx = x + pad + i * bw * 1.6;
+    const k = entrada(u, 0.95 + i * 0.08, 0.35);
+    tracar(ctx, retPontos(bx, base - h * 0.3 * f * k, bw, h * 0.3 * f * k), k > 0 ? 1 : 0);
+  });
+  ctx.lineWidth = 3 * S;
+  tracar(ctx, [[x + pad - 6 * S, base], [x + w - pad * 1.6, base]], entrada(u, 0.9, 0.3));
+  ctx.restore();
+  // carimbo
+  const golpe = 1.45;
+  const sx = x + w * 0.86, sy = y + h * 0.72, r = w * 0.27;
+  if (u > golpe - 0.3) {
+    const k = clamp((u - (golpe - 0.3)) / 0.3);
+    const esc = u < golpe ? lerp(1.9, 1, easeIn(k)) : 1 + 0.06 * Math.exp(-10 * (u - golpe)) * Math.sin((u - golpe) * 30);
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(-0.22);
+    ctx.scale(esc, esc);
+    ctx.globalAlpha = u < golpe ? k * 0.7 : 1;
+    ctx.strokeStyle = tracoDourado(c, -r, r);
+    ctx.fillStyle = comAlpha(tema.bg[0], 0.85);
+    ctx.lineWidth = 6 * S;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.lineWidth = 2.5 * S;
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.82, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = tracoDourado(c, -r, r);
+    const txt = String(p.carimbo || 'CONTAS').toUpperCase();
+    fonte(ctx, 100, 800, TEXTO(tema));
+    fonte(ctx, Math.min(44 * S, (r * 1.35 / ctx.measureText(txt).width) * 100), 800, TEXTO(tema));
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(txt, 0, 2 * S);
+    ctx.restore();
+  }
+  return { golpe, impacto: { x: sx, y: sy } };
+}
+
+/** Prédio público: frontão, colunas e escadaria desenhados a traço. */
+function ilustraPredio(c, cx, y, tam) {
+  const { ctx, u, S } = c;
+  const w = tam * 0.86, x = cx - w / 2, h = tam * 0.72;
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = tracoDourado(c, x, x + w);
+  ctx.lineWidth = 4 * S;
+  const topo = y + h * 0.04, frontao = y + h * 0.3, viga = y + h * 0.36, base = y + h * 0.86;
+  tracar(ctx, [[x, frontao], [cx, topo], [x + w, frontao], [x, frontao]], entrada(u, 0, 0.6));
+  tracar(ctx, retPontos(x + w * 0.03, frontao, w * 0.94, viga - frontao), entrada(u, 0.3, 0.4));
+  const n = 6;
+  for (let i = 0; i < n; i++) {
+    const xx = x + w * 0.1 + i * (w * 0.8) / (n - 1);
+    const k = entrada(u, 0.5 + i * 0.07, 0.4);
+    tracar(ctx, [[xx - 10 * S, viga + 14 * S], [xx - 10 * S, base - 14 * S]], k);
+    tracar(ctx, [[xx + 10 * S, viga + 14 * S], [xx + 10 * S, base - 14 * S]], k);
+  }
+  [0, 1, 2].forEach((i) => {
+    const k = entrada(u, 0.95 + i * 0.1, 0.35);
+    const off = i * w * 0.03;
+    tracar(ctx, [[x + off - w * 0.02, base + i * 16 * S], [x + w - off + w * 0.02, base + i * 16 * S]], k);
+  });
+  ctx.restore();
+  return { golpe: 1.2, impacto: { x: cx, y: base } };
+}
+
+const ILUSTRACOES = { documento: ilustraDocumento, predio: ilustraPredio };
+
 // ---------- cenas ----------
 
 export const CENAS = {
@@ -201,18 +314,27 @@ export const CENAS = {
       let y = area.y;
       y += selo(c, p.kicker, cx, y, entrada(u, 0.05)) + 10 * S;
       const tam = Math.min(area.w * 0.95, area.h * 0.5);
-      const proj = c.tres('martelo', cx - tam / 2, y + 10 * S, tam);
-      const impacto = proj.projetar(proj.obj.pontoImpacto);
-      if (u > proj.obj.golpe && u < proj.obj.golpe + 0.12) {
+      const ilustra = ILUSTRACOES[p.ilustracao || (tema.abertura === 'traco' ? 'documento' : '')];
+      let golpe, impacto, iniTitulo = 0.6;
+      if (ilustra) {
+        const r = ilustra(c, cx, y + 30 * S, tam * 0.9);
+        golpe = r.golpe; impacto = r.impacto; iniTitulo = 0.9;
+        y += tam * 0.9 * 0.8 + 70 * S;
+      } else {
+        const proj = c.tres('martelo', cx - tam / 2, y + 10 * S, tam);
+        golpe = proj.obj.golpe;
+        impacto = proj.projetar(proj.obj.pontoImpacto);
+        y += tam * 0.82;
+      }
+      if (u > golpe && u < golpe + 0.12) {
         ctx.save();
-        ctx.globalAlpha = 1 - (u - proj.obj.golpe) / 0.12;
+        ctx.globalAlpha = (1 - (u - golpe) / 0.12) * (ilustra ? 0.5 : 1);
         ctx.fillStyle = comAlpha(tema.destaque, 0.25);
         ctx.fillRect(0, 0, c.W, c.H);
         ctx.restore();
       }
-      ondas(c, impacto.x, impacto.y, proj.obj.golpe, tema.destaque);
-      y += tam * 0.82;
-      tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x: area.x, y, w: area.w, ini: 0.6, max: 100, linhas: 4 });
+      ondas(c, impacto.x, impacto.y, golpe, tema.destaque);
+      tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x: area.x, y, w: area.w, ini: iniTitulo, max: 100, linhas: 4 });
     },
   },
 
@@ -702,6 +824,36 @@ export const CENAS = {
       const { ctx, u, p, S, area, tema, marca } = c;
       const cx = area.x + area.w / 2;
       let y = area.y;
+      if (marca.imgLogo) {
+        // logo do escritório no lugar do 3D e do avatar
+        const img = marca.imgLogo;
+        const lw = Math.min(area.w * 0.62, 640 * S), lh = lw * img.height / img.width;
+        const k = entrada(u, 0, 0.9, easeInOut);
+        ctx.save();
+        ctx.globalAlpha *= k;
+        ctx.translate(0, (1 - k) * 30 * S);
+        ctx.drawImage(img, cx - lw / 2, y + 20 * S, lw, lh);
+        ctx.restore();
+        y += lh + 90 * S;
+        if (p.titulo) y += tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x: area.x, y, w: area.w, max: 72, min: 46, linhas: 3, ini: 0.5 }) + 30 * S;
+        const cta = p.cta || marca.cta;
+        if (cta) {
+          const kc = entrada(u, 1.0, 0.5, easeBack);
+          fonte(ctx, 38 * S, 700, TEXTO(tema));
+          const w = Math.min(area.w, ctx.measureText(cta).width + 90 * S);
+          ctx.save();
+          ctx.globalAlpha *= clamp(kc * 1.5);
+          retangulo(ctx, cx - w / 2, y, w, 86 * S, 43 * S);
+          ctx.fillStyle = tema.destaque;
+          ctx.fill();
+          ctx.fillStyle = tema.textoSobreDestaque;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(cta, cx, y + 45 * S);
+          ctx.restore();
+        }
+        return;
+      }
       const tam = Math.min(area.w * 0.8, area.h * 0.38);
       c.tres('livros', cx - tam / 2, y - tam * 0.1, tam);
       y += tam * 0.8;

@@ -47,7 +47,7 @@ Cada cena tem `tipo`, `fala` (o que a voz diz e vira legenda) e os campos do tip
 
 | tipo | campos | quando usar |
 |---|---|---|
-| `abertura` | `titulo`, `destaque`, `kicker` | gancho dos 2 primeiros segundos (martelo 3D) |
+| `abertura` | `titulo`, `destaque`, `kicker`, `ilustracao` (documento/predio), `carimbo` | gancho dos 2 primeiros segundos. Com o tema `eduardo-brito` é uma ilustração em traço dourado (documento com carimbo ou prédio público); nos outros temas, martelo 3D |
 | `artigo` | `lei`, `artigo`, `texto`, `destaque` | texto literal da lei com marca-texto (`destaque` tem que estar dentro do `texto`) |
 | `numero` | `numero`, `prefixo`, `sufixo`, `casas`, `unidade`, `legenda`, `titulo`, `cubos` | prazos, valores, percentuais (cubos 3D até 60) |
 | `balanca` | `esquerda`, `direita`, `pende` (esquerda/direita/equilibrio), `titulo`, `conclusao` | quem tem razão, dois lados |
@@ -73,7 +73,10 @@ Opcionais em qualquer cena: `duracao` (mínimo em segundos), `apoio` (texto do s
 
 ## Marca, temas e voz
 
-- `marca.json`: nome, @, iniciais, cor (opcional, substitui o destaque), CTA, aviso legal.
+- `marca.json`: nome, @, iniciais, cor (opcional, substitui o destaque), CTA, aviso legal, áreas,
+  público, estilo, `logo` (fecho do vídeo) e `monograma` (topo de cada quadro). As logos oficiais
+  do escritório ficam em `marca/` (creme, marinho e dourado; vertical, horizontal e monograma).
+  Não use martelo de juiz para o escritório: a pessoa achou artificial (e juiz brasileiro não usa).
   Quando a pessoa pedir "muda a cor", "meu @ é…", edite aqui.
 - Temas em `motor/temas.json`: `toga` (marinho e dourado), `vade-mecum` (papel e vermelho),
   `tribunal` (verde e dourado), `noir` (preto e vermelho) e `eduardo-brito` (padrão do

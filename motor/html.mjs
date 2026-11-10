@@ -64,7 +64,15 @@ fs.mkdirSync(out, { recursive: true });
 const roteiro = JSON.parse(fs.readFileSync(arq, 'utf8'));
 const { erros, avisos } = validar(arq);
 const tl = await montarTimeline(arq, { semVoz: true });
-const tlPagina = { ...tl, trilhas: [], audio: null };
+const dataUri = (rel) => {
+  if (!rel) return undefined;
+  const arqImg = path.join(RAIZ, rel);
+  return fs.existsSync(arqImg) ? `data:image/png;base64,${fs.readFileSync(arqImg).toString('base64')}` : undefined;
+};
+const tlPagina = {
+  ...tl, trilhas: [], audio: null,
+  marca: { ...tl.marca, logoData: dataUri(tl.marca.logo), monogramaData: dataUri(tl.marca.monograma) },
+};
 
 const fontes = roteiro.fontes || [];
 const pendentes = fontes.filter((f) => !f.conferido_em).length;

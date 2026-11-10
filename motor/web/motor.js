@@ -38,6 +38,17 @@ if (window.__FONTES_EXTERNAS__) {
   }));
 }
 
+// ---------- logo do escritório (marca.json: logo e monograma) ----------
+async function carregarImagem(dado, caminho) {
+  const src = dado || (caminho ? '/' + caminho.replace(/^\//, '') : null);
+  if (!src) return null;
+  const img = new Image();
+  img.src = src;
+  try { await img.decode(); return img; } catch { return null; }
+}
+marca.imgLogo = await carregarImagem(marca.logoData, marca.logo);
+marca.imgMono = await carregarImagem(marca.monogramaData, marca.monograma);
+
 // ---------- canvases ----------
 const saida = document.getElementById('saida');
 saida.width = W;
@@ -190,14 +201,23 @@ function moldura(t) {
   ctx.fillRect(80 * S, 70 * S, (W - 160 * S) * clamp(t / timeline.duracao), 6 * S);
   fonte(ctx, 30 * S, 700, tema.fonteTexto);
   ctx.fillStyle = comAlpha(tema.texto, 0.75);
-  ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
-  ctx.fillText(marca.arroba || '', W / 2, 100 * S);
+  if (marca.imgMono) {
+    // monograma à esquerda e @ à direita, como nos posts
+    const mh = 58 * S, mw = mh * marca.imgMono.width / marca.imgMono.height;
+    ctx.drawImage(marca.imgMono, 80 * S, 96 * S, mw, mh);
+    ctx.textAlign = 'right';
+    ctx.fillText(marca.arroba || '', W - 80 * S, 114 * S);
+  } else {
+    ctx.textAlign = 'center';
+    ctx.fillText(marca.arroba || '', W / 2, 100 * S);
+  }
   // aviso jurídico no fim
   const ultima = timeline.cenas[timeline.cenas.length - 1];
   if (marca.aviso && t > ultima.inicio + 0.6) {
     ctx.globalAlpha = easeOut((t - ultima.inicio - 0.6) / 0.5);
     fonte(ctx, 28 * S, 500, tema.fonteTexto);
+    ctx.textAlign = 'center';
     ctx.fillStyle = comAlpha(tema.texto, 0.7);
     const ls = quebrar(ctx, marca.aviso, W - 200 * S);
     ls.forEach((l, i) => ctx.fillText(l.palavras.map((p) => p.txt).join(' '), W / 2, H * 0.9 + i * 38 * S));
