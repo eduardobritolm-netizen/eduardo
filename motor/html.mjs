@@ -91,7 +91,7 @@ const cenasHtml = tl.cenas.map((c, i) => `
           <button type="button" class="ver" data-t="${c.inicio.toFixed(2)}" aria-label="Assistir a cena ${i + 1}">Assistir</button>
         </header>
         <div class="corpo">
-          <section class="fala"><h3>Narração</h3><blockquote>${esc(c.fala || '(sem fala)')}</blockquote></section>
+          <section class="fala"><h3>Narração</h3><blockquote>${esc(c.fala || '(sem fala)')}</blockquote>${c.voz && c.voz !== c.fala ? `<p class="voz"><b>A voz lê:</b> ${esc(c.voz)}</p>` : ''}</section>
           <section class="tela"><h3>Na tela</h3>${naTela(c)}</section>
         </div>
       </article>`).join('');
@@ -163,6 +163,8 @@ h2 { font: 700 1.35rem/1.2 var(--display); margin: 0 0 1rem; }
 .corpo { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.25rem; }
 h3 { font: 600 .7rem/1 var(--texto); letter-spacing: .1em; text-transform: uppercase; color: var(--suave); margin: 0 0 .45rem; }
 blockquote { margin: 0; font: 400 1.05rem/1.5 var(--display); font-style: italic; }
+.voz { margin: .5rem 0 0; font-size: .8rem; color: var(--suave); }
+.voz b { font-weight: 600; }
 dl { margin: 0; display: grid; gap: .4rem; font-size: .88rem; }
 dl div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: .5rem; }
 dt { color: var(--suave); }

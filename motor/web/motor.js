@@ -302,6 +302,15 @@ const gradienteOuro = (c2, x0, x1) => {
   return g;
 };
 
+/** Câmera: aproximação lenta e contínua durante a cena (dolly-in), como em trailer. */
+function camera(c2, cena, u) {
+  if (cena.camera === false || tema.camera === false) return;
+  const z = 1 + 0.035 * clamp(u / Math.max(cena.dur, 1));
+  c2.translate(W / 2, H * 0.45);
+  c2.scale(z, z);
+  c2.translate(-W / 2, -H * 0.45);
+}
+
 /** Folha nova: a próxima cena sobe como uma página posta sobre os autos, com a faixa dourada na borda. */
 function folha(ant, cena, u, dur) {
   const k = easeOut(u / dur);
@@ -316,6 +325,15 @@ function folha(ant, cena, u, dur) {
   ctx.translate(W / 2, y + H);
   ctx.rotate((1 - k) * 0.03);
   ctx.translate(-W / 2, -H);
+  // rastro de movimento enquanto a folha ainda corre
+  const vel = 1 - k;
+  if (vel > 0.05) {
+    for (let r = 3; r >= 1; r--) {
+      ctx.globalAlpha = 0.18 * vel;
+      ctx.drawImage(camada, 0, r * 60 * S * vel);
+    }
+    ctx.globalAlpha = 1;
+  }
   ctx.shadowColor = 'rgba(0,0,0,0.45)';
   ctx.shadowBlur = 50 * S;
   ctx.shadowOffsetY = -12 * S;
@@ -349,6 +367,30 @@ function brilho(v) {
   ctx.fillStyle = g;
   ctx.fillRect(-larg, -H, larg * 2, H * 2);
   ctx.restore();
+  // risco horizontal anamórfico que acompanha o reflexo
+  ctx.save();
+  ctx.globalCompositeOperation = 'screen';
+  const ly = H * 0.42;
+  const h = ctx.createLinearGradient(0, 0, W, 0);
+  h.addColorStop(0, 'rgba(255,230,180,0)');
+  h.addColorStop(clamp(cx / W, 0.05, 0.95), `rgba(255,240,210,${0.8 * a})`);
+  h.addColorStop(1, 'rgba(255,230,180,0)');
+  ctx.fillStyle = h;
+  ctx.shadowColor = `rgba(255,200,120,${a})`;
+  ctx.shadowBlur = 30 * S;
+  ctx.fillRect(0, ly - 2 * S, W, 4 * S);
+  ctx.restore();
+}
+
+/** Grão de filme que muda a cada quadro (24 por segundo), por cima de tudo. */
+function graoFilme(t) {
+  const f = Math.floor(t * 24);
+  ctx.save();
+  ctx.globalAlpha = 0.55;
+  ctx.translate(-((f * 73) % 256), -((f * 151) % 256));
+  ctx.fillStyle = ctx.createPattern(grao, 'repeat');
+  ctx.fillRect(0, 0, W + 256, H + 256);
+  ctx.restore();
 }
 
 const APELIDOS = { rasgo: 'folha', luz: 'brilho' };
@@ -371,7 +413,11 @@ function desenhar(t, { comLegenda = true } = {}) {
   if (trans === 'folha' && u < DUR_FOLHA) {
     folha(ant, cena, u, DUR_FOLHA);
   } else {
+    ctx.save();
+    const zf = 1 + 0.012 * clamp(u / Math.max(cena.dur, 1));
+    ctx.translate(W / 2, H / 2); ctx.scale(zf, zf); ctx.translate(-W / 2, -H / 2);
     fundo(ctx, t, temaDa(cena));
+    ctx.restore();
     const mesmoFundo = ant && fundoDe(ant) === fundoDe(cena);
     const suave = mesmoFundo && trans !== 'corte' && u < TRANS;
     if (suave) {
@@ -390,6 +436,7 @@ function desenhar(t, { comLegenda = true } = {}) {
     ctx.save();
     ctx.globalAlpha = k;
     ctx.translate(0, (1 - k) * 80 * S);
+    camera(ctx, cena, u);
     ctx.drawImage(camada, 0, 0);
     ctx.restore();
   }
@@ -398,6 +445,7 @@ function desenhar(t, { comLegenda = true } = {}) {
   // enquanto a folha sobe, o topo ainda é da cena anterior
   const bordaY = H * (1 - easeOut(u / DUR_FOLHA));
   const temaTopo = trans === 'folha' && u < DUR_FOLHA && bordaY > 170 * S ? temaDa(ant) : temaDa(cena);
+  graoFilme(t);
   moldura(t, temaTopo);
   if (comLegenda) legendas(t);
 }

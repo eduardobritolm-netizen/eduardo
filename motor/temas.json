@@ -160,6 +160,7 @@
       "tinta": "#0B1530",
       "destaqueEstilo": "colchete",
       "vinheta": 0
-    }
+    },
+    "editorial": true
   }
 }

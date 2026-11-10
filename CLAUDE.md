@@ -71,12 +71,29 @@ escritório). Os recursos foram desenhados a partir da marca para não copiar ne
 ## Regras de roteiro
 
 - 30 a 60 segundos, 6 a 10 cenas. Uma ideia por cena. Fala com frases curtas, 8 a 20 palavras.
-- A fala é para ouvir: escreva números por extenso quando a leitura for ambígua
-  ("artigo cento e trinta e quatro"); na tela (campos visuais) use a forma escrita ("Art. 134").
+- Escreva a `fala` sempre em português padrão de texto jurídico, com números como se escreve:
+  "Lei nº 14.230/2021", "art. 1º, § 2º", "arts. 9º, 10 e 11", "Decreto-Lei nº 4.657/1942", "20%".
+  NUNCA escreva número por extenso na fala: a legenda mostra exatamente a forma escrita, e o motor
+  (`motor/pronuncia.mjs`) gera sozinho a leitura da voz ("Lei número catorze mil duzentos e trinta,
+  de dois mil e vinte e um", "artigo primeiro, parágrafo segundo") e sincroniza as duas. A página de
+  revisão mostra "A voz lê:" em cada cena. Se uma leitura sair errada, use `fala_voz` na cena só para a voz.
+- Prefira citar a lei pelo número na tela e encurtar na fala quando o número longo pesar
+  ("Desde 2021, improbidade exige dolo"), deixando o número completo no subtítulo ou no cartão.
 - Na cena `artigo`, o `texto` é cópia literal da lei. Se resumir, diga "resumo" no `lei`.
 - Sem promessa de resultado, sem "consulta grátis", sem "contrate agora", sem comparar com
   colegas, sem incentivar litígio. Conteúdo informativo, não captação.
 - Termine com `encerramento`. O aviso legal da `marca.json` aparece sozinho no fim.
+
+## Acabamento (tema eduardo-brito)
+
+- Sem ícones nem símbolos desenhados: abertura em manchete, alerta e jurisprudência editoriais
+  (rótulo com espaçamento que fecha, manchete por máscara, barra lateral, aspas tipográficas).
+- Câmera em aproximação lenta em todas as cenas, fundo em paralaxe, zoom digital na primeira
+  ênfase da tipografia, rastro de movimento na `folha`, risco anamórfico no `brilho`, grão de filme.
+- Som (`motor/som.mjs`, só no render): impacto grave na abertura, whoosh na `folha`, cintilar no
+  `brilho`, swish nos cortes suaves, tique na ênfase, subida no fecho e cama grave discreta. A
+  narração abaixa os efeitos automaticamente. Desligue com `"trilha": false` ou `"cama": false` no
+  roteiro, ou `--sem-trilha` no render.
 
 ## Marca, temas e voz
 

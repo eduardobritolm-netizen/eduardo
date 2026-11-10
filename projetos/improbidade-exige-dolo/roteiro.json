@@ -1,99 +1,124 @@
 {
   "titulo": "Errou na gestão não é improbidade",
-  "pedido": "Outro roteiro de Direito Administrativo, abertura sem cara de IA",
+  "pedido": "Melhorar o de improbidade com LINDB e julgado de tribunal superior; visual de produtora",
   "objetivo": "explicar",
   "area": "Direito Administrativo",
-  "publico": "gestores públicos, servidores e assessores",
+  "publico": "gestores públicos, servidores, procuradores e assessores",
   "tema": "eduardo-brito",
-  "voz": { "provedor": "nenhuma" },
+  "voz": {
+    "provedor": "nenhuma"
+  },
   "fontes": [
     {
-      "afirmacao": "Atos de improbidade são as condutas dolosas tipificadas nos arts. 9º, 10 e 11 da Lei 8.429/1992.",
-      "fonte": "Lei 8.429/1992, art. 1º, § 1º (redação da Lei 14.230/2021)",
+      "afirmacao": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito tipificado nos arts. 9º, 10 e 11, não bastando a voluntariedade do agente.",
+      "fonte": "Lei nº 8.429/1992, art. 1º, § 2º (redação da Lei nº 14.230/2021)",
       "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
       "conferido_em": null
     },
     {
-      "afirmacao": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito tipificado, não bastando a voluntariedade do agente.",
-      "fonte": "Lei 8.429/1992, art. 1º, § 2º",
-      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "afirmacao": "É necessária a comprovação de responsabilidade subjetiva (dolo) para a tipificação dos atos de improbidade dos arts. 9º, 10 e 11.",
+      "fonte": "STF, Tema 1.199 da repercussão geral (ARE 843.989)",
+      "url": "https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=1199",
       "conferido_em": null
     },
     {
-      "afirmacao": "O mero exercício da função, sem comprovação de ato doloso com fim ilícito, afasta a responsabilidade por improbidade.",
-      "fonte": "Lei 8.429/1992, art. 1º, § 3º",
-      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "afirmacao": "O agente público responderá pessoalmente por suas decisões ou opiniões técnicas em caso de dolo ou erro grosseiro.",
+      "fonte": "LINDB (Decreto-Lei nº 4.657/1942), art. 28, incluído pela Lei nº 13.655/2018",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm",
       "conferido_em": null
     },
     {
-      "afirmacao": "A ação de improbidade prescreve em 8 anos, contados da ocorrência do fato.",
-      "fonte": "Lei 8.429/1992, art. 23, caput",
-      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "afirmacao": "Na interpretação de normas sobre gestão pública, serão considerados os obstáculos e as dificuldades reais do gestor.",
+      "fonte": "LINDB, art. 22, caput",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm",
       "conferido_em": null
     }
   ],
-  "legenda_post": "Desde a Lei 14.230/2021, improbidade exige dolo: a vontade livre e consciente de alcançar o resultado ilícito. Erro de gestão, sozinho, não basta. Mas a mudança não é salvo-conduto. Salve e envie para quem está na gestão pública.",
-  "hashtags": ["direitoadministrativo", "improbidadeadministrativa", "gestaopublica", "lei14230", "servidorpublico"],
+  "legenda_post": "Desde a Lei nº 14.230/2021, improbidade exige dolo, e o STF confirmou isso no Tema 1.199. A LINDB completa: o agente público responde pessoalmente por dolo ou erro grosseiro, e as dificuldades reais da gestão devem ser consideradas. Erro de gestão, sozinho, não é improbidade. Salve e envie para quem está na gestão pública.",
+  "hashtags": [
+    "direitoadministrativo",
+    "improbidadeadministrativa",
+    "lindb",
+    "gestaopublica",
+    "stf"
+  ],
   "cenas": [
     {
       "tipo": "abertura",
       "kicker": "Direito Administrativo",
       "titulo": "Errou na gestão? Isso não é improbidade.",
       "destaque": "Isso não é improbidade.",
-      "subtitulo": "O que a Lei 14.230/2021 mudou na Lei de Improbidade.",
-      "fala": "Errou na gestão pública? Isso, sozinho, não é improbidade. A lei mudou em 2021."
+      "subtitulo": "O que dizem a Lei nº 14.230/2021, o STF e a LINDB sobre o erro do gestor.",
+      "fala": "Errou na gestão pública? Isso, sozinho, não é improbidade."
     },
     {
       "tipo": "tipografia",
       "fundo": "papel",
-      "fala": "Desde a Lei catorze mil duzentos e trinta, improbidade exige dolo. Culpa não basta.",
-      "enfase": ["exige dolo.", "Culpa não basta."]
+      "fala": "Desde 2021, improbidade exige dolo. Culpa não basta.",
+      "enfase": [
+        "exige dolo.",
+        "Culpa não basta."
+      ]
     },
     {
       "tipo": "artigo",
       "fundo": "papel",
-      "lei": "Lei 8.429/1992 · Lei de Improbidade",
+      "lei": "Lei nº 8.429/1992 · Lei de Improbidade Administrativa",
       "artigo": "Art. 1º, § 2º",
       "texto": "Considera-se dolo a vontade livre e consciente de alcançar o resultado ilícito tipificado nos arts. 9º, 10 e 11 desta Lei, não bastando a voluntariedade do agente.",
       "destaque": "não bastando a voluntariedade do agente",
       "duracao": 7,
-      "fala": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito. Não basta ter agido."
+      "fala": "Pelo art. 1º, § 2º, dolo é a vontade livre e consciente de alcançar o resultado ilícito."
     },
     {
-      "tipo": "lista",
-      "titulo": "Os três tipos de improbidade",
-      "estilo": "numerada",
-      "itens": [
-        "Enriquecimento ilícito (art. 9º)",
-        "Prejuízo ao erário (art. 10)",
-        "Violação aos princípios (art. 11)"
-      ],
-      "fala": "E a lei prevê três tipos: enriquecimento ilícito, prejuízo ao erário e violação aos princípios da administração."
+      "tipo": "jurisprudencia",
+      "tribunal": "Supremo Tribunal Federal",
+      "referencia": "Tema 1.199",
+      "data": "ARE 843.989 · Repercussão geral",
+      "trecho": "É necessária a comprovação de responsabilidade subjetiva para a tipificação dos atos de improbidade administrativa, exigindo-se, nos artigos 9º, 10 e 11 da LIA, a presença do elemento subjetivo: dolo.",
+      "destaque": "dolo.",
+      "duracao": 8,
+      "fala": "O STF confirmou no Tema 1.199: sem comprovação de dolo, não há ato de improbidade."
     },
     {
-      "tipo": "numero",
-      "titulo": "Prescrição",
-      "numero": 8,
-      "cubos": false,
-      "unidade": "anos",
-      "legenda": "contados da data do fato",
-      "fala": "A ação prescreve em oito anos, contados da data do fato."
+      "tipo": "artigo",
+      "fundo": "papel",
+      "lei": "LINDB · Decreto-Lei nº 4.657/1942",
+      "artigo": "Art. 28",
+      "texto": "O agente público responderá pessoalmente por suas decisões ou opiniões técnicas em caso de dolo ou erro grosseiro.",
+      "destaque": "dolo ou erro grosseiro",
+      "duracao": 6,
+      "fala": "E a LINDB completa no art. 28: o agente responde pessoalmente por dolo ou erro grosseiro."
+    },
+    {
+      "tipo": "tipografia",
+      "fundo": "papel",
+      "fala": "O art. 22 da LINDB manda considerar as dificuldades reais do gestor.",
+      "enfase": [
+        "dificuldades reais do gestor."
+      ]
     },
     {
       "tipo": "alerta",
       "transicao": "brilho",
-      "titulo": "Não é salvo-conduto",
-      "texto": "Conduta dolosa continua sendo improbidade, com as sanções da lei",
-      "fala": "Mas atenção: a mudança não é salvo-conduto. Conduta dolosa continua sendo improbidade."
+      "rotulo": "Atenção",
+      "titulo": "Não é salvo-conduto.",
+      "destaque": "salvo-conduto.",
+      "texto": "Conduta dolosa continua sendo improbidade. E o erro grosseiro gera responsabilidade pessoal pela LINDB.",
+      "fala": "Mas atenção: não é salvo-conduto. Dolo continua sendo improbidade.",
+      "duracao": 6.5
     },
     {
       "tipo": "tipografia",
       "fundo": "papel",
       "fala": "Erro de gestão é uma coisa. Improbidade é outra.",
-      "enfase": ["Improbidade é outra."]
+      "enfase": [
+        "Improbidade é outra."
+      ]
     },
     {
       "tipo": "encerramento",
+      "transicao": "brilho",
       "titulo": "Salve e envie para quem está na gestão pública.",
       "cta": "Salve e envie",
       "fala": "Salve e envie para quem está na gestão pública."

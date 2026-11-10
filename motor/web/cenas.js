@@ -38,12 +38,12 @@ function selo(c, texto, cx, y, k = 1) {
 }
 
 /** Título com palavras que sobem uma a uma; `destaque` ganha a cor de destaque e sublinhado. */
-function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas = 4, ini = 0, alinhar = 'center', cor, mascara = false }) {
+function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas = 4, ini = 0, alinhar = 'center', cor, mascara = false, peso }) {
   const { ctx, S, tema, u } = c;
   const px = ajustar(ctx, texto, w, max * S, min * S, linhas, 800, TITULO(tema));
   const alvo = destaque ? marcarPalavras(texto, destaque) : new Set();
   // peso fino no texto e negrito no destaque quando o tema pede (ex.: tema "eduardo-brito")
-  const pesoBase = tema.pesoTitulo ?? 800;
+  const pesoBase = peso ?? tema.pesoTitulo ?? 800;
   const pesoDe = (i) => (alvo.has(i) ? 800 : pesoBase);
   const palavras = String(texto).split(/\s+/).filter(Boolean);
   const ls = [];
@@ -368,6 +368,75 @@ function aberturaManchete(c) {
   }
 }
 
+/** Rótulo em caixa alta que "fecha" o espaçamento ao entrar, como título de abertura de filme. */
+function rotulo(c, texto, x, y, cor, ini = 0) {
+  const { ctx, u, S, tema } = c;
+  const k = entrada(u, ini, 0.9, easeOut);
+  if (k <= 0) return 0;
+  fonte(ctx, 28 * S, 700, TEXTO(tema));
+  ctx.save();
+  ctx.letterSpacing = `${(5 + (1 - k) * 18) * S}px`;
+  ctx.globalAlpha *= k;
+  ctx.fillStyle = cor;
+  ctx.textBaseline = 'top';
+  ctx.fillRect(x, y + 15 * S, 48 * S * k, 3 * S);
+  ctx.fillText(String(texto).toUpperCase(), x + 66 * S, y);
+  ctx.restore();
+  return 60 * S;
+}
+
+/** Jurisprudência editorial: sem ícone; tribunal em rótulo, referência grande, aspas e tese em máscara. */
+function jurisprudenciaEditorial(c) {
+  const { ctx, u, p, S, area, tema } = c;
+  const x = area.x;
+  let y = area.y + 30 * S;
+  y += rotulo(c, p.tribunal, x, y, tema.destaque, 0.05) + 20 * S;
+  y += tituloAnimado(c, { texto: p.referencia, x, y, w: area.w, max: 96, min: 60, linhas: 2, ini: 0.25, alinhar: 'left', mascara: true, peso: 800 });
+  if (p.data) {
+    ctx.save();
+    ctx.globalAlpha *= entrada(u, 0.6, 0.5);
+    fonte(ctx, 34 * S, 400, TEXTO(tema));
+    ctx.fillStyle = tema.suave;
+    ctx.textBaseline = 'top';
+    ctx.fillText(p.data, x, y);
+    ctx.restore();
+    y += 60 * S;
+  }
+  y += 30 * S;
+  // aspas tipográficas grandes
+  ctx.save();
+  ctx.globalAlpha *= entrada(u, 0.7, 0.6);
+  fonte(ctx, 300 * S, 800, 'Playfair Display');
+  ctx.fillStyle = tracoDourado(c, x, x + 160 * S);
+  ctx.textBaseline = 'top';
+  ctx.fillText('“', x - 10 * S, y - 70 * S);
+  ctx.restore();
+  y += 120 * S;
+  tituloAnimado(c, { texto: p.trecho, destaque: p.destaque, x, y, w: area.w, max: 52, min: 34, linhas: 9, ini: 0.9, alinhar: 'left', mascara: true });
+}
+
+/** Alerta editorial: sem triângulo; rótulo, frase forte e barra lateral. */
+function alertaEditorial(c) {
+  const { ctx, u, p, S, area, tema } = c;
+  const x = area.x + 40 * S;
+  let y = area.y + area.h * 0.16;
+  const topo = y;
+  y += rotulo(c, p.rotulo || 'Atenção', x, y, tema.alerta, 0.05) + 30 * S;
+  y += tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x, y, w: area.w - 40 * S, max: 104, min: 60, linhas: 4, ini: 0.25, alinhar: 'left', mascara: true });
+  if (p.texto) {
+    ctx.save();
+    ctx.globalAlpha *= entrada(u, 0.9, 0.6);
+    ctx.translate(0, (1 - entrada(u, 0.9, 0.6)) * 16 * S);
+    y += 20 * S + paragrafo(c, p.texto, x, y + 20 * S, area.w - 60 * S, { px: 44, peso: 300, cor: tema.suave, lh: 1.32 });
+    ctx.restore();
+  }
+  // barra lateral que cresce
+  ctx.save();
+  ctx.fillStyle = tema.alerta;
+  ctx.fillRect(area.x, topo, 6 * S, (y - topo + 30 * S) * entrada(u, 0.1, 0.9, easeInOut));
+  ctx.restore();
+}
+
 const ILUSTRACOES = { documento: ilustraDocumento, predio: ilustraPredio };
 let REFLEXO; // canvas de apoio para o reflexo dourado da logo
 
@@ -444,7 +513,7 @@ export const CENAS = {
       ctx.restore();
 
       let yy = y + pad;
-      fonte(ctx, 28 * S, 600, TEXTO(tema));
+      ajustar(ctx, String(p.lei || '').toUpperCase(), w - pad * 2 - 90 * S, 28 * S, 18 * S, 1, 600, TEXTO(tema));
       ctx.save();
       ctx.letterSpacing = `${2 * S}px`;
       ctx.fillStyle = comAlpha(tema.tinta, 0.6);
@@ -710,6 +779,7 @@ export const CENAS = {
     obrigatorios: ['tribunal', 'referencia', 'trecho'],
     desenhar(c) {
       const { ctx, u, p, S, area, tema } = c;
+      if (tema.editorial) return jurisprudenciaEditorial(c);
       const cx = area.x + area.w / 2;
       // fachada de tribunal desenhada a traço
       const fw = 360 * S, fh = 250 * S, fx = cx - fw / 2, fy = area.y + 10 * S;
@@ -772,6 +842,7 @@ export const CENAS = {
     obrigatorios: ['titulo'],
     desenhar(c) {
       const { ctx, u, p, S, area, tema } = c;
+      if (tema.editorial) return alertaEditorial(c);
       const cx = area.x + area.w / 2;
       const tremor = u > 0.35 ? Math.sin(u * 45) * 14 * S * Math.exp(-6 * (u - 0.35)) : 0;
       let y = area.y + area.h * 0.06;
@@ -907,6 +978,14 @@ export const CENAS = {
       const altura = () => linhas.reduce((a, l) => a + l.h, 0);
       while (altura() > area.h * 0.95 && escala > 0.5) { escala -= 0.05; linhas = montar(); }
       let y = area.y + Math.max(0, (area.h - altura()) / 2) - 20 * S;
+      // zoom digital (punch-in) quando entra a primeira palavra de ênfase
+      const primeira = palavras.findIndex((w) => enf.has(limpa(w)));
+      if (primeira >= 0) {
+        const zp = 1 + 0.06 * entrada(u, quando(primeira) - 0.02, 0.22, easeOut);
+        ctx.translate(area.x + area.w / 2, area.y + area.h / 2);
+        ctx.scale(zp, zp);
+        ctx.translate(-(area.x + area.w / 2), -(area.y + area.h / 2));
+      }
       const blocos = [];
       let bloco = null;
       linhas.forEach((l) => {

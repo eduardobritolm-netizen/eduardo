@@ -7,6 +7,7 @@ import { chromium } from 'playwright';
 import { montarTimeline, RAIZ } from './timeline.mjs';
 import { validar } from './validar.mjs';
 import { servir } from './servidor.mjs';
+import { gerarTrilha } from './som.mjs';
 
 const args = process.argv.slice(2);
 const arq = args.find((a) => !a.startsWith('--'));
@@ -85,8 +86,19 @@ try {
 
     console.log('3/5 Juntando narração...');
     const final = path.join(out, 'video.mp4');
-    if (narracao) {
-      await executar('ffmpeg', ['-y', '-v', 'error', '-i', semAudio, '-i', narracao, '-c:v', 'copy', '-c:a', 'copy', '-shortest', final]);
+    // desenho de som (efeitos + cama), a menos que o roteiro peça "trilha": false
+    const roteiroSom = JSON.parse(fs.readFileSync(arq, 'utf8'));
+    const sfx = roteiroSom.trilha === false || flag('--sem-trilha') ? null
+      : await gerarTrilha(tl, path.join(out, 'efeitos.m4a'), { cama: roteiroSom.cama !== false });
+    const entradasAudio = [narracao, sfx].filter(Boolean);
+    if (entradasAudio.length === 2) {
+      // narração por cima; efeitos abaixam quando a voz fala (sidechain)
+      await executar('ffmpeg', ['-y', '-v', 'error', '-i', semAudio, '-i', narracao, '-i', sfx, '-filter_complex',
+        '[2:a][1:a]sidechaincompress=threshold=0.05:ratio=6:attack=20:release=300[sfxd];[1:a][sfxd]amix=inputs=2:normalize=0,alimiter=limit=0.95[a]',
+        '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', final]);
+      fs.rmSync(semAudio);
+    } else if (entradasAudio.length === 1) {
+      await executar('ffmpeg', ['-y', '-v', 'error', '-i', semAudio, '-i', entradasAudio[0], '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'copy', '-shortest', final]);
       fs.rmSync(semAudio);
     } else fs.renameSync(semAudio, final);
 

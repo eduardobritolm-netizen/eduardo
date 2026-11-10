@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { narrar, estimarDuracao, timingProporcional, carregarEnv } from './voz.mjs';
+import { preparar, tempoEscrito } from './pronuncia.mjs';
 
 export const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -56,16 +57,22 @@ export async function montarTimeline(arqRoteiro, { semVoz = false, fps = 30 } = 
   const trilhas = [];
   for (const [i, cena] of roteiro.cenas.entries()) {
     const fala = cena.fala || '';
-    const audio = fala ? await narrar(fala, provedor, path.join(pasta, 'audio')) : null;
-    const durFala = audio ? audio.duracao : estimarDuracao(fala) / velocidade;
+    // a legenda mostra a forma escrita (Lei nº 14.230/2021); a voz lê a forma falada
+    const prep = preparar(fala);
+    const falado = cena.fala_voz || prep.falado;
+    const audio = fala ? await narrar(falado, provedor, path.join(pasta, 'audio')) : null;
+    const durFala = audio ? audio.duracao : estimarDuracao(falado) / velocidade;
     const atraso = i === 0 ? INICIO : 0.15; // a fala entra logo depois da transição
     const inicioFala = t + atraso;
-    const palavras = audio
+    let temposFalados = audio
       ? audio.palavras.map((w) => ({ p: w.p, t0: inicioFala + w.t0, t1: inicioFala + w.t1 }))
-      : timingProporcional(fala, durFala, inicioFala);
+      : timingProporcional(falado, durFala, inicioFala);
+    const totalFalado = prep.mapa.reduce((a, b) => a + b, 0);
+    if (!cena.fala_voz && temposFalados.length !== totalFalado) temposFalados = timingProporcional(prep.falado, durFala, inicioFala);
+    const palavras = fala ? (cena.fala_voz ? timingProporcional(fala, durFala, inicioFala) : tempoEscrito(prep, temposFalados)) : [];
     const dur = Math.max(MINIMO[cena.tipo] || 2.4, cena.duracao || 0, atraso + durFala + FOLGA);
     if (audio) trilhas.push({ arquivo: audio.arquivo, inicio: inicioFala });
-    cenas.push({ ...cena, inicio: t, dur, grupos: agrupar(palavras) });
+    cenas.push({ ...cena, inicio: t, dur, voz: falado, grupos: agrupar(palavras) });
     t += dur;
   }
   const duracao = t;
