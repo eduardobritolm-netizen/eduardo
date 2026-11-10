@@ -6,5 +6,12 @@
   "tema_padrao": "eduardo-brito",
   "cta": "Salve e envie para quem precisa",
   "aviso": "Conteúdo de caráter informativo. Não substitui a orientação de um advogado. OAB/AM 21.748",
-  "oab": "OAB/AM 21.748"
+  "oab": "OAB/AM 21.748",
+  "areas": [
+    "Direito Eleitoral",
+    "Direito Administrativo"
+  ],
+  "regiao": "Amazonas",
+  "publico": "gestores públicos, servidores, candidatos, partidos e eleitores",
+  "estilo": "sóbrio e didático; sem críticas a governos ou referências a entes específicos; imagens genéricas"
 }

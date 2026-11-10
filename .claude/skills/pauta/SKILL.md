@@ -4,6 +4,11 @@ description: Sugere temas e ângulos de vídeos jurídicos. Use quando a pessoa 
 ---
 # Pauta
 
+Comece pelas `areas` e pelo `publico` em `marca.json` (hoje: Direito Eleitoral e Direito
+Administrativo, Amazonas). Prefira temas que cruzem as duas áreas: contas de gestor e
+inelegibilidade, licitações (Lei 14.133/2021) e improbidade, condutas vedadas a agentes públicos.
+Siga o `estilo` da marca: sem críticas a governos nem referências a entes específicos.
+
 Para cada ideia entregue: título-gancho (pergunta ou afirmação surpreendente), área do Direito,
 público, base legal provável e formato sugerido (sequência de tipos de cena).
 

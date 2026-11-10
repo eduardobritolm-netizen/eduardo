@@ -260,7 +260,7 @@ export const CENAS = {
       ctx.fillText(String(p.lei || '').toUpperCase(), x + pad, yy);
       ctx.restore();
       yy += 60 * S;
-      fonte(ctx, 72 * S, 800, TITULO(tema));
+      ajustar(ctx, p.artigo, w - pad * 2, 72 * S, 40 * S, 1, 800, TITULO(tema));
       ctx.fillStyle = tema.tinta;
       ctx.textBaseline = 'top';
       ctx.fillText(p.artigo, x + pad, yy);

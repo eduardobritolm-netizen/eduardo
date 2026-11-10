@@ -1,0 +1,99 @@
+{
+  "titulo": "Todo ano, o prefeito presta contas",
+  "pedido": "Prestação de contas anual, versão Direito Administrativo",
+  "objetivo": "explicar",
+  "area": "Direito Administrativo",
+  "publico": "gestores públicos, servidores e eleitores",
+  "tema": "eduardo-brito",
+  "voz": { "provedor": "nenhuma" },
+  "fontes": [
+    {
+      "afirmacao": "Presta contas qualquer pessoa física ou jurídica, pública ou privada, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos.",
+      "fonte": "Constituição Federal, art. 70, parágrafo único",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "O prefeito presta contas anualmente; o Tribunal de Contas emite parecer prévio, que só deixa de prevalecer por decisão de dois terços da Câmara Municipal.",
+      "fonte": "Constituição Federal, art. 31, §§ 1º e 2º",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "As contas dos Municípios ficam, anualmente, durante 60 dias, à disposição de qualquer contribuinte, que pode questionar sua legitimidade.",
+      "fonte": "Constituição Federal, art. 31, § 3º",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "São inelegíveis por 8 anos os que tiverem contas rejeitadas por irregularidade insanável que configure ato doloso de improbidade administrativa, por decisão irrecorrível do órgão competente.",
+      "fonte": "Lei Complementar 64/1990, art. 1º, I, g",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp64.htm",
+      "conferido_em": null
+    }
+  ],
+  "legenda_post": "Quem administra dinheiro público presta contas, e o prefeito faz isso todo ano. O Tribunal de Contas dá o parecer prévio, a Câmara julga, e a rejeição por irregularidade insanável pode gerar inelegibilidade. Salve e envie para quem está na gestão pública.",
+  "hashtags": ["direitoadministrativo", "gestaopublica", "prestacaodecontas", "tribunaldecontas", "direitoeleitoral"],
+  "cenas": [
+    {
+      "tipo": "abertura",
+      "kicker": "Direito Administrativo",
+      "titulo": "Todo ano, o prefeito presta contas.",
+      "destaque": "presta contas.",
+      "fala": "Todo ano, o prefeito tem que prestar contas. E quem julga não é o Tribunal de Contas."
+    },
+    {
+      "tipo": "artigo",
+      "lei": "Constituição Federal",
+      "artigo": "Art. 70, parágrafo único",
+      "texto": "Prestará contas qualquer pessoa física ou jurídica, pública ou privada, que utilize, arrecade, guarde, gerencie ou administre dinheiros, bens e valores públicos ou pelos quais a União responda, ou que, em nome desta, assuma obrigações de natureza pecuniária.",
+      "destaque": "dinheiros, bens e valores públicos",
+      "fala": "A Constituição é clara: quem usa, arrecada ou administra dinheiro público presta contas."
+    },
+    {
+      "tipo": "linha_do_tempo",
+      "titulo": "O caminho das contas",
+      "etapas": [
+        { "titulo": "Prefeito", "detalhe": "presta as contas do ano" },
+        { "titulo": "Tribunal de Contas", "detalhe": "emite o parecer prévio" },
+        { "titulo": "Câmara Municipal", "detalhe": "julga as contas" }
+      ],
+      "fala": "O caminho é este: o prefeito presta as contas, o Tribunal de Contas emite um parecer prévio, e a Câmara Municipal julga."
+    },
+    {
+      "tipo": "numero",
+      "titulo": "Para derrubar o parecer",
+      "numero": 2,
+      "sufixo": "/3",
+      "cubos": false,
+      "unidade": "da Câmara Municipal",
+      "legenda": "é o voto necessário para o parecer do Tribunal de Contas deixar de valer",
+      "fala": "E o parecer do Tribunal só deixa de valer pelo voto de dois terços dos vereadores."
+    },
+    {
+      "tipo": "numero",
+      "numero": 60,
+      "unidade": "dias por ano",
+      "legenda": "as contas do município ficam à disposição de qualquer contribuinte",
+      "fala": "As contas do município ficam sessenta dias por ano à disposição de qualquer contribuinte, que pode questioná-las."
+    },
+    {
+      "tipo": "alerta",
+      "titulo": "Contas rejeitadas?",
+      "texto": "Irregularidade insanável que configure ato doloso de improbidade, com decisão irrecorrível, gera inelegibilidade por 8 anos",
+      "fala": "Atenção: contas rejeitadas por irregularidade insanável, que configure ato doloso de improbidade, podem deixar o gestor inelegível por oito anos."
+    },
+    {
+      "tipo": "frase",
+      "texto": "Quem administra dinheiro público, presta contas.",
+      "destaque": "presta contas.",
+      "fala": "Quem administra dinheiro público presta contas. É dever constitucional."
+    },
+    {
+      "tipo": "encerramento",
+      "titulo": "Salve e envie para quem está na gestão pública.",
+      "cta": "Salve e envie",
+      "fala": "Salve e envie para quem está na gestão pública."
+    }
+  ]
+}
