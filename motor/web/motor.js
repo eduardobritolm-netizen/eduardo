@@ -50,6 +50,7 @@ marca.imgLogo = await carregarImagem(marca.logoData, marca.logo);
 marca.imgMono = await carregarImagem(marca.monogramaData, marca.monograma);
 marca.imgMonoPapel = await carregarImagem(marca.monogramaPapelData, marca.monograma_papel);
 marca.imgMarcaDagua = await carregarImagem(marca.marcaDaguaData, marca.marca_dagua);
+marca.imgMarcaDaguaEscuro = await carregarImagem(marca.marcaDaguaEscuroData, marca.marca_dagua_escuro);
 
 // ---------- canvases ----------
 const saida = document.getElementById('saida');

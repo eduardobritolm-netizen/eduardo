@@ -38,7 +38,7 @@ function selo(c, texto, cx, y, k = 1) {
 }
 
 /** Título com palavras que sobem uma a uma; `destaque` ganha a cor de destaque e sublinhado. */
-function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas = 4, ini = 0, alinhar = 'center', cor }) {
+function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas = 4, ini = 0, alinhar = 'center', cor, mascara = false }) {
   const { ctx, S, tema, u } = c;
   const px = ajustar(ctx, texto, w, max * S, min * S, linhas, 800, TITULO(tema));
   const alvo = destaque ? marcarPalavras(texto, destaque) : new Set();
@@ -64,10 +64,20 @@ function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas
   ls.forEach((linha, li) => {
     const x0 = alinhar === 'center' ? x + (w - linha.w) / 2 : x;
     linha.palavras.forEach((p) => {
-      const k = entrada(u, ini + p.i * 0.07, 0.55, easeBack);
       ctx.save();
-      ctx.globalAlpha *= clamp(k * 1.4);
-      ctx.translate(0, (1 - clamp(k)) * 40 * S);
+      let k;
+      if (mascara) {
+        // a linha inteira sobe de trás de uma máscara (abertura editorial)
+        k = entrada(u, ini + li * 0.16, 0.7, easeOut);
+        ctx.beginPath();
+        ctx.rect(x - 40 * S, y + li * lh + px * 0.05, w + 80 * S, lh + px * 0.2);
+        ctx.clip();
+        ctx.translate(0, (1 - k) * lh * 1.05);
+      } else {
+        k = entrada(u, ini + p.i * 0.07, 0.55, easeBack);
+        ctx.globalAlpha *= clamp(k * 1.4);
+        ctx.translate(0, (1 - clamp(k)) * 40 * S);
+      }
       ctx.textBaseline = 'alphabetic';
       ctx.textAlign = 'left';
       const em = alvo.has(p.i);
@@ -113,13 +123,14 @@ function paragrafo(c, texto, x, y, w, { px = 42, peso = 500, cor, familia, alinh
   fonte(ctx, px * S, peso, familia || TEXTO(tema), estilo);
   const ls = quebrar(ctx, texto, w);
   ctx.save();
+  const alfaBase = ctx.globalAlpha;
   ctx.fillStyle = cor || tema.texto;
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   ls.forEach((l, i) => {
     const kk = clamp(k * ls.length - i);
     if (kk <= 0) return;
-    ctx.globalAlpha = clamp(kk);
+    ctx.globalAlpha = alfaBase * clamp(kk);
     const x0 = alinhar === 'center' ? x + (w - l.w) / 2 : x;
     ctx.fillText(l.palavras.map((p) => p.txt).join(' '), x0, y + px * S + i * px * S * lh);
   });
@@ -306,6 +317,57 @@ function ilustraPredio(c, cx, y, tam) {
   return { golpe: 1.2, impacto: { x: cx, y: base } };
 }
 
+/** Abertura editorial: só tipografia, alinhada à esquerda, sem ícone. */
+function aberturaManchete(c) {
+  const { ctx, u, d, p, S, area, tema, marca, W, H } = c;
+  // monograma gigante quase invisível ao fundo, com deriva lenta
+  const md = marca.imgMarcaDaguaEscuro;
+  if (md) {
+    const z = 1 + 0.04 * (u / Math.max(d, 1));
+    const mh = H * 0.62 * z, mw = mh * md.width / md.height;
+    ctx.save();
+    ctx.globalAlpha = 0.05 * entrada(u, 0, 1.2);
+    ctx.drawImage(md, W - mw * 0.72 + u * 4 * S, H * 0.2 - u * 3 * S, mw, mh);
+    ctx.restore();
+  }
+  const x = area.x;
+  let y = area.y + area.h * 0.18;
+  // selo dourado preenchido, alinhado à esquerda
+  if (p.kicker) {
+    const k = entrada(u, 0.05, 0.5);
+    fonte(ctx, 28 * S, 700, TEXTO(tema));
+    ctx.save();
+    ctx.letterSpacing = `${3 * S}px`;
+    const txt = String(p.kicker).toUpperCase();
+    const w = ctx.measureText(txt).width + 56 * S, h = 58 * S;
+    ctx.globalAlpha *= k;
+    retangulo(ctx, x, y, w * k + 1, h, h / 2);
+    ctx.fillStyle = tema.destaque;
+    ctx.fill();
+    ctx.fillStyle = tema.textoSobreDestaque;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(txt, x + 28 * S, y + h / 2 + 1 * S);
+    ctx.restore();
+    y += h + 70 * S;
+  }
+  const alto = tituloAnimado(c, { texto: p.titulo, destaque: p.destaque, x, y, w: area.w, max: 128, min: 70, linhas: 5, ini: 0.25, alinhar: 'left', mascara: true });
+  y += alto + 10 * S;
+  // fio dourado
+  ctx.save();
+  ctx.strokeStyle = tracoDourado(c, x, x + 160 * S);
+  ctx.lineWidth = 4 * S;
+  tracar(ctx, [[x, y], [x + 160 * S, y]], entrada(u, 0.9, 0.6, easeInOut));
+  ctx.restore();
+  y += 46 * S;
+  if (p.subtitulo) {
+    ctx.save();
+    ctx.globalAlpha *= entrada(u, 1.1, 0.6);
+    ctx.translate(0, (1 - entrada(u, 1.1, 0.6)) * 16 * S);
+    paragrafo(c, p.subtitulo, x, y, area.w * 0.9, { px: 44, peso: 300, cor: tema.suave, lh: 1.3 });
+    ctx.restore();
+  }
+}
+
 const ILUSTRACOES = { documento: ilustraDocumento, predio: ilustraPredio };
 let REFLEXO; // canvas de apoio para o reflexo dourado da logo
 
@@ -317,6 +379,7 @@ export const CENAS = {
     obrigatorios: ['titulo'],
     desenhar(c) {
       const { ctx, u, p, S, area, tema } = c;
+      if (!p.ilustracao && (p.estilo === 'manchete' || tema.abertura === 'manchete')) return aberturaManchete(c);
       const cx = area.x + area.w / 2;
       let y = area.y;
       y += selo(c, p.kicker, cx, y, entrada(u, 0.05)) + 10 * S;

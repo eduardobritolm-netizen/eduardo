@@ -1,0 +1,102 @@
+{
+  "titulo": "Errou na gestão não é improbidade",
+  "pedido": "Outro roteiro de Direito Administrativo, abertura sem cara de IA",
+  "objetivo": "explicar",
+  "area": "Direito Administrativo",
+  "publico": "gestores públicos, servidores e assessores",
+  "tema": "eduardo-brito",
+  "voz": { "provedor": "nenhuma" },
+  "fontes": [
+    {
+      "afirmacao": "Atos de improbidade são as condutas dolosas tipificadas nos arts. 9º, 10 e 11 da Lei 8.429/1992.",
+      "fonte": "Lei 8.429/1992, art. 1º, § 1º (redação da Lei 14.230/2021)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito tipificado, não bastando a voluntariedade do agente.",
+      "fonte": "Lei 8.429/1992, art. 1º, § 2º",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "O mero exercício da função, sem comprovação de ato doloso com fim ilícito, afasta a responsabilidade por improbidade.",
+      "fonte": "Lei 8.429/1992, art. 1º, § 3º",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "A ação de improbidade prescreve em 8 anos, contados da ocorrência do fato.",
+      "fonte": "Lei 8.429/1992, art. 23, caput",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8429.htm",
+      "conferido_em": null
+    }
+  ],
+  "legenda_post": "Desde a Lei 14.230/2021, improbidade exige dolo: a vontade livre e consciente de alcançar o resultado ilícito. Erro de gestão, sozinho, não basta. Mas a mudança não é salvo-conduto. Salve e envie para quem está na gestão pública.",
+  "hashtags": ["direitoadministrativo", "improbidadeadministrativa", "gestaopublica", "lei14230", "servidorpublico"],
+  "cenas": [
+    {
+      "tipo": "abertura",
+      "kicker": "Direito Administrativo",
+      "titulo": "Errou na gestão? Isso não é improbidade.",
+      "destaque": "Isso não é improbidade.",
+      "subtitulo": "O que a Lei 14.230/2021 mudou na Lei de Improbidade.",
+      "fala": "Errou na gestão pública? Isso, sozinho, não é improbidade. A lei mudou em 2021."
+    },
+    {
+      "tipo": "tipografia",
+      "fundo": "papel",
+      "fala": "Desde a Lei catorze mil duzentos e trinta, improbidade exige dolo. Culpa não basta.",
+      "enfase": ["exige dolo.", "Culpa não basta."]
+    },
+    {
+      "tipo": "artigo",
+      "fundo": "papel",
+      "lei": "Lei 8.429/1992 · Lei de Improbidade",
+      "artigo": "Art. 1º, § 2º",
+      "texto": "Considera-se dolo a vontade livre e consciente de alcançar o resultado ilícito tipificado nos arts. 9º, 10 e 11 desta Lei, não bastando a voluntariedade do agente.",
+      "destaque": "não bastando a voluntariedade do agente",
+      "duracao": 7,
+      "fala": "Dolo é a vontade livre e consciente de alcançar o resultado ilícito. Não basta ter agido."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "Os três tipos de improbidade",
+      "estilo": "numerada",
+      "itens": [
+        "Enriquecimento ilícito (art. 9º)",
+        "Prejuízo ao erário (art. 10)",
+        "Violação aos princípios (art. 11)"
+      ],
+      "fala": "E a lei prevê três tipos: enriquecimento ilícito, prejuízo ao erário e violação aos princípios da administração."
+    },
+    {
+      "tipo": "numero",
+      "titulo": "Prescrição",
+      "numero": 8,
+      "cubos": false,
+      "unidade": "anos",
+      "legenda": "contados da data do fato",
+      "fala": "A ação prescreve em oito anos, contados da data do fato."
+    },
+    {
+      "tipo": "alerta",
+      "transicao": "brilho",
+      "titulo": "Não é salvo-conduto",
+      "texto": "Conduta dolosa continua sendo improbidade, com as sanções da lei",
+      "fala": "Mas atenção: a mudança não é salvo-conduto. Conduta dolosa continua sendo improbidade."
+    },
+    {
+      "tipo": "tipografia",
+      "fundo": "papel",
+      "fala": "Erro de gestão é uma coisa. Improbidade é outra.",
+      "enfase": ["Improbidade é outra."]
+    },
+    {
+      "tipo": "encerramento",
+      "titulo": "Salve e envie para quem está na gestão pública.",
+      "cta": "Salve e envie",
+      "fala": "Salve e envie para quem está na gestão pública."
+    }
+  ]
+}

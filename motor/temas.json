@@ -136,7 +136,7 @@
     "pesoTitulo": 300,
     "sublinhado": false,
     "quebraDestaque": true,
-    "abertura": "traco",
+    "abertura": "manchete",
     "destaqueGradiente": [
       "#FDE9C9",
       "#D4B488",

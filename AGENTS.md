@@ -47,7 +47,7 @@ Cada cena tem `tipo`, `fala` (o que a voz diz e vira legenda) e os campos do tip
 
 | tipo | campos | quando usar |
 |---|---|---|
-| `abertura` | `titulo`, `destaque`, `kicker`, `ilustracao` (documento/predio), `carimbo` | gancho dos 2 primeiros segundos. Com o tema `eduardo-brito` é uma ilustração em traço dourado (documento com carimbo ou prédio público); nos outros temas, martelo 3D |
+| `abertura` | `titulo`, `destaque`, `kicker`, `subtitulo`; opcional `ilustracao` (documento/predio), `carimbo` | gancho dos 2 primeiros segundos. No tema `eduardo-brito` é uma manchete editorial só de tipografia (linha fina branca + destaque em negrito dourado, alinhada à esquerda, monograma quase invisível ao fundo). A pessoa NÃO quer ícone nem ilustração na primeira tela; use `ilustracao` só se ela pedir. Nos outros temas, martelo 3D |
 | `artigo` | `lei`, `artigo`, `texto`, `destaque` | texto literal da lei com marca-texto (`destaque` tem que estar dentro do `texto`) |
 | `numero` | `numero`, `prefixo`, `sufixo`, `casas`, `unidade`, `legenda`, `titulo`, `cubos` | prazos, valores, percentuais (cubos 3D até 60) |
 | `balanca` | `esquerda`, `direita`, `pende` (esquerda/direita/equilibrio), `titulo`, `conclusao` | quem tem razão, dois lados |

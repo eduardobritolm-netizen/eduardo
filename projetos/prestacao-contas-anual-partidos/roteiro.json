@@ -5,7 +5,9 @@
   "area": "Direito Eleitoral",
   "publico": "dirigentes partidários, tesoureiros e pré-candidatos",
   "tema": "eduardo-brito",
-  "voz": { "provedor": "nenhuma" },
+  "voz": {
+    "provedor": "nenhuma"
+  },
   "fontes": [
     {
       "afirmacao": "O partido deve enviar, todo ano, à Justiça Eleitoral o balanço contábil do exercício findo, até 30 de junho do ano seguinte.",
@@ -39,14 +41,21 @@
     }
   ],
   "legenda_post": "Não é só na campanha: todo partido presta contas anuais à Justiça Eleitoral, até 30 de junho do ano seguinte. Diretório municipal sem movimento também declara. Salve e envie para quem cuida das contas do partido.",
-  "hashtags": ["direitoeleitoral", "partidospoliticos", "prestacaodecontas", "justicaeleitoral", "eleicoes"],
+  "hashtags": [
+    "direitoeleitoral",
+    "partidospoliticos",
+    "prestacaodecontas",
+    "justicaeleitoral",
+    "eleicoes"
+  ],
   "cenas": [
     {
       "tipo": "abertura",
       "kicker": "Direito Eleitoral",
       "titulo": "Não é só na campanha. O partido presta contas todo ano.",
       "destaque": "O partido presta contas todo ano.",
-      "fala": "Não é só na campanha. O partido político também presta contas todo ano."
+      "fala": "Não é só na campanha. O partido político também presta contas todo ano.",
+      "subtitulo": "O balanço anual vai à Justiça Eleitoral até 30 de junho."
     },
     {
       "tipo": "artigo",
@@ -78,8 +87,19 @@
     {
       "tipo": "comparacao",
       "titulo": "Se der errado",
-      "esquerda": { "titulo": "Desaprovadas", "itens": ["Devolução do valor irregular", "Multa de até 20%"] },
-      "direita": { "titulo": "Não prestadas", "itens": ["Suspensão de novas cotas do Fundo Partidário"] },
+      "esquerda": {
+        "titulo": "Desaprovadas",
+        "itens": [
+          "Devolução do valor irregular",
+          "Multa de até 20%"
+        ]
+      },
+      "direita": {
+        "titulo": "Não prestadas",
+        "itens": [
+          "Suspensão de novas cotas do Fundo Partidário"
+        ]
+      },
       "fala": "Contas desaprovadas: devolução do valor irregular, com multa de até vinte por cento. Contas não prestadas: novas cotas do Fundo Partidário suspensas."
     },
     {
