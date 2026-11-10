@@ -1,10 +1,10 @@
 {
-  "nome": "Seu Nome Advocacia",
-  "arroba": "@seuperfil",
-  "iniciais": "SN",
+  "nome": "Eduardo Brito Advocacia",
+  "arroba": "@eduardobritoadv",
+  "iniciais": "EB",
   "cor": null,
-  "tema_padrao": "toga",
-  "cta": "Salve e mande para quem precisa",
-  "aviso": "Conteúdo informativo. Não substitui a orientação de um advogado para o seu caso.",
-  "oab": ""
+  "tema_padrao": "eduardo-brito",
+  "cta": "Salve e envie para quem precisa",
+  "aviso": "Conteúdo de caráter informativo. Não substitui a orientação de um advogado. OAB/AM 21.748",
+  "oab": "OAB/AM 21.748"
 }

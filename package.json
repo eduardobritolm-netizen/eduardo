@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fontsource/inter": "5.1.0",
+    "@fontsource/montserrat": "^5.1.0",
     "@fontsource/playfair-display": "5.1.0",
     "playwright": "1.63.0",
     "three": "0.169.0"

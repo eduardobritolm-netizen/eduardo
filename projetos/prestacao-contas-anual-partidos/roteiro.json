@@ -1,0 +1,104 @@
+{
+  "titulo": "O partido também presta contas todo ano",
+  "pedido": "Prestação de contas anual, com a identidade do escritório",
+  "objetivo": "explicar",
+  "area": "Direito Eleitoral",
+  "publico": "dirigentes partidários, tesoureiros e pré-candidatos",
+  "tema": "eduardo-brito",
+  "voz": { "provedor": "nenhuma" },
+  "fontes": [
+    {
+      "afirmacao": "O partido deve enviar, todo ano, à Justiça Eleitoral o balanço contábil do exercício findo, até 30 de junho do ano seguinte.",
+      "fonte": "Lei 9.096/1995, art. 32, caput (redação da Lei 13.877/2019)",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "O balanço do órgão nacional vai ao TSE, o dos órgãos estaduais aos TREs e o dos municipais aos juízes eleitorais.",
+      "fonte": "Lei 9.096/1995, art. 32, § 1º",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "Órgão municipal sem movimentação de recursos fica desobrigado de prestar contas, mas o responsável apresenta declaração de ausência de movimentação no mesmo prazo.",
+      "fonte": "Lei 9.096/1995, art. 32, § 4º",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "A desaprovação das contas implica a devolução da importância irregular, acrescida de multa de até 20%.",
+      "fonte": "Lei 9.096/1995, art. 37, caput",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+      "conferido_em": null
+    },
+    {
+      "afirmacao": "A falta de prestação de contas implica a suspensão de novas cotas do Fundo Partidário enquanto perdurar a inadimplência.",
+      "fonte": "Lei 9.096/1995, art. 37-A",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+      "conferido_em": null
+    }
+  ],
+  "legenda_post": "Não é só na campanha: todo partido presta contas anuais à Justiça Eleitoral, até 30 de junho do ano seguinte. Diretório municipal sem movimento também declara. Salve e envie para quem cuida das contas do partido.",
+  "hashtags": ["direitoeleitoral", "partidospoliticos", "prestacaodecontas", "justicaeleitoral", "eleicoes"],
+  "cenas": [
+    {
+      "tipo": "abertura",
+      "kicker": "Direito Eleitoral",
+      "titulo": "Não é só na campanha. O partido presta contas todo ano.",
+      "destaque": "O partido presta contas todo ano.",
+      "fala": "Não é só na campanha. O partido político também presta contas todo ano."
+    },
+    {
+      "tipo": "artigo",
+      "lei": "Lei 9.096/1995 · Lei dos Partidos Políticos",
+      "artigo": "Art. 32",
+      "texto": "O partido está obrigado a enviar, anualmente, à Justiça Eleitoral, o balanço contábil do exercício findo, até o dia 30 de junho do ano seguinte.",
+      "destaque": "até o dia 30 de junho do ano seguinte",
+      "fala": "A Lei dos Partidos manda enviar à Justiça Eleitoral, todo ano, o balanço contábil do ano que passou."
+    },
+    {
+      "tipo": "numero",
+      "titulo": "O prazo",
+      "numero": 30,
+      "unidade": "de junho",
+      "legenda": "do ano seguinte ao exercício",
+      "fala": "O prazo é trinta de junho do ano seguinte."
+    },
+    {
+      "tipo": "lista",
+      "titulo": "Quem recebe o balanço",
+      "estilo": "numerada",
+      "itens": [
+        "Órgão nacional: TSE",
+        "Órgãos estaduais: TREs",
+        "Órgãos municipais: juízes eleitorais"
+      ],
+      "fala": "O nacional presta contas ao TSE, os estaduais aos TREs e os municipais ao juiz eleitoral."
+    },
+    {
+      "tipo": "comparacao",
+      "titulo": "Se der errado",
+      "esquerda": { "titulo": "Desaprovadas", "itens": ["Devolução do valor irregular", "Multa de até 20%"] },
+      "direita": { "titulo": "Não prestadas", "itens": ["Suspensão de novas cotas do Fundo Partidário"] },
+      "fala": "Contas desaprovadas: devolução do valor irregular, com multa de até vinte por cento. Contas não prestadas: novas cotas do Fundo Partidário suspensas."
+    },
+    {
+      "tipo": "alerta",
+      "titulo": "Sem movimento? Declare.",
+      "texto": "Diretório municipal sem movimentação entrega a declaração de ausência de movimentação no mesmo prazo",
+      "fala": "Atenção: o diretório municipal que não movimentou recursos não fica livre. Ele entrega a declaração de ausência de movimentação no mesmo prazo."
+    },
+    {
+      "tipo": "frase",
+      "texto": "Na Justiça Eleitoral, prazo é tudo.",
+      "destaque": "prazo é tudo.",
+      "fala": "Na Justiça Eleitoral, prazo é tudo. Inclusive no ano sem eleição."
+    },
+    {
+      "tipo": "encerramento",
+      "titulo": "Salve e envie para quem cuida das contas do partido.",
+      "cta": "Salve e envie",
+      "fala": "Salve e envie para quem cuida das contas do partido."
+    }
+  ]
+}

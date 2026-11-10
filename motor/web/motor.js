@@ -26,6 +26,7 @@ const fontes = [
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-700-normal.woff2`, '700', 'normal'],
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-800-normal.woff2`, '800', 'normal'],
   ['Playfair Display', `${FS}/playfair-display/files/playfair-display-latin-400-italic.woff2`, '400', 'italic'],
+  ...['300', '400', '500', '600', '700', '800'].map((w) => ['Montserrat', `${FS}/montserrat/files/montserrat-latin-${w}-normal.woff2`, w, 'normal']),
 ];
 if (window.__FONTES_EXTERNAS__) {
   // página de revisão: as fontes vêm do Google Fonts, só espera carregarem

@@ -41,8 +41,25 @@ function selo(c, texto, cx, y, k = 1) {
 function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas = 4, ini = 0, alinhar = 'center', cor }) {
   const { ctx, S, tema, u } = c;
   const px = ajustar(ctx, texto, w, max * S, min * S, linhas, 800, TITULO(tema));
-  const ls = quebrar(ctx, texto, w);
   const alvo = destaque ? marcarPalavras(texto, destaque) : new Set();
+  // peso fino no texto e negrito no destaque quando o tema pede (ex.: tema "eduardo-brito")
+  const pesoBase = tema.pesoTitulo ?? 800;
+  const pesoDe = (i) => (alvo.has(i) ? 800 : pesoBase);
+  const palavras = String(texto).split(/\s+/).filter(Boolean);
+  const ls = [];
+  let atual = { palavras: [], w: 0 };
+  palavras.forEach((txt, i) => {
+    fonte(ctx, px, pesoDe(i), TITULO(tema));
+    const pw = ctx.measureText(txt).width;
+    const esp = ctx.measureText(' ').width;
+    const quebraAntes = tema.quebraDestaque && alvo.has(i) && !alvo.has(i - 1) && i > 0;
+    const novoW = atual.palavras.length ? atual.w + esp + pw : pw;
+    if (atual.palavras.length && (novoW > w || quebraAntes)) { ls.push(atual); atual = { palavras: [], w: 0 }; }
+    const px0 = atual.palavras.length ? atual.w + esp : 0;
+    atual.palavras.push({ txt, x: px0, w: pw, i });
+    atual.w = px0 + pw;
+  });
+  if (atual.palavras.length) ls.push(atual);
   const lh = px * 1.12;
   ls.forEach((linha, li) => {
     const x0 = alinhar === 'center' ? x + (w - linha.w) / 2 : x;
@@ -54,9 +71,10 @@ function tituloAnimado(c, { texto, destaque, x, y, w, max = 96, min = 54, linhas
       ctx.textBaseline = 'alphabetic';
       ctx.textAlign = 'left';
       const em = alvo.has(p.i);
+      fonte(ctx, px, pesoDe(p.i), TITULO(tema));
       ctx.fillStyle = em ? tema.destaque : (cor || tema.texto);
       ctx.fillText(p.txt, x0 + p.x, y + px + li * lh);
-      if (em) {
+      if (em && tema.sublinhado !== false) {
         const ks = entrada(u, ini + 0.35 + p.i * 0.07, 0.5);
         ctx.fillStyle = tema.destaque;
         ctx.fillRect(x0 + p.x, y + px + li * lh + 12 * S, p.w * ks, 7 * S);
@@ -644,7 +662,7 @@ export const CENAS = {
       // selo VS
       const k = entrada(u, 0.6, 0.4, easeBack);
       ctx.save();
-      ctx.translate(area.x + area.w / 2, y + 50 * S);
+      ctx.translate(area.x + area.w / 2, y + Math.min(hCol / 2, 230 * S));
       ctx.scale(k, k);
       ctx.beginPath();
       ctx.arc(0, 0, 44 * S, 0, Math.PI * 2);

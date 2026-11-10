@@ -76,7 +76,9 @@ Opcionais em qualquer cena: `duracao` (mínimo em segundos), `apoio` (texto do s
 - `marca.json`: nome, @, iniciais, cor (opcional, substitui o destaque), CTA, aviso legal.
   Quando a pessoa pedir "muda a cor", "meu @ é…", edite aqui.
 - Temas em `motor/temas.json`: `toga` (marinho e dourado), `vade-mecum` (papel e vermelho),
-  `tribunal` (verde e dourado), `noir` (preto e vermelho). Pode criar novos copiando um.
+  `tribunal` (verde e dourado), `noir` (preto e vermelho) e `eduardo-brito` (padrão do
+  escritório: marinho #0B1530, dourado #D9B86C, Montserrat, título fino com destaque em negrito).
+  Pode criar novos copiando um. Opções de tema: `pesoTitulo`, `sublinhado`, `quebraDestaque`.
 - Voz: `.env` (copie de `.env.exemplo`). `elevenlabs` dá legenda sincronizada pelo áudio;
   `fish` e `nenhuma` usam tempo estimado. Sem chave, o vídeo sai mudo (bom para rascunho).
   Nunca peça para colarem a chave no chat; peça para editarem o `.env`.
