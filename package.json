@@ -9,6 +9,7 @@
     "preview": "node motor/preview.mjs",
     "validar": "node motor/validar.mjs",
     "html": "node motor/html.mjs",
+    "clonar": "node motor/clonar.mjs",
     "exemplo": "node motor/render.mjs projetos/exemplo-ferias/roteiro.json --rapido"
   },
   "dependencies": {

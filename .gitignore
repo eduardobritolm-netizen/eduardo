@@ -3,3 +3,4 @@ node_modules/
 projetos/*/saida/
 projetos/*/audio/
 .DS_Store
+marca/voz/

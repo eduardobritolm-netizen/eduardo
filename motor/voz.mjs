@@ -47,9 +47,10 @@ function hash(...partes) {
 }
 
 async function elevenlabs(texto, destino) {
-  const chave = process.env.ELEVENLABS_API_KEY;
+  // no ambiente na nuvem a chave é injetada pelo proxy; no computador da pessoa vem do .env
+  const chave = process.env.ELEVENLABS_API_KEY || 'chave-injetada-pelo-proxy';
   const voz = process.env.ELEVENLABS_VOICE_ID;
-  if (!chave || !voz) throw new Error('Defina ELEVENLABS_API_KEY e ELEVENLABS_VOICE_ID no .env');
+  if (!voz) throw new Error('Falta ELEVENLABS_VOICE_ID no .env (rode npm run clonar com a sua gravação)');
   const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voz}/with-timestamps?output_format=mp3_44100_128`, {
     method: 'POST',
     headers: { 'xi-api-key': chave, 'content-type': 'application/json' },
