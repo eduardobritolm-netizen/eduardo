@@ -71,3 +71,12 @@ A execução financeira (empenhos liquidados e pagamentos) fica no Portal da Tra
 que não oferece API aberta: as consultas usam parâmetros criptografados e os contratos do SGC exigem reCAPTCHA.
 Esses dados não são coletados automaticamente. Caminho recomendado: pedido via InformaBR para que a SEFAZ/CSC
 publiquem essas bases em formato aberto (art. 8º, § 3º, da LAI).
+
+## Atualizar pelo Google Colab (alternativa)
+
+Se algum site recusar o robô do GitHub, rode a coleta pelo Colab:
+[Abrir no Colab](https://colab.research.google.com/github/eduardobritolm-netizen/eduardo/blob/main/colab/atualizar_painel.ipynb)
+
+Precisa de um token do GitHub: **Settings (do seu perfil) → Developer settings → Fine-grained tokens → Generate**,
+só para este repositório, permissão **Contents: Read and write**. O Colab não agenda sozinho no plano gratuito:
+é uma execução manual (≈5 min), por exemplo uma vez por semana.
