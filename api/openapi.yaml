@@ -150,3 +150,19 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /precos.json:
+    get:
+      summary: "Pesquisa de preços de mercado (itens da Gerência de Material) (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /precos-referencia.csv:
+    get:
+      summary: "Pesquisa de preços de mercado (itens da Gerência de Material) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}

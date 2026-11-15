@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pesquisa de preços — PGE-AM</title><style>
+:root{--c1:#118DFF;--c2:#12239E;--c3:#E66C37;--c4:#6B007B;--c5:#E044A7;--ink:#252423;--mut:#605E5C;--line:#E1DFDD;--bg:#EAEAEA;--hd:#1F3A5F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI","Segoe UI Web",Selawik,system-ui,-apple-system,Roboto,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+.canvas{flex:1;padding:14px;display:flex;justify-content:center}
+.page{width:100%;max-width:1280px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:grid;grid-template-columns:repeat(12,1fr);gap:10px;padding:0 14px 14px;align-content:start}
+.ban{grid-column:1/-1;margin:0 -14px;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;flex-wrap:wrap}
+.ban h1{margin:0;font-size:20px;font-weight:600}
+.ban .s{font-size:11.5px;opacity:.8}
+.ban .r{font-size:11px;text-align:right;opacity:.85;line-height:1.5}
+.slicers{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.sl{border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.sl label{display:block;font-size:11px;color:var(--mut);margin-bottom:3px}
+.sl select{width:100%;border:0;border-bottom:1px solid #8A8886;font:inherit;padding:2px 0;background:#fff;color:var(--ink)}
+.sl .fixed{font-size:13px;border-bottom:1px solid #C8C6C4;padding:2px 0}
+.v{border:1px solid var(--line);padding:8px 10px;min-width:0;position:relative;background:#fff}
+.v h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink)}
+.card{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:96px}
+.card .n{font-size:32px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .l{font-size:12px;color:var(--mut);margin-top:2px}
+.card.acc .n{color:var(--c3)}
+.k3{grid-column:span 3}.k4{grid-column:span 4}.k5{grid-column:span 5}.k6{grid-column:span 6}.k7{grid-column:span 7}.k8{grid-column:span 8}.k12{grid-column:span 12}
+svg{display:block;width:100%;overflow:visible}
+svg text{font-family:inherit;fill:var(--mut);font-size:11px}
+svg .lbl{fill:var(--ink)}
+.tbl{max-height:260px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#fff;text-align:left;font-weight:600;border-bottom:1px solid #8A8886;padding:4px 6px}
+td{padding:4px 6px;border-bottom:1px solid #F3F2F1}
+tbody tr:nth-child(even) td{background:#FAF9F8}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-bottom:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #C8C6C4;box-shadow:0 2px 6px rgba(0,0,0,.2);padding:6px 9px;font-size:12px;z-index:9;display:none;max-width:280px}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.foot-note{grid-column:1/-1;font-size:11px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px}
+.pages{background:#F3F2F1;border-top:1px solid #C8C6C4;display:flex;align-items:stretch;padding:0 10px;position:sticky;bottom:0;overflow-x:auto}
+.pages button{all:unset;cursor:pointer;padding:8px 16px;font-size:12.5px;color:var(--mut);border-top:3px solid transparent;white-space:nowrap}
+.pages button[aria-selected=true]{background:#fff;color:var(--ink);border-top-color:#F2C811;font-weight:600}
+.pages button:focus-visible{outline:2px solid var(--c1);outline-offset:-2px}
+.pages .info{margin-left:auto;align-self:center;font-size:11px;color:var(--mut);padding-left:12px;white-space:nowrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
+@media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
+
+.sel{font:inherit;font-size:13px;padding:6px 10px;border:1px solid #8A8886;background:#fff;min-width:320px;max-width:100%}
+.ref{background:#DEECF9!important}
+.badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:2px;background:#F3F2F1;color:#605E5C;margin-left:6px}
+.proto{background:#FFF4CE;border:1px solid #F2D98D;padding:8px 12px;font-size:12px;color:#605E5C;border-radius:3px;margin-bottom:10px}
+.dl{font:inherit;font-size:12px;padding:5px 12px;border:1px solid #118DFF;background:#fff;color:#118DFF;cursor:pointer}
+.dl:hover{background:#118DFF;color:#fff}
+.desc{font-size:12px;color:#605E5C;margin:2px 0 8px}
+td.p{text-align:right;font-variant-numeric:tabular-nums}
+</style></head><body>
+<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precos.html" data-n="precos">Pesquisa de preços</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
+<div id="tip" class="tip"></div>
+<div class="canvas"><div class="page">
+ <div class="ban"><div><h1>Pesquisa de Preços de Mercado</h1><div class="s">Apoio à Gerência de Material · preços praticados em compras públicas</div></div><div class="r" id="gen"></div></div>
+
+ <div class="v k12">
+  <div class="proto">Protótipo de apoio. Metodologia da IN SEGES/ME nº 65/2021: saneamento de preços fora de média ± 1 desvio-padrão; referência pela mediana quando a dispersão (CV) passa de 25%. A decisão sobre o preço de referência cabe ao agente de contratação.</div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+   <select id="item" class="sel"></select>
+   <button class="dl" id="csv">Baixar CSV</button>
+   <span class="badge" id="orig"></span>
+  </div>
+  <div class="desc" id="desc"></div>
+ </div>
+
+ <div class="v k2"><div class="t">Preços coletados</div><div class="n" id="kN">—</div><div class="u" id="uN"></div></div>
+ <div class="v k2"><div class="t">Menor preço</div><div class="n" id="kMin">—</div><div class="u">na amostra</div></div>
+ <div class="v k2"><div class="t">Mediana (saneada)</div><div class="n" id="kMed">—</div><div class="u" id="uCV"></div></div>
+ <div class="v k2 ref"><div class="t">Preço de referência</div><div class="n" id="kRef">—</div><div class="u" id="uRef"></div></div>
+
+ <div class="v k12"><div class="t">Distribuição dos preços</div><div id="cHist"></div></div>
+
+ <div class="v k12"><div class="t">Compras consideradas <span id="cnt" style="font-weight:400;color:#605E5C;font-size:12px"></span></div>
+  <div class="tbl"><table><thead><tr><th>Data</th><th class="p">Preço</th><th>Unidade</th><th>Marca</th><th>Fornecedor</th><th>Órgão comprador</th><th>UF</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+
+ <div class="foot-note">Fonte: <b>Compras.gov.br — Preços Praticados</b> (dados abertos, SEGES/MGI). A lista de itens é mantida pela Gerência de Material no arquivo <code>fontes/itens_precos.txt</code>; o robô atualiza os preços a cada execução.</div>
+</div></div>
+<script>
+
+const pt=n=>n.toLocaleString('pt-BR');
+const tip=document.getElementById('tip');
+function tt(ev,h){tip.innerHTML=h;tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-300);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px'}
+function th(){tip.style.display='none'}
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=d=>d?d.slice(0,10).split('-').reverse().join('/'):'—';
+const rs=v=>v==null?'—':'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:v<1?4:2});
+function hist(box,precos,ref){
+ box.innerHTML='';const W=box.clientWidth||700,H=150,b=24,l=10;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const v=precos.filter(x=>x>0).sort((a,b)=>a-b);if(!v.length)return;const min=v[0],max=v[v.length-1],nb=12,rng=(max-min)||1,bw=(W-2*l)/nb;
+ const bins=Array(nb).fill(0);v.forEach(x=>{let i=Math.min(nb-1,Math.floor((x-min)/rng*nb));bins[i]++});const mx=Math.max(...bins)||1;
+ bins.forEach((c,i)=>{const h=(H-b)*c/mx,x=l+i*bw;const r=el('rect',{x:x+1,y:H-b-h,width:bw-2,height:h,fill:'#118DFF'},s);
+  const lo=min+rng*i/nb,hi=min+rng*(i+1)/nb;r.addEventListener('mousemove',e=>tt(e,`${rs(lo)} – ${rs(hi)}<br><b>${c}</b> compras`));r.addEventListener('mouseleave',th)});
+ const xr=l+(W-2*l)*(ref-min)/rng;el('line',{x1:xr,x2:xr,y1:0,y2:H-b,stroke:'#E66C37','stroke-width':2,'stroke-dasharray':'4 3'},s);
+ const t=el('text',{x:Math.min(xr+4,W-70),y:12,fill:'#E66C37','font-size':11,'font-weight':600},s);t.textContent='referência';
+ [min,max].forEach((val,i)=>{const t=el('text',{x:i?W-l:l,y:H-8,'text-anchor':i?'end':'start','font-size':10,fill:'#605E5C'},s);t.textContent=rs(val)});
+}
+
+let D,atual;
+function render(it){atual=it;const e=it.estat;
+ document.getElementById('desc').textContent=it.descricao||'';
+ document.getElementById('orig').textContent=it.origem==='api'?'dados ao vivo da API':it.origem==='cache'?'cache (última coleta)':'sem dados';
+ if(!e){['kN','kMin','kMed','kRef'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('tb').innerHTML='<tr><td colspan="7" style="color:#605E5C">Sem preços coletados ainda. Será preenchido na próxima execução do robô.</td></tr>';document.getElementById('cHist').innerHTML='';return}
+ document.getElementById('kN').textContent=e.n;document.getElementById('uN').textContent=e.n_saneada+' após saneamento';
+ document.getElementById('kMin').textContent=rs(e.menor);
+ document.getElementById('kMed').textContent=rs(e.mediana_saneada);document.getElementById('uCV').textContent='CV '+String(e.cv_saneada).replace('.',',')+'%';
+ document.getElementById('kRef').textContent=rs(e.referencia);document.getElementById('uRef').textContent='por '+e.metodo;
+ hist(document.getElementById('cHist'),it.compras.map(r=>r[1]),e.referencia);
+ document.getElementById('cnt').textContent='('+it.compras.length+')';
+ document.getElementById('tb').innerHTML=it.compras.map(r=>`<tr><td>${fd(r[0])}</td><td class="p">${rs(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('');
+}
+document.getElementById('csv').onclick=()=>{if(!atual)return;const cab=['Data','Preco','Unidade','Marca','Fornecedor','Orgao','UF'];
+ const linhas=atual.compras.map(r=>[fd(r[0]),r[1],r[2],r[3],r[4],r[5],r[6]].map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(';'));
+ const blob=new Blob(['﻿'+[cab.join(';'),...linhas].join('\n')],{type:'text/csv'});const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download='precos_'+atual.codigo+'.csv';a.click();};
+fetch('data/precos.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;
+ document.getElementById('gen').innerHTML='Atualizado em '+fd(j.atualizado_em)+'<br>Período: '+fd(j.periodo[0])+' a '+fd(j.periodo[1]);
+ const sel=document.getElementById('item');sel.innerHTML=j.itens.map((it,i)=>`<option value="${i}">${esc(it.rotulo||it.codigo)} — CATMAT ${esc(it.codigo)}${it.estat?' ('+it.estat.n+' preços)':' (sem dados)'}</option>`).join('');
+ sel.onchange=()=>render(j.itens[sel.value]);render(j.itens[0]);
+});
+</script></body></html>

@@ -1,0 +1,7 @@
+# Itens para pesquisa de preços — um por linha: tipo;codigo;rotulo
+# tipo: material (CATMAT) ou servico (CATSER). Código do catálogo: https://catalogo.compras.gov.br
+# A Gerência de Material edita esta lista; o robô atualiza os preços a cada execução.
+material;280755;Guardanapo de papel 22x24 cm
+material;341842;Saco plástico para documento A4 (40 fl)
+material;231463;Guardanapo de papel 20 cm
+material;377697;Saco plástico para documento

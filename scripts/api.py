@@ -91,6 +91,21 @@ def main():
                                       {'formato': 'CSV', 'url': f'{BASE}/despesas-mensal.csv'},
                                       {'formato': 'CSV', 'url': f'{BASE}/despesas-elemento.csv'}],
                     'campos': {'empenhado': 'R$ empenhado no mês', 'liquidado': 'R$ liquidado no mês', 'pago': 'R$ pago no mês', 'elemento_despesa': 'natureza do gasto'}})
+    PR = ler('precos.json')
+    if PR:
+        shutil.copy(os.path.join(DADOS, 'precos.json'), os.path.join(API, 'precos.json'))
+        linhasc = []
+        for it in PR['itens']:
+            e = it.get('estat') or {}
+            linhasc.append([it['codigo'], it.get('rotulo', ''), e.get('n', 0), e.get('menor', ''), e.get('mediana_saneada', ''), e.get('referencia', ''), e.get('metodo', '')])
+        csv_out('precos-referencia.csv', ['codigo_catalogo', 'item', 'precos_coletados', 'menor', 'mediana_saneada', 'referencia', 'metodo'], linhasc)
+        cat.append({'identificador': 'precos', 'titulo': 'Pesquisa de preços de mercado (itens da Gerência de Material)',
+                    'descricao': 'Preços praticados em compras públicas para os itens acompanhados pela PGE, com estatística da IN 65/2021 (menor, mediana saneada e preço de referência).',
+                    'fonte': 'Compras.gov.br — Preços Praticados (dados abertos, SEGES/MGI)',
+                    'atualizado_em': PR['atualizado_em'], 'periodicidade': 'diária',
+                    'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
+                    'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/precos.json'}, {'formato': 'CSV', 'url': f'{BASE}/precos-referencia.csv'}],
+                    'campos': {'codigo_catalogo': 'código CATMAT/CATSER', 'mediana_saneada': 'mediana após saneamento (R$)', 'referencia': 'preço de referência sugerido (R$)', 'metodo': 'média ou mediana'}})
     json.dump({'titulo': 'API de Dados Abertos da Procuradoria Geral do Estado do Amazonas', 'gerado_em': hoje(),
                'licenca': LICENCA, 'conjuntos': cat}, open(os.path.join(API, 'catalogo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
