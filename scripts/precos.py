@@ -61,17 +61,50 @@ def estat(valores):
             'cv_saneada': round(cv2, 1), 'referencia': round(ref, 4),
             'metodo': 'mediana (alta dispersão)' if cv2 > 25 else 'média'}
 
+
+def itens_da_classe(codigo_classe, limite):
+    """Lista os itens (CATMAT) de uma classe do catálogo."""
+    out, pagina = [], 1
+    while len(out) < limite:
+        url = f'{BASE}/modulo-material/4_consultarItemMaterial?' + urllib.parse.urlencode(
+            {'pagina': pagina, 'tamanhoPagina': 500, 'codigoClasse': codigo_classe, 'statusItem': 'true'})
+        req = urllib.request.Request(url, headers={'Accept': 'application/json', 'User-Agent': 'painel-pge-am/1.0'})
+        with urllib.request.urlopen(req, timeout=90) as r:
+            j = json.loads(r.read())
+        res = j.get('resultado', [])
+        out += [(str(x['codigoItem']), (x.get('descricaoItem') or '').strip()) for x in res]
+        if pagina >= j.get('totalPaginas', 1) or not res: break
+        pagina += 1
+    return out[:limite]
+
+MAX_ITENS_CLASSE = 120  # teto de itens por classe, para não estourar o tempo/limite da API
+MIN_PRECOS = 3
+
 def main():
     if not os.path.exists(LISTA):
         print('Preços: fontes/itens_precos.txt não encontrado.'); return
-    itens = []
+    alvos = []  # (tipo, codigo, rotulo)
     for ln in open(LISTA, encoding='utf-8'):
         ln = ln.strip()
         if not ln or ln.startswith('#'): continue
         p = [x.strip() for x in ln.split(';')]
-        tipo, codigo = p[0], p[1]; rotulo = p[2] if len(p) > 2 else ''
+        if p[0] == 'classe':
+            try:
+                for cod, desc in itens_da_classe(p[1], MAX_ITENS_CLASSE):
+                    alvos.append(('material', cod, desc))
+                print(f'  classe {p[1]}: {sum(1 for a in alvos if a)} itens para consultar')
+            except Exception as ex:
+                print(f'  classe {p[1]}: não foi possível listar — {ex}')
+        else:
+            alvos.append((p[0], p[1], p[2] if len(p) > 2 else ''))
+    vistos, itens = set(), []
+    for tipo, codigo, rotulo in alvos:
+        if codigo in vistos: continue
+        vistos.add(codigo)
         reg, origem = registros(tipo, codigo)
         e = estat([r.get('precoUnitario') for r in reg])
+        if e and e['n'] < MIN_PRECOS and origem == 'api':  # sem preços suficientes: não polui o catálogo
+            continue
         tab = [[r.get('dataResultado', ''), r.get('precoUnitario'), r.get('nomeUnidadeFornecimento', ''),
                 r.get('marca', '') or '', r.get('nomeFornecedor', ''), r.get('nomeOrgao', ''), r.get('estado', '')]
                for r in sorted(reg, key=lambda x: x.get('precoUnitario') or 0)]

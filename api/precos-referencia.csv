@@ -1,5 +1,7 @@
 ﻿codigo_catalogo;item;precos_coletados;menor;mediana_saneada;referencia;metodo
-280755;Guardanapo de papel 22x24 cm;8;1.66;2.2;2.336;média
-341842;Saco plástico para documento A4 (40 fl);0;;;;
-231463;Guardanapo de papel 20 cm;0;;;;
-377697;Saco plástico para documento;0;;;;
+280755;Guardanapo de papel 22x24 cm;8;1.66;;;média
+466451;ESQUADRO;57;0.7;;;mediana (alta dispersão)
+445051;ESQUADRO;14;1.55;;;mediana (alta dispersão)
+445055;ESQUADRO;7;0.78;;;média
+445054;ESQUADRO;44;0.55;;;mediana (alta dispersão)
+445052;ESQUADRO;18;1.55;;;mediana (alta dispersão)
