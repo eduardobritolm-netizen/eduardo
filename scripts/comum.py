@@ -1,4 +1,4 @@
-import json, os, time, urllib.request
+import json, os, time, urllib.request, urllib.error
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DADOS = os.path.join(RAIZ, 'data')
 UA = {'User-Agent': 'painel-pge-am/1.0 (+transparencia)'}
@@ -16,8 +16,12 @@ def baixar(url, dados=None, cabecalhos=None, tentativas=3, timeout=90):
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 FALHAS[host] = 0
                 return r.read()
+        except urllib.error.HTTPError as e:
+            corpo = e.read()[:200].decode('utf-8', 'replace').replace('\n', ' ')
+            print(f'  tentativa {i+1} falhou ({host}): HTTP {e.code} — {corpo}')
+            time.sleep(5 * (i + 1)); continue
         except Exception as e:
-            print(f'  tentativa {i+1} falhou ({host}): {e}')
+            print(f'  tentativa {i+1} falhou ({host}): {type(e).__name__}: {e}')
             time.sleep(5 * (i + 1))
     FALHAS[host] = FALHAS.get(host, 0) + 1
     raise RuntimeError(f'não foi possível baixar {url}')
