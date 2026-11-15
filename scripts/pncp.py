@@ -3,6 +3,7 @@
 Órgãos: PGE-AM e Fundo Especial da PGE (FUNDPGE)."""
 import json, time, urllib.error
 from datetime import date
+import comum
 from comum import baixar, salvar, hoje
 
 API = 'https://pncp.gov.br/api/consulta/v1'
@@ -13,6 +14,7 @@ MODALIDADES = range(1, 14)
 def get(url):
     for i in range(6):
         time.sleep(1.5)
+        comum.FALHAS.pop('pncp.gov.br', None)  # o PNCP limita a taxa (429); aqui a espera é tratada abaixo
         try:
             b = baixar(url, tentativas=1, timeout=120)
             return json.loads(b) if b.strip() else {}
