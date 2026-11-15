@@ -16,6 +16,10 @@ jobs:
       - run: pip install pandas
       - name: Coletar dados
         env:
+          FALABR_CLIENT_ID: ${{ secrets.FALABR_CLIENT_ID }}
+          FALABR_CLIENT_SECRET: ${{ secrets.FALABR_CLIENT_SECRET }}
+          FALABR_USUARIO: ${{ secrets.FALABR_USUARIO }}
+          FALABR_SENHA: ${{ secrets.FALABR_SENHA }}
           OUVIDORIA_URLS: ${{ vars.OUVIDORIA_URLS }}
         run: cd scripts && python -u atualizar.py
       - name: Publicar se houver mudança

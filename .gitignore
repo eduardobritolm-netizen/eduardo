@@ -2,3 +2,4 @@ __pycache__/
 *.tmp
 fontes/ouvidoria/*.csv
 fontes/ouvidoria/*.zip
+fontes/ouvidoria/api/
