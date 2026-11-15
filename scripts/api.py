@@ -68,6 +68,14 @@ def main():
             'PNCP – Portal Nacional de Contratações Públicas', K['atualizado_em'], ['contratacoes.json', 'contratos.csv', 'licitacoes.csv'],
             {'unidade': 'PGE ou FUNDPGE', 'valor_global': 'R$', 'modalidade': 'modalidade de contratação', 'situacao': 'situação no PNCP'})
 
+    R = ler('precedentes.json')
+    if R:
+        shutil.copy(os.path.join(DADOS, 'precedentes.json'), os.path.join(API, 'precedentes-lai.json'))
+        csv_out('precedentes-pge.csv', ['numero', 'data', 'instancia', 'tema', 'dispositivo', 'decisao', 'ementa', 'link'],
+                [[p.get(k, '') for k in ('numero', 'data', 'instancia', 'tema', 'dispositivo', 'decisao', 'ementa', 'link')] for p in R['pge']])
+        reg('precedentes-lai', 'Precedentes em recursos da Lei de Acesso à Informação', 'Decisões recursais da PGE-AM e, como referência, decisões da CGU (3ª instância) e da CMRI (4ª instância) do Executivo federal.',
+            'PGE-AM e CGU – Busca de Precedentes (dados abertos)', R['atualizado_em'], ['precedentes-lai.json', 'precedentes-pge.csv'],
+            {'numero': 'número da decisão', 'instancia': 'instância recursal', 'tema': 'assunto', 'dispositivo': 'fundamento legal', 'decisao': 'resultado', 'ementa': 'síntese'})
     json.dump({'titulo': 'API de Dados Abertos da Procuradoria Geral do Estado do Amazonas', 'gerado_em': hoje(),
                'licenca': LICENCA, 'conjuntos': cat}, open(os.path.join(API, 'catalogo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 

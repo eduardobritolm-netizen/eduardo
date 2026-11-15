@@ -140,6 +140,34 @@
     "modalidade": "modalidade de contratação",
     "situacao": "situação no PNCP"
    }
+  },
+  {
+   "identificador": "precedentes-lai",
+   "titulo": "Precedentes em recursos da Lei de Acesso à Informação",
+   "descricao": "Decisões recursais da PGE-AM e, como referência, decisões da CGU (3ª instância) e da CMRI (4ª instância) do Executivo federal.",
+   "fonte": "PGE-AM e CGU – Busca de Precedentes (dados abertos)",
+   "atualizado_em": "2026-11-15",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/precedentes-lai.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/precedentes-pge.csv"
+    }
+   ],
+   "campos": {
+    "numero": "número da decisão",
+    "instancia": "instância recursal",
+    "tema": "assunto",
+    "dispositivo": "fundamento legal",
+    "decisao": "resultado",
+    "ementa": "síntese"
+   }
   }
  ]
 }

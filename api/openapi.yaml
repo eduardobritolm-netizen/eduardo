@@ -110,3 +110,19 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /precedentes-lai.json:
+    get:
+      summary: "Precedentes em recursos da Lei de Acesso à Informação (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /precedentes-pge.csv:
+    get:
+      summary: "Precedentes em recursos da Lei de Acesso à Informação (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
