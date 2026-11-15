@@ -55,14 +55,15 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 .upd{grid-column:1/-1;font-size:12px;color:var(--mut)}
 </style></head><body>
 <header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
-<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a></nav></header>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a></nav></header>
 <style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
 <script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
 <div class="canvas"><div class="page">
  <div class="ban"><div><h1>Painel de Dados da Procuradoria Geral do Estado</h1><div class="s">Procuradoria Geral do Estado do Amazonas · Coordenadoria de Transparência e Ouvidoria</div></div><div class="r">Atualização automática diária a partir de dados abertos oficiais</div></div>
- <a class="tile k4" href="processual.html"><h3>Inteligência Processual</h3><p>O Estado do Amazonas como parte no TJAM, TRT11 e TRF1</p><div class="kp" id="t1"></div></a>
- <a class="tile k4" href="ouvidoria.html"><h3>Ouvidoria</h3><p>Manifestações recebidas pela PGE no Fala.BR</p><div class="kp" id="t2"></div></a>
- <a class="tile k4" href="transparencia.html"><h3>Gestão e Transparência</h3><p>Folha de pagamento, diárias e passagens</p><div class="kp" id="t3"></div></a>
+ <a class="tile k3" href="processual.html"><h3>Inteligência Processual</h3><p>O Estado do Amazonas como parte no TJAM, TRT11 e TRF1</p><div class="kp" id="t1"></div></a>
+ <a class="tile k3" href="ouvidoria.html"><h3>Ouvidoria</h3><p>Manifestações recebidas pela PGE no Fala.BR</p><div class="kp" id="t2"></div></a>
+ <a class="tile k3" href="transparencia.html"><h3>Gestão e Transparência</h3><p>Folha de pagamento, diárias e passagens</p><div class="kp" id="t3"></div></a>
+ <a class="tile k3" href="contratacoes.html"><h3>Contratações</h3><p>Contratos e licitações da PGE no PNCP</p><div class="kp" id="t4"></div></a>
  <div class="v k12"><h3>Situação das fontes</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Fonte</th><th>Conteúdo</th><th>Atualização</th><th class="r">Dados até</th></tr></thead><tbody id="fontes"></tbody></table></div></div>
  <div class="foot-note">Fontes: CNJ (DataJud e Grandes Litigantes), CGU (Painel Resolveu? / Fala.BR) e Portal da Transparência do Governo do Estado do Amazonas. Nenhum dado pessoal é exibido.</div>
 </div></div>
@@ -71,14 +72,17 @@ const pt=n=>n.toLocaleString('pt-BR');const fd=d=>d?d.split('-').reverse().join(
 const brl=v=>v>=1e6?'R$ '+(v/1e6).toFixed(1).replace('.',',')+' mi':'R$ '+pt(Math.round(v));
 const k=(id,arr)=>document.getElementById(id).innerHTML=arr.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('');
 const get=u=>fetch(u+'?v='+Date.now()).then(r=>r.json()).catch(()=>null);
-Promise.all(['data/processual.json','data/manual.json','data/ouvidoria.json','data/transparencia.json'].map(get)).then(([P,M,O,T])=>{
+Promise.all(['data/processual.json','data/manual.json','data/ouvidoria.json','data/transparencia.json','data/contratacoes.json'].map(get)).then(([P,M,O,T,K])=>{
  if(M){const tj=M.TRIB.find(t=>t[0]==='TJAM');k('t1',[[pt(tj?tj[1]:0),'processos com o Estado como réu no TJAM'],[P?pt(P.classes.MS.total):'—','mandados de segurança na base']])}
  if(O)k('t2',[[pt(O.n),'manifestações desde 2018'],[String(O.prazo).replace('.',',')+'%','respondidas no prazo']]);
  if(T){const u=T.folha[T.folha.length-1];k('t3',[[pt(u[1]),'servidores na folha'],[brl(u[2]),'folha bruta do mês']])}
+
+ if(K){const H=new Date().toISOString().slice(0,10),v=K.contratos.filter(x=>x.tipo!=='Empenho'&&x.fim>=H);k('t4',[[pt(v.length),'contratos vigentes'],[brl(v.reduce((s,x)=>s+x.valor,0)),'valor global vigente']])}
  const rows=[['CNJ — DataJud (API)','Classes processuais no TJAM','Diária, automática',P&&P.atualizado_em],
   ['CNJ — Grandes Litigantes','Estado como parte por vara e tribunal','Manual (sem API)',M&&M.atualizado_em],
   ['CGU — Painel Resolveu? / Fala.BR','Manifestações de ouvidoria da PGE','Automática quando a CGU publica',O&&O.ultima],
-  ['Portal da Transparência AM (API)','Folha, diárias e passagens da PGE','Diária, automática',T&&T.atualizado_em]];
+  ['Portal da Transparência AM (API)','Folha, diárias e passagens da PGE','Diária, automática',T&&T.atualizado_em],
+  ['PNCP (API)','Contratos e licitações da PGE e do FUNDPGE','Diária, automática',K&&K.atualizado_em]];
  document.getElementById('fontes').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="r">${fd(r[3])}</td></tr>`).join('');
 });
 </script></body></html>

@@ -7,6 +7,7 @@ Site estático com quatro páginas no estilo Power BI, atualizado sozinho todo d
 | Inteligência Processual | CNJ – API Pública do DataJud (TJAM) | automática, diária |
 | | CNJ – Grandes Litigantes (Estado por vara e tribunal) | **manual** – editar `data/manual.json` |
 | Ouvidoria | CGU – Painel Resolveu? / Fala.BR | automática quando houver link configurado (ver abaixo) |
+| Contratações | PNCP – API pública de consulta (contratos e licitações da PGE e do FUNDPGE) | automática, diária |
 | Gestão e Transparência | Portal da Transparência do AM – APIs de Remuneração de Servidores e de Diárias e Passagens | automática, diária |
 
 ## Endereço
@@ -57,9 +58,16 @@ da página inicial.
 
 ## Estrutura
 ```
-index.html  processual.html  ouvidoria.html  transparencia.html
+index.html  processual.html  ouvidoria.html  transparencia.html  contratacoes.html
 data/        ← JSON lidos pelas páginas (gerados pelo robô; manual.json é editado à mão)
-scripts/     ← coletores em Python (datajud.py, transparencia.py, ouvidoria.py, atualizar.py)
+scripts/     ← coletores em Python (datajud.py, transparencia.py, ouvidoria.py, pncp.py, atualizar.py)
 fontes/      ← arquivos de ouvidoria colocados à mão (opcional)
 .github/workflows/atualizar.yml  ← agendamento diário
 ```
+
+## Pagamentos (SEFAZ)
+
+A execução financeira (empenhos liquidados e pagamentos) fica no Portal da Transparência Fiscal da SEFAZ,
+que não oferece API aberta: as consultas usam parâmetros criptografados e os contratos do SGC exigem reCAPTCHA.
+Esses dados não são coletados automaticamente. Caminho recomendado: pedido via InformaBR para que a SEFAZ/CSC
+publiquem essas bases em formato aberto (art. 8º, § 3º, da LAI).

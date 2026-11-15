@@ -1,7 +1,7 @@
 """Roda todas as coletas. Se uma fonte falhar, as outras seguem e o arquivo antigo daquela fonte é mantido."""
-import sys, traceback, datajud, transparencia, ouvidoria
+import sys, traceback, datajud, transparencia, ouvidoria, pncp
 falhas = 0
-for nome, mod in [('DataJud', datajud), ('Transparência AM', transparencia), ('Ouvidoria CGU', ouvidoria)]:
+for nome, mod in [('DataJud', datajud), ('Transparência AM', transparencia), ('Ouvidoria CGU', ouvidoria), ('PNCP', pncp)]:
     print(f'=== {nome}')
     try: mod.main()
     except Exception:
