@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inteligência Processual — PGE-AM</title>
+<style>
+:root{--c1:#118DFF;--c2:#12239E;--c3:#E66C37;--c4:#6B007B;--c5:#E044A7;--ink:#252423;--mut:#605E5C;--line:#E1DFDD;--bg:#EAEAEA;--hd:#1F3A5F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI","Segoe UI Web",Selawik,system-ui,-apple-system,Roboto,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+.canvas{flex:1;padding:14px;display:flex;justify-content:center}
+.page{width:100%;max-width:1280px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:grid;grid-template-columns:repeat(12,1fr);gap:10px;padding:0 14px 14px;align-content:start}
+.ban{grid-column:1/-1;margin:0 -14px;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;flex-wrap:wrap}
+.ban h1{margin:0;font-size:20px;font-weight:600}
+.ban .s{font-size:11.5px;opacity:.8}
+.ban .r{font-size:11px;text-align:right;opacity:.85;line-height:1.5}
+.slicers{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.sl{border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.sl label{display:block;font-size:11px;color:var(--mut);margin-bottom:3px}
+.sl select{width:100%;border:0;border-bottom:1px solid #8A8886;font:inherit;padding:2px 0;background:#fff;color:var(--ink)}
+.sl .fixed{font-size:13px;border-bottom:1px solid #C8C6C4;padding:2px 0}
+.v{border:1px solid var(--line);padding:8px 10px;min-width:0;position:relative;background:#fff}
+.v h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink)}
+.card{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:96px}
+.card .n{font-size:32px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .l{font-size:12px;color:var(--mut);margin-top:2px}
+.card.acc .n{color:var(--c3)}
+.k3{grid-column:span 3}.k4{grid-column:span 4}.k5{grid-column:span 5}.k6{grid-column:span 6}.k7{grid-column:span 7}.k8{grid-column:span 8}.k12{grid-column:span 12}
+svg{display:block;width:100%;overflow:visible}
+svg text{font-family:inherit;fill:var(--mut);font-size:11px}
+svg .lbl{fill:var(--ink)}
+.tbl{max-height:260px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#fff;text-align:left;font-weight:600;border-bottom:1px solid #8A8886;padding:4px 6px}
+td{padding:4px 6px;border-bottom:1px solid #F3F2F1}
+tbody tr:nth-child(even) td{background:#FAF9F8}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-bottom:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #C8C6C4;box-shadow:0 2px 6px rgba(0,0,0,.2);padding:6px 9px;font-size:12px;z-index:9;display:none;max-width:280px}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.foot-note{grid-column:1/-1;font-size:11px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px}
+.pages{background:#F3F2F1;border-top:1px solid #C8C6C4;display:flex;align-items:stretch;padding:0 10px;position:sticky;bottom:0;overflow-x:auto}
+.pages button{all:unset;cursor:pointer;padding:8px 16px;font-size:12.5px;color:var(--mut);border-top:3px solid transparent;white-space:nowrap}
+.pages button[aria-selected=true]{background:#fff;color:var(--ink);border-top-color:#F2C811;font-weight:600}
+.pages button:focus-visible{outline:2px solid var(--c1);outline-offset:-2px}
+.pages .info{margin-left:auto;align-self:center;font-size:11px;color:var(--mut);padding-left:12px;white-space:nowrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
+@media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
+</style>
+</head>
+<body>
+<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a></nav></header>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
+<div class="canvas">
+<div class="page">
+  <div class="ban">
+    <div><h1>Inteligência Processual — Estado do Amazonas no TJAM</h1><div class="s">Procuradoria Geral do Estado do Amazonas · Coordenadoria de Transparência e Ouvidoria</div></div>
+    <div class="r">Fonte: CNJ — Grandes Litigantes e DataJud<br>Pendentes em 30/09/2026 · atualizado em 13/11/2026</div>
+  </div>
+
+  <!-- PÁGINA 1 -->
+  <div class="slicers" data-pg="1">
+    <div class="sl"><label>Tribunal</label><div class="fixed">TJAM</div></div>
+    <div class="sl"><label>Indicador</label><select id="s-ind"><option value="reu">Estado como réu</option><option value="autor">Estado como autor</option></select></div>
+    <div class="sl"><label>Grau</label><select id="s-grau"><option value="">Todos</option><option>1º Grau</option><option>Juizado Especial</option><option>2º Grau</option><option>Turma Recursal</option></select></div>
+  </div>
+  <div class="v card acc k3" data-pg="1"><div class="n" id="c-tot">—</div><div class="l" id="c-tot-l">Processos pendentes</div></div>
+  <div class="v card k3" data-pg="1"><div class="n">25.664</div><div class="l">Casos novos (12 meses) · Estado réu</div></div>
+  <div class="v card k3" data-pg="1"><div class="n">2º</div><div class="l">Posição entre os maiores réus (novos)</div></div>
+  <div class="v card k3" data-pg="1"><div class="n">3.361</div><div class="l">PGE-AM como autora · pendentes</div></div>
+  <div class="v k7" data-pg="1"><h3 id="h-unid">Processos pendentes por órgão julgador</h3><div id="g-unid"></div></div>
+  <div class="v k5" data-pg="1"><h3>Participação por grau</h3><div id="g-grau"></div></div>
+  <div class="v k6" data-pg="1"><h3>Administração indireta e órgãos como réu</h3><div id="g-ind"></div></div>
+  <div class="v k6" data-pg="1"><h3>Detalhamento por órgão julgador</h3><div class="tbl"><table><thead><tr><th>Órgão julgador</th><th>Grau</th><th class="r">Réu</th><th class="r">Autor</th></tr></thead><tbody id="t-unid"></tbody><tfoot><tr><td>Total</td><td></td><td class="r" id="f-reu"></td><td class="r" id="f-aut"></td></tr></tfoot></table></div></div>
+
+  <!-- PÁGINA 2 -->
+  <div class="slicers" data-pg="2" hidden>
+    <div class="sl"><label>Tribunal</label><div class="fixed">TJAM</div></div>
+    <div class="sl"><label>Classe processual</label><select id="s-cls"></select></div>
+  </div>
+  <div class="v card k4" data-pg="2" hidden><div class="n" id="c2-tot">—</div><div class="l">Processos na base</div></div>
+  <div class="v card k4" data-pg="2" hidden><div class="n" id="c2-25">—</div><div class="l" id="c2-25-l">Ajuizados em 2025</div></div>
+  <div class="v card acc k4" data-pg="2" hidden><div class="n" id="c2-26">—</div><div class="l">Ajuizados em 2026 (até 13/11)</div></div>
+  <div class="v k8" data-pg="2" hidden><h3 id="h-ano">Ações ajuizadas por ano</h3><div id="g-ano"></div></div>
+  <div class="v k4" data-pg="2" hidden><h3>Processos por classe</h3><div id="g-cls"></div></div>
+  <div class="v k12" data-pg="2" hidden><h3>Série histórica por classe</h3><div class="legend" id="lg-lin"></div><div id="g-lin"></div></div>
+
+  <!-- PÁGINA 3 -->
+  <div class="v card acc k4" data-pg="3" hidden><div class="n">1º</div><div class="l">Maior réu no TRT da 11ª Região (AM/RR)</div></div>
+  <div class="v card k4" data-pg="3" hidden><div class="n">1.909</div><div class="l">Processos do Estado como réu no TRT11 · todos os graus</div></div>
+  <div class="v card k4" data-pg="3" hidden><div class="n">554</div><div class="l">Processos do Estado como réu na Justiça Federal em Manaus (TRF1)</div></div>
+  <div class="v k6" data-pg="3" hidden><h3>Estado do Amazonas como réu por tribunal</h3><div id="g-trib"></div></div>
+  <div class="v k6" data-pg="3" hidden><h3>Estado do Amazonas em outros tribunais</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Tribunal</th><th>Recorte</th><th class="r">Réu</th><th class="r">Pos.</th><th class="r">Autor</th></tr></thead><tbody>
+    <tr><td>TJAM</td><td>Todos os graus</td><td class="r">42.458</td><td class="r">3º</td><td class="r">9.577*</td></tr>
+    <tr><td>TRT11</td><td>Todos os graus</td><td class="r">1.909</td><td class="r">1º</td><td class="r">500 (3º)</td></tr>
+    <tr><td>TRT11</td><td>Só 1º grau</td><td class="r">1.448</td><td class="r">1º</td><td class="r">—</td></tr>
+    <tr><td>TRF1</td><td>Unidades de Manaus (varas, JEF e Turmas Recursais)</td><td class="r">554</td><td class="r">7º</td><td class="r">abaixo de 291</td></tr>
+    <tr><td>TRF1</td><td>Tribunal inteiro</td><td class="r">abaixo de 4.573</td><td class="r">fora do top 20</td><td class="r">—</td></tr>
+    <tr><td>STF, STJ, TST, TRE-AM</td><td>—</td><td class="r" colspan="3">não constam no painel do CNJ</td></tr>
+  </tbody></table></div><p style="font-size:11px;color:#605E5C;margin:6px 0 0">* 1º grau e juizados. No TRT11 os demais réus de destaque são terceirizadas (Amazon Security, Total Saúde, MKN) — sinal de responsabilidade subsidiária do Estado.</p></div>
+  <div class="v k12" data-pg="3" hidden><h3>Maiores litigantes do TJAM — Estado e PGE-AM</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Litigante</th><th>Polo</th><th>Indicador</th><th class="r">Processos</th><th class="r">Posição</th></tr></thead><tbody id="t-lit"></tbody></table></div></div>
+  <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
+    <table><tbody>
+      <tr><td>Estado como parte</td><td>Transcrito do painel Grandes Litigantes do CNJ, filtrando TJAM por grau e por órgão julgador. Pendentes em 30/09/2026.</td></tr>
+      <tr><td>Classes processuais</td><td>API Pública do DataJud. A API não informa as partes: os totais incluem processos de outros entes e de particulares.</td></tr>
+      <tr><td>Dívida ativa</td><td>A cobrança estadual tramita na 1ª Vara Tributária e da Dívida Ativa; a Vara Especializada da Dívida Ativa é municipal.</td></tr>
+      <tr><td>Órgãos de 1º grau</td><td>Listadas as oito unidades com mais processos do Estado; demais unidades de 1º grau não estão no detalhamento.</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="foot-note">Dados abertos do Conselho Nacional de Justiça. Valores transcritos e agregados pela Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
+</div>
+</div>
+<nav class="pages" role="tablist" aria-label="Páginas do relatório">
+  <button role="tab" data-p="1" aria-selected="true">Estado como parte</button>
+  <button role="tab" data-p="2" aria-selected="false">Classes processuais</button>
+  <button role="tab" data-p="3" aria-selected="false">Outros tribunais e notas</button>
+  <span class="info" id="pginfo">Página 1 de 3</span>
+</nav>
+<div class="tip" id="tip"></div>
+
+<script>
+const pt=n=>n.toLocaleString('pt-BR');
+const C=['#118DFF','#12239E','#E66C37','#6B007B','#E044A7','#744EC2','#D9B300'];
+const tip=document.getElementById('tip');
+function tt(ev,h){tip.innerHTML=h;tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-290);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px'}
+function th(){tip.style.display='none'}
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+
+/* ---------- dados ---------- */
+let U,IND,LIT,TRIB,CL,YR,META={};
+/* ---------- visuais genéricos ---------- */
+function hbar(box,rows,color,fmtTip){
+ box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(240,W*.45),rh=24,H=rows.length*rh+20;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-60;
+ [0,.25,.5,.75,1].forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-18,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-4,'text-anchor':'middle'},s);t.textContent=pt(Math.round(m*f))});
+ rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+15,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>38?r.k.slice(0,36)+'…':r.k;
+  const b=el('rect',{x:lw,y:y+4,height:rh-8,width:Math.max(1,bw*r.v/m),fill:r.c||color},s);
+  b.addEventListener('mousemove',e=>tt(e,fmtTip(r)));b.addEventListener('mouseleave',th);
+  const v=el('text',{x:lw+bw*r.v/m+5,y:y+15,class:'lbl'},s);v.textContent=pt(r.v)});
+}
+function donut(box,rows){
+ box.innerHTML='';const W=box.clientWidth||400,H=230,R=80,cx=Math.min(W*.32,130),cy=H/2;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const T=rows.reduce((a,r)=>a+r.v,0)||1;let a0=-Math.PI/2;
+ rows.forEach((r,i)=>{const a1=a0+2*Math.PI*r.v/T;const L=a1-a0>Math.PI?1:0;
+  const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const[x0,y0]=p(a0,R),[x1,y1]=p(a1,R),[x2,y2]=p(a1,R*.58),[x3,y3]=p(a0,R*.58);
+  const pa=el('path',{d:`M${x0} ${y0}A${R} ${R} 0 ${L} 1 ${x1} ${y1}L${x2} ${y2}A${R*.58} ${R*.58} 0 ${L} 0 ${x3} ${y3}Z`,fill:C[i],stroke:'#fff','stroke-width':1.5},s);
+  pa.addEventListener('mousemove',e=>tt(e,`<b>${r.k}</b>${pt(r.v)} processos · ${(r.v/T*100).toFixed(1).replace('.',',')}%`));pa.addEventListener('mouseleave',th);a0=a1});
+ const tc=el('text',{x:cx,y:cy+6,'text-anchor':'middle',class:'lbl','font-size':18},s);tc.textContent=pt(T);
+ rows.forEach((r,i)=>{const y=40+i*30;el('circle',{cx:cx+R+30,cy:y-4,r:5,fill:C[i]},s);const t=el('text',{x:cx+R+42,y,class:'lbl'},s);t.textContent=r.k;const t2=el('text',{x:cx+R+42,y:y+14},s);t2.textContent=`${pt(r.v)} · ${(r.v/T*100).toFixed(0)}%`});
+}
+function vcol(box,vals,color){
+ box.innerHTML='';const W=box.clientWidth||600,H=250,b=22,l=40,t=16;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...vals)||1,bw=(W-l)/vals.length;
+ [0,.5,1].forEach(f=>{const y=H-b-(H-b-t)*f;el('line',{x1:l,x2:W,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
+ vals.forEach((v,i)=>{const h=(H-b-t)*v/m,x=l+i*bw+bw*.18;const r=el('rect',{x,y:H-b-h,width:bw*.64,height:Math.max(h,0),fill:i===vals.length-1?'#9FCBF5':color},s);
+  r.addEventListener('mousemove',e=>tt(e,`<b>${YR[i]}${i===11?' (parcial)':''}</b>${pt(v)} ações`));r.addEventListener('mouseleave',th);
+  const yy=el('text',{x:x+bw*.32,y:H-6,'text-anchor':'middle'},s);yy.textContent=W<500?String(YR[i]).slice(2):YR[i];
+  if(W>=500){const lv=el('text',{x:x+bw*.32,y:H-b-h-4,'text-anchor':'middle',class:'lbl','font-size':10},s);lv.textContent=pt(v)}});
+}
+function lines(box,series){
+ box.innerHTML='';const W=box.clientWidth||900,H=230,b=22,l=48,t=10;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...series.flatMap(x=>x.v)),sx=i=>l+(W-l-10)*i/11,sy=v=>H-b-(H-b-t)*v/m;
+ [0,.25,.5,.75,1].forEach(f=>{const y=sy(m*f);el('line',{x1:l,x2:W-10,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
+ YR.forEach((y,i)=>{const tx=el('text',{x:sx(i),y:H-5,'text-anchor':'middle'},s);tx.textContent=W<600?String(y).slice(2):y});
+ series.forEach(se=>{el('path',{d:se.v.map((v,i)=>(i?'L':'M')+sx(i)+' '+sy(v)).join(''),fill:'none',stroke:se.c,'stroke-width':2},s);
+  se.v.forEach((v,i)=>{const c=el('circle',{cx:sx(i),cy:sy(v),r:3,fill:se.c},s);c.addEventListener('mousemove',e=>tt(e,`<b>${se.k} · ${YR[i]}</b>${pt(v)} ações`));c.addEventListener('mouseleave',th)})});
+}
+
+/* ---------- página 1 ---------- */
+function p1(){
+ const ind=document.getElementById('s-ind').value,g=document.getElementById('s-grau').value,ix=ind==='reu'?2:3;
+ const rows=U.filter(r=>!g||r[1]===g);const tot=rows.reduce((a,r)=>a+r[ix],0);
+ document.getElementById('c-tot').textContent=pt(tot);
+ document.getElementById('c-tot-l').textContent=`Pendentes · Estado como ${ind==='reu'?'réu':'autor'}${g?' · '+g:''}`;
+ document.getElementById('h-unid').textContent=`Processos pendentes por órgão julgador — Estado como ${ind==='reu'?'réu':'autor'}`;
+ const gi={"1º Grau":0,"Juizado Especial":1,"2º Grau":2,"Turma Recursal":3};
+ hbar(document.getElementById('g-unid'),rows.map(r=>({k:r[0],v:r[ix],c:C[gi[r[1]]],raw:r})).sort((a,b)=>b.v-a.v),C[0],r=>`<b>${r.k}</b>${r.raw[1]}<br>Réu: ${pt(r.raw[2])} · Autor: ${pt(r.raw[3])}`);
+ const gs=Object.keys(gi).map(k=>({k,v:U.filter(r=>r[1]===k).reduce((a,r)=>a+r[ix],0)}));donut(document.getElementById('g-grau'),gs);
+ document.getElementById('t-unid').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="r">${pt(r[2])}</td><td class="r">${pt(r[3])}</td></tr>`).join('');
+ document.getElementById('f-reu').textContent=pt(rows.reduce((a,r)=>a+r[2],0));document.getElementById('f-aut').textContent=pt(rows.reduce((a,r)=>a+r[3],0));
+ hbar(document.getElementById('g-ind'),IND.map(r=>({k:r[0],v:r[1]})),C[2],r=>`<b>${r.k}</b>${pt(r.v)} processos como réu`);
+}
+/* ---------- página 2 ---------- */
+const sc=document.getElementById('s-cls');
+function p2(){
+ const d=CL[sc.value];document.getElementById('c2-tot').textContent=pt(d[1]);document.getElementById('c2-25').textContent=pt(d[2][10]);document.getElementById('c2-26').textContent=pt(d[2][11]);
+ const vr=d[2][9]?((d[2][10]-d[2][9])/d[2][9]*100):null;document.getElementById('c2-25-l').textContent='Ajuizados em 2025'+(vr==null?'':` · ${vr>=0?'▲':'▼'} ${Math.abs(vr).toFixed(0)}% vs 2024`);
+ document.getElementById('h-ano').textContent=`Ações ajuizadas por ano — ${d[0]}`;
+ vcol(document.getElementById('g-ano'),d[2],C[0]);
+ hbar(document.getElementById('g-cls'),Object.values(CL).map((x,i)=>({k:x[0],v:x[1],c:x[0]===d[0]?C[0]:'#C8C6C4'})).sort((a,b)=>b.v-a.v),C[0],r=>`<b>${r.k}</b>${pt(r.v)} processos`);
+ const ser=Object.values(CL).filter(x=>x[2]).map((x,i)=>({k:x[0],v:x[2],c:C[i]}));
+ document.getElementById('lg-lin').innerHTML=ser.map(x=>`<span><i style="background:${x.c}"></i>${x.k}</span>`).join('');lines(document.getElementById('g-lin'),ser);
+}
+/* ---------- página 3 ---------- */
+function fillLit(){document.getElementById('t-lit').innerHTML=LIT.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="r">${pt(r[3])}</td><td class="r">${r[4]}</td></tr>`).join('');}
+
+/* ---------- navegação ---------- */
+let cur='1';
+function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
+ document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
+ document.getElementById('pginfo').textContent=`Página ${p} de 3`;draw()}
+function p3(){hbar(document.getElementById('g-trib'),TRIB.map((t,i)=>({k:t[0],v:t[1],c:C[i+1]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} processos com o Estado como réu`)}
+function draw(){if(cur==='1')p1();if(cur==='2')p2();if(cur==='3')p3()}
+document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
+['s-ind','s-grau','s-cls'].forEach(id=>document.getElementById(id).onchange=draw);
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
+Promise.all(['data/processual.json','data/manual.json'].map(u=>fetch(u+'?v='+Date.now()).then(r=>r.json()))).then(([P,M])=>{
+ U=M.U;IND=M.IND;LIT=M.LIT;TRIB=M.TRIB;YR=P.anos_ref;
+ CL=Object.fromEntries(Object.entries(P.classes).map(([k,v])=>[k,[v.nome,v.total,v.anos]]));
+ sc.innerHTML=Object.entries(CL).filter(([,d])=>d[2]).map(([k,d])=>`<option value="${k}">${d[0]}</option>`).join('');
+ const fd=d=>d.split('-').reverse().join('/');
+ document.querySelector('.ban .r').innerHTML=`Fonte: CNJ — DataJud (atualizado em ${fd(P.atualizado_em)}) e Grandes Litigantes (pendentes em ${fd(M.atualizado_em)})`;
+ fillLit();go('1');
+}).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
+</script>
+</body>
+</html>

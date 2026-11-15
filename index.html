@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Dados — PGE-AM</title><style>
+:root{--c1:#118DFF;--c2:#12239E;--c3:#E66C37;--c4:#6B007B;--c5:#E044A7;--ink:#252423;--mut:#605E5C;--line:#E1DFDD;--bg:#EAEAEA;--hd:#1F3A5F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI","Segoe UI Web",Selawik,system-ui,-apple-system,Roboto,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+.canvas{flex:1;padding:14px;display:flex;justify-content:center}
+.page{width:100%;max-width:1280px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:grid;grid-template-columns:repeat(12,1fr);gap:10px;padding:0 14px 14px;align-content:start}
+.ban{grid-column:1/-1;margin:0 -14px;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;flex-wrap:wrap}
+.ban h1{margin:0;font-size:20px;font-weight:600}
+.ban .s{font-size:11.5px;opacity:.8}
+.ban .r{font-size:11px;text-align:right;opacity:.85;line-height:1.5}
+.slicers{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.sl{border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.sl label{display:block;font-size:11px;color:var(--mut);margin-bottom:3px}
+.sl select{width:100%;border:0;border-bottom:1px solid #8A8886;font:inherit;padding:2px 0;background:#fff;color:var(--ink)}
+.sl .fixed{font-size:13px;border-bottom:1px solid #C8C6C4;padding:2px 0}
+.v{border:1px solid var(--line);padding:8px 10px;min-width:0;position:relative;background:#fff}
+.v h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink)}
+.card{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:96px}
+.card .n{font-size:32px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .l{font-size:12px;color:var(--mut);margin-top:2px}
+.card.acc .n{color:var(--c3)}
+.k3{grid-column:span 3}.k4{grid-column:span 4}.k5{grid-column:span 5}.k6{grid-column:span 6}.k7{grid-column:span 7}.k8{grid-column:span 8}.k12{grid-column:span 12}
+svg{display:block;width:100%;overflow:visible}
+svg text{font-family:inherit;fill:var(--mut);font-size:11px}
+svg .lbl{fill:var(--ink)}
+.tbl{max-height:260px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#fff;text-align:left;font-weight:600;border-bottom:1px solid #8A8886;padding:4px 6px}
+td{padding:4px 6px;border-bottom:1px solid #F3F2F1}
+tbody tr:nth-child(even) td{background:#FAF9F8}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-bottom:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #C8C6C4;box-shadow:0 2px 6px rgba(0,0,0,.2);padding:6px 9px;font-size:12px;z-index:9;display:none;max-width:280px}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.foot-note{grid-column:1/-1;font-size:11px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px}
+.pages{background:#F3F2F1;border-top:1px solid #C8C6C4;display:flex;align-items:stretch;padding:0 10px;position:sticky;bottom:0;overflow-x:auto}
+.pages button{all:unset;cursor:pointer;padding:8px 16px;font-size:12.5px;color:var(--mut);border-top:3px solid transparent;white-space:nowrap}
+.pages button[aria-selected=true]{background:#fff;color:var(--ink);border-top-color:#F2C811;font-weight:600}
+.pages button:focus-visible{outline:2px solid var(--c1);outline-offset:-2px}
+.pages .info{margin-left:auto;align-self:center;font-size:11px;color:var(--mut);padding-left:12px;white-space:nowrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
+@media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
+
+.tile{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);padding:14px 16px;background:#fff;transition:box-shadow .15s}
+.tile:hover{box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tile h3{margin:0 0 4px;font-size:15px;font-weight:600;color:#12239E}
+.tile p{margin:0 0 10px;font-size:12px;color:var(--mut)}
+.tile .kp{display:flex;gap:18px;flex-wrap:wrap}
+.tile .kp div{min-width:90px}.tile .kp b{display:block;font-size:22px;font-weight:300;color:var(--ink)}.tile .kp span{font-size:11px;color:var(--mut)}
+.upd{grid-column:1/-1;font-size:12px;color:var(--mut)}
+</style></head><body>
+<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a></nav></header>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
+<div class="canvas"><div class="page">
+ <div class="ban"><div><h1>Painel de Dados da Procuradoria Geral do Estado</h1><div class="s">Procuradoria Geral do Estado do Amazonas · Coordenadoria de Transparência e Ouvidoria</div></div><div class="r">Atualização automática diária a partir de dados abertos oficiais</div></div>
+ <a class="tile k4" href="processual.html"><h3>Inteligência Processual</h3><p>O Estado do Amazonas como parte no TJAM, TRT11 e TRF1</p><div class="kp" id="t1"></div></a>
+ <a class="tile k4" href="ouvidoria.html"><h3>Ouvidoria</h3><p>Manifestações recebidas pela PGE no Fala.BR</p><div class="kp" id="t2"></div></a>
+ <a class="tile k4" href="transparencia.html"><h3>Gestão e Transparência</h3><p>Folha de pagamento, diárias e passagens</p><div class="kp" id="t3"></div></a>
+ <div class="v k12"><h3>Situação das fontes</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Fonte</th><th>Conteúdo</th><th>Atualização</th><th class="r">Dados até</th></tr></thead><tbody id="fontes"></tbody></table></div></div>
+ <div class="foot-note">Fontes: CNJ (DataJud e Grandes Litigantes), CGU (Painel Resolveu? / Fala.BR) e Portal da Transparência do Governo do Estado do Amazonas. Nenhum dado pessoal é exibido.</div>
+</div></div>
+<script>
+const pt=n=>n.toLocaleString('pt-BR');const fd=d=>d?d.split('-').reverse().join('/'):'—';
+const brl=v=>v>=1e6?'R$ '+(v/1e6).toFixed(1).replace('.',',')+' mi':'R$ '+pt(Math.round(v));
+const k=(id,arr)=>document.getElementById(id).innerHTML=arr.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('');
+const get=u=>fetch(u+'?v='+Date.now()).then(r=>r.json()).catch(()=>null);
+Promise.all(['data/processual.json','data/manual.json','data/ouvidoria.json','data/transparencia.json'].map(get)).then(([P,M,O,T])=>{
+ if(M){const tj=M.TRIB.find(t=>t[0]==='TJAM');k('t1',[[pt(tj?tj[1]:0),'processos com o Estado como réu no TJAM'],[P?pt(P.classes.MS.total):'—','mandados de segurança na base']])}
+ if(O)k('t2',[[pt(O.n),'manifestações desde 2018'],[String(O.prazo).replace('.',',')+'%','respondidas no prazo']]);
+ if(T){const u=T.folha[T.folha.length-1];k('t3',[[pt(u[1]),'servidores na folha'],[brl(u[2]),'folha bruta do mês']])}
+ const rows=[['CNJ — DataJud (API)','Classes processuais no TJAM','Diária, automática',P&&P.atualizado_em],
+  ['CNJ — Grandes Litigantes','Estado como parte por vara e tribunal','Manual (sem API)',M&&M.atualizado_em],
+  ['CGU — Painel Resolveu? / Fala.BR','Manifestações de ouvidoria da PGE','Automática quando a CGU publica',O&&O.ultima],
+  ['Portal da Transparência AM (API)','Folha, diárias e passagens da PGE','Diária, automática',T&&T.atualizado_em]];
+ document.getElementById('fontes').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="r">${fd(r[3])}</td></tr>`).join('');
+});
+</script></body></html>

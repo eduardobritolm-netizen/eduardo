@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ouvidoria e Acesso à Informação — PGE-AM</title>
+<style>
+:root{--c1:#118DFF;--c2:#12239E;--c3:#E66C37;--c4:#6B007B;--c5:#E044A7;--ink:#252423;--mut:#605E5C;--line:#E1DFDD;--bg:#EAEAEA;--hd:#1F3A5F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI","Segoe UI Web",Selawik,system-ui,-apple-system,Roboto,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+.canvas{flex:1;padding:14px;display:flex;justify-content:center}
+.page{width:100%;max-width:1280px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:grid;grid-template-columns:repeat(12,1fr);gap:10px;padding:0 14px 14px;align-content:start}
+.ban{grid-column:1/-1;margin:0 -14px;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;flex-wrap:wrap}
+.ban h1{margin:0;font-size:20px;font-weight:600}
+.ban .s{font-size:11.5px;opacity:.8}
+.ban .r{font-size:11px;text-align:right;opacity:.85;line-height:1.5}
+.slicers{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.sl{border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.sl label{display:block;font-size:11px;color:var(--mut);margin-bottom:3px}
+.sl select{width:100%;border:0;border-bottom:1px solid #8A8886;font:inherit;padding:2px 0;background:#fff;color:var(--ink)}
+.sl .fixed{font-size:13px;border-bottom:1px solid #C8C6C4;padding:2px 0}
+.v{border:1px solid var(--line);padding:8px 10px;min-width:0;position:relative;background:#fff}
+.v h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink)}
+.card{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:96px}
+.card .n{font-size:32px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .l{font-size:12px;color:var(--mut);margin-top:2px}
+.card.acc .n{color:var(--c3)}
+.k3{grid-column:span 3}.k4{grid-column:span 4}.k5{grid-column:span 5}.k6{grid-column:span 6}.k7{grid-column:span 7}.k8{grid-column:span 8}.k12{grid-column:span 12}
+svg{display:block;width:100%;overflow:visible}
+svg text{font-family:inherit;fill:var(--mut);font-size:11px}
+svg .lbl{fill:var(--ink)}
+.tbl{max-height:260px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#fff;text-align:left;font-weight:600;border-bottom:1px solid #8A8886;padding:4px 6px}
+td{padding:4px 6px;border-bottom:1px solid #F3F2F1}
+tbody tr:nth-child(even) td{background:#FAF9F8}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-bottom:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #C8C6C4;box-shadow:0 2px 6px rgba(0,0,0,.2);padding:6px 9px;font-size:12px;z-index:9;display:none;max-width:280px}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.foot-note{grid-column:1/-1;font-size:11px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px}
+.pages{background:#F3F2F1;border-top:1px solid #C8C6C4;display:flex;align-items:stretch;padding:0 10px;position:sticky;bottom:0;overflow-x:auto}
+.pages button{all:unset;cursor:pointer;padding:8px 16px;font-size:12.5px;color:var(--mut);border-top:3px solid transparent;white-space:nowrap}
+.pages button[aria-selected=true]{background:#fff;color:var(--ink);border-top-color:#F2C811;font-weight:600}
+.pages button:focus-visible{outline:2px solid var(--c1);outline-offset:-2px}
+.pages .info{margin-left:auto;align-self:center;font-size:11px;color:var(--mut);padding-left:12px;white-space:nowrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
+@media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
+
+.kpi-sub{font-size:11px;margin-top:3px}
+.up{color:#107C10}.dn{color:#D13438}
+</style>
+</head>
+<body>
+<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a></nav></header>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
+<div class="canvas">
+<div class="page">
+  <div class="ban">
+    <div><h1>Ouvidoria e Acesso à Informação — PGE-AM</h1><div class="s">Procuradoria Geral do Estado do Amazonas · Coordenadoria de Transparência e Ouvidoria</div></div>
+    <div class="r">Fonte: CGU — Painel Resolveu? / Fala.BR (manifestações de ouvidoria)<br>Registros de 12/05/2018 a 29/09/2026</div>
+  </div>
+
+  <!-- PÁGINA 1 -->
+  <div class="slicers" data-pg="1">
+    <div class="sl"><label>Órgão</label><div class="fixed">Procuradoria Geral do Estado - PGE</div></div>
+    <div class="sl"><label>Ano de registro</label><select id="s-ano"></select></div>
+  </div>
+  <div class="v card acc k3" data-pg="1"><div class="n" id="k-n">—</div><div class="l" id="k-n-l">Manifestações recebidas</div></div>
+  <div class="v card k3" data-pg="1"><div class="n" id="k-pz">—</div><div class="l">Respondidas dentro do prazo</div><div class="kpi-sub" id="k-pz-c"></div></div>
+  <div class="v card k3" data-pg="1"><div class="n" id="k-md">—</div><div class="l">Mediana de dias para resposta</div><div class="kpi-sub" id="k-md-c"></div></div>
+  <div class="v card k3" data-pg="1"><div class="n" id="k-rk">—</div><div class="l" id="k-rk-l">Posição em volume entre órgãos estaduais</div></div>
+  <div class="v k7" data-pg="1"><h3>Manifestações por ano</h3><div id="g-ano"></div></div>
+  <div class="v k5" data-pg="1"><h3 id="h-tipo">Tipo de manifestação</h3><div id="g-tipo"></div></div>
+  <div class="v k7" data-pg="1"><h3 id="h-ass">Assuntos mais frequentes</h3><div id="g-ass"></div></div>
+  <div class="v k5" data-pg="1"><h3>Últimos 24 meses</h3><div id="g-mes"></div></div>
+
+  <!-- PÁGINA 2 -->
+  <div class="v card k4" data-pg="2" hidden><div class="n" id="k2-pz"></div><div class="l">No prazo · PGE (todo o período)</div><div class="kpi-sub" id="k2-pz-c"></div></div>
+  <div class="v card k4" data-pg="2" hidden><div class="n" id="k2-md"></div><div class="l">Mediana de dias · PGE</div><div class="kpi-sub" id="k2-md-c"></div></div>
+  <div class="v card acc k4" data-pg="2" hidden><div class="n" id="k2-60"></div><div class="l">Respostas com mais de 60 dias</div></div>
+  <div class="v k8" data-pg="2" hidden><h3>% respondidas no prazo — PGE x média dos órgãos estaduais</h3><div class="legend"><span><i style="background:#118DFF"></i>PGE-AM</span><span><i style="background:#C8C6C4"></i>Órgãos estaduais do AM</span></div><div id="g-pz"></div></div>
+  <div class="v k4" data-pg="2" hidden><h3>Tempo de resposta (dias)</h3><div id="g-fx"></div></div>
+  <div class="v k6" data-pg="2" hidden><h3>Mediana de dias para resposta por ano</h3><div class="legend"><span><i style="background:#E66C37"></i>PGE-AM</span><span><i style="background:#C8C6C4"></i>Órgãos estaduais do AM</span></div><div id="g-md"></div></div>
+  <div class="v k6" data-pg="2" hidden><h3>Tempo por tipo de manifestação</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Tipo</th><th class="r">Qtde</th><th class="r">Mediana (dias)</th><th class="r">Média (dias)</th></tr></thead><tbody id="t-td"></tbody></table></div></div>
+
+  <!-- PÁGINA 3 -->
+  <div class="v k4" data-pg="3" hidden><h3>Canal (formulário)</h3><div id="g-form"></div></div>
+  <div class="v k4" data-pg="3" hidden><h3>Gênero do manifestante</h3><div id="g-gen"></div></div>
+  <div class="v k4" data-pg="3" hidden><h3>Raça/cor declarada</h3><div id="g-raca"></div></div>
+  <div class="v k6" data-pg="3" hidden><h3>Município do manifestante</h3><div id="g-mun"></div></div>
+  <div class="v k6" data-pg="3" hidden><h3>Pesquisa de satisfação</h3><div id="g-sat"></div><p style="font-size:11px;color:#605E5C;margin:4px 0 0" id="sat-note"></p></div>
+  <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
+    <table><tbody>
+      <tr><td>Fonte</td><td>Base de manifestações de ouvidoria da CGU (Painel Resolveu? / Fala.BR), arquivos anuais 2014–2026. Filtro: órgão "Procuradoria Geral do Estado - PGE", esfera estadual, UF AM.</td></tr>
+      <tr><td>Prazo</td><td>Considerada no prazo a manifestação com data de resposta igual ou anterior à data-limite registrada no sistema. O campo "dias de atraso" vem vazio na base para a PGE.</td></tr>
+      <tr><td>Comparação</td><td>"Órgãos estaduais do AM" reúne as 46.882 manifestações dos 110 órgãos estaduais do Amazonas na mesma base.</td></tr>
+      <tr><td>Acesso à informação</td><td>Esta base cobre manifestações de ouvidoria. Pedidos formais da LAI (e-SIC) ficam em base própria e não estão incluídos; o assunto "Acesso à informação" aqui reúne manifestações de ouvidoria sobre o tema.</td></tr>
+      <tr><td>Dados pessoais</td><td>Somente campos agregados; nenhum manifestante é identificável.</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="foot-note">Dados abertos da Controladoria-Geral da União. Tratamento e agregação: Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
+</div>
+</div>
+<nav class="pages" role="tablist" aria-label="Páginas do relatório">
+  <button role="tab" data-p="1" aria-selected="true">Visão geral</button>
+  <button role="tab" data-p="2" aria-selected="false">Prazo e tempo de resposta</button>
+  <button role="tab" data-p="3" aria-selected="false">Perfil e satisfação</button>
+  <span class="info" id="pginfo">Página 1 de 3</span>
+</nav>
+<div class="tip" id="tip"></div>
+<script>
+const pt=n=>n.toLocaleString('pt-BR');
+const C=['#118DFF','#12239E','#E66C37','#6B007B','#E044A7','#744EC2','#D9B300'];
+const tip=document.getElementById('tip');
+function tt(ev,h){tip.innerHTML=h;tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-290);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px'}
+function th(){tip.style.display='none'}
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+
+
+/* ---------- visuais genéricos ---------- */
+function hbar(box,rows,color,fmtTip){
+ box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(240,W*.45),rh=24,H=rows.length*rh+20;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-60;
+ [0,.25,.5,.75,1].forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-18,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-4,'text-anchor':'middle'},s);t.textContent=pt(Math.round(m*f))});
+ rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+15,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>38?r.k.slice(0,36)+'…':r.k;
+  const b=el('rect',{x:lw,y:y+4,height:rh-8,width:Math.max(1,bw*r.v/m),fill:r.c||color},s);
+  b.addEventListener('mousemove',e=>tt(e,fmtTip(r)));b.addEventListener('mouseleave',th);
+  const v=el('text',{x:lw+bw*r.v/m+5,y:y+15,class:'lbl'},s);v.textContent=pt(r.v)});
+}
+function donut(box,rows){
+ box.innerHTML='';const W=box.clientWidth||400,H=230,R=80,cx=Math.min(W*.32,130),cy=H/2;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const T=rows.reduce((a,r)=>a+r.v,0)||1;let a0=-Math.PI/2;
+ rows.forEach((r,i)=>{const a1=a0+2*Math.PI*r.v/T;const L=a1-a0>Math.PI?1:0;
+  const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const[x0,y0]=p(a0,R),[x1,y1]=p(a1,R),[x2,y2]=p(a1,R*.58),[x3,y3]=p(a0,R*.58);
+  const pa=el('path',{d:`M${x0} ${y0}A${R} ${R} 0 ${L} 1 ${x1} ${y1}L${x2} ${y2}A${R*.58} ${R*.58} 0 ${L} 0 ${x3} ${y3}Z`,fill:C[i],stroke:'#fff','stroke-width':1.5},s);
+  pa.addEventListener('mousemove',e=>tt(e,`<b>${r.k}</b>${pt(r.v)} processos · ${(r.v/T*100).toFixed(1).replace('.',',')}%`));pa.addEventListener('mouseleave',th);a0=a1});
+ const tc=el('text',{x:cx,y:cy+6,'text-anchor':'middle',class:'lbl','font-size':18},s);tc.textContent=pt(T);
+ rows.forEach((r,i)=>{const y=40+i*30;el('circle',{cx:cx+R+30,cy:y-4,r:5,fill:C[i]},s);const t=el('text',{x:cx+R+42,y,class:'lbl'},s);t.textContent=r.k;const t2=el('text',{x:cx+R+42,y:y+14},s);t2.textContent=`${pt(r.v)} · ${(r.v/T*100).toFixed(0)}%`});
+}
+function vcol(box,vals,color){
+ box.innerHTML='';const W=box.clientWidth||600,H=250,b=22,l=40,t=16;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...vals)||1,bw=(W-l)/vals.length;
+ [0,.5,1].forEach(f=>{const y=H-b-(H-b-t)*f;el('line',{x1:l,x2:W,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
+ vals.forEach((v,i)=>{const h=(H-b-t)*v/m,x=l+i*bw+bw*.18;const r=el('rect',{x,y:H-b-h,width:bw*.64,height:Math.max(h,0),fill:i===vals.length-1?'#9FCBF5':color},s);
+  r.addEventListener('mousemove',e=>tt(e,`<b>${YR[i]}${i===11?' (parcial)':''}</b>${pt(v)} ações`));r.addEventListener('mouseleave',th);
+  const yy=el('text',{x:x+bw*.32,y:H-6,'text-anchor':'middle'},s);yy.textContent=W<500?String(YR[i]).slice(2):YR[i];
+  if(W>=500){const lv=el('text',{x:x+bw*.32,y:H-b-h-4,'text-anchor':'middle',class:'lbl','font-size':10},s);lv.textContent=pt(v)}});
+}
+function lines(box,series){
+ box.innerHTML='';const W=box.clientWidth||900,H=230,b=22,l=48,t=10;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...series.flatMap(x=>x.v)),sx=i=>l+(W-l-10)*i/11,sy=v=>H-b-(H-b-t)*v/m;
+ [0,.25,.5,.75,1].forEach(f=>{const y=sy(m*f);el('line',{x1:l,x2:W-10,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
+ YR.forEach((y,i)=>{const tx=el('text',{x:sx(i),y:H-5,'text-anchor':'middle'},s);tx.textContent=W<600?String(y).slice(2):y});
+ series.forEach(se=>{el('path',{d:se.v.map((v,i)=>(i?'L':'M')+sx(i)+' '+sy(v)).join(''),fill:'none',stroke:se.c,'stroke-width':2},s);
+  se.v.forEach((v,i)=>{const c=el('circle',{cx:sx(i),cy:sy(v),r:3,fill:se.c},s);c.addEventListener('mousemove',e=>tt(e,`<b>${se.k} · ${YR[i]}</b>${pt(v)} ações`));c.addEventListener('mouseleave',th)})});
+}
+
+
+let D;
+const N=(s)=>s==='Não Informado'?'Não informado':s;
+function lineN(box,labels,series,fmt){
+ box.innerHTML='';const W=box.clientWidth||700,H=220,b=22,l=40,t=12;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...series.flatMap(x=>x.v))||1,n=labels.length,sx=i=>l+(W-l-14)*i/(n-1),sy=v=>H-b-(H-b-t)*v/m;
+ [0,.5,1].forEach(f=>{const y=sy(m*f);el('line',{x1:l,x2:W-14,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=fmt(m*f)});
+ labels.forEach((y,i)=>{if(n>12&&i%3)return;const tx=el('text',{x:sx(i),y:H-5,'text-anchor':'middle'},s);tx.textContent=y});
+ series.forEach(se=>{el('path',{d:se.v.map((v,i)=>(i?'L':'M')+sx(i)+' '+sy(v)).join(''),fill:'none',stroke:se.c,'stroke-width':2},s);
+  se.v.forEach((v,i)=>{const c=el('circle',{cx:sx(i),cy:sy(v),r:3.5,fill:se.c},s);c.addEventListener('mousemove',e=>tt(e,`<b>${se.k} · ${labels[i]}</b>${fmt(v)}`));c.addEventListener('mouseleave',th)})});
+}
+function cols(box,labels,vals,hl,color){
+ box.innerHTML='';const W=box.clientWidth||600,H=220,b=22,l=34,t=16;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...vals)||1,bw=(W-l)/vals.length;
+ [0,.5,1].forEach(f=>{const y=H-b-(H-b-t)*f;el('line',{x1:l,x2:W,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
+ vals.forEach((v,i)=>{const h=(H-b-t)*v/m,x=l+i*bw+bw*.18;const on=hl==null||hl===labels[i];
+  const r=el('rect',{x,y:H-b-h,width:bw*.64,height:Math.max(h,0),fill:on?color:'#C8C6C4'},s);
+  r.addEventListener('mousemove',e=>tt(e,`<b>${labels[i]}</b>${pt(v)} manifestações`));r.addEventListener('mouseleave',th);
+  if(vals.length<=12||i%3===0){const yy=el('text',{x:x+bw*.32,y:H-6,'text-anchor':'middle'},s);yy.textContent=labels[i]}
+  if(vals.length<=12){const lv=el('text',{x:x+bw*.32,y:H-b-h-4,'text-anchor':'middle',class:'lbl','font-size':10},s);lv.textContent=pt(v)}});
+}
+const pc=v=>v.toFixed(1).replace('.',',')+'%';
+let anos;
+function p1(){
+ const a=document.getElementById('s-ano').value;const row=D.anos.find(x=>x[0]===a);const E=a?D.anos_estado[a]:null;
+ document.getElementById('k-n').textContent=pt(a?row[1]:D.n);
+ document.getElementById('k-n-l').textContent='Manifestações recebidas'+(a?' em '+a:' desde 2018');
+ const pz=a?row[3]:D.prazo,pe=a?E[2]:D.prazo_estado,md=a?row[2]:D.med,me=a?E[1]:D.med_estado;
+ document.getElementById('k-pz').textContent=pc(pz);
+ const c1=document.getElementById('k-pz-c');c1.textContent=`Órgãos estaduais: ${pc(pe)}`;c1.className='kpi-sub '+(pz>=pe?'up':'dn');
+ document.getElementById('k-md').textContent=String(md).replace('.',',');
+ const c2=document.getElementById('k-md-c');c2.textContent=`Órgãos estaduais: ${String(me).replace('.',',')} dias`;c2.className='kpi-sub '+(md<=me?'up':'dn');
+ document.getElementById('k-rk').textContent=a?pt(E[0]):D.rank+'º';
+ document.getElementById('k-rk-l').textContent=a?`Manifestações a todos os órgãos estaduais em ${a}`:`Posição em volume entre ${D.norgaos} órgãos estaduais`;
+ cols(document.getElementById('g-ano'),anos,D.anos.map(x=>x[1]),a||null,C[0]);
+ const tp=a?Object.entries(D.tipo_ano[a]).sort((x,y)=>y[1]-x[1]):D.tipo;
+ document.getElementById('h-tipo').textContent='Tipo de manifestação'+(a?' — '+a:'');
+ donut(document.getElementById('g-tipo'),tp.map(([k,v])=>({k,v})));
+ const as=a?Object.entries(D.ass_ano[a]):D.assunto;
+ document.getElementById('h-ass').textContent='Assuntos mais frequentes'+(a?' — '+a:'');
+ hbar(document.getElementById('g-ass'),as.map(([k,v])=>({k,v,c:/Acesso à informação/.test(k)?C[2]:C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} manifestações`);
+ cols(document.getElementById('g-mes'),D.mes.map(m=>m[0].slice(5)+'/'+m[0].slice(2,4)),D.mes.map(m=>m[1]),null,C[1]);
+}
+function p2(){
+ document.getElementById('k2-pz').textContent=pc(D.prazo);
+ const c=document.getElementById('k2-pz-c');c.textContent=`Órgãos estaduais: ${pc(D.prazo_estado)}`;c.className='kpi-sub dn';
+ document.getElementById('k2-md').textContent=String(D.med).replace('.',',')+' dias';
+ const c2=document.getElementById('k2-md-c');c2.textContent=`Órgãos estaduais: ${D.med_estado} dias · média PGE ${String(D.media).replace('.',',')}`;c2.className='kpi-sub dn';
+ const f60=D.faixas.find(f=>f[0]==='mais de 60')[1];document.getElementById('k2-60').textContent=pt(f60)+' ('+Math.round(f60/D.n*100)+'%)';
+ const yrs=anos.filter(a=>a>='2020');
+ lineN(document.getElementById('g-pz'),yrs,[{k:'PGE-AM',c:'#118DFF',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[3])},{k:'Órgãos estaduais',c:'#C8C6C4',v:yrs.map(a=>D.anos_estado[a][2])}],v=>pc(v));
+ lineN(document.getElementById('g-md'),yrs,[{k:'PGE-AM',c:'#E66C37',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[2])},{k:'Órgãos estaduais',c:'#C8C6C4',v:yrs.map(a=>D.anos_estado[a][1])}],v=>Math.round(v)+' dias');
+ hbar(document.getElementById('g-fx'),D.faixas.map(([k,v])=>({k:k+' dias',v,c:k==='mais de 60'?C[2]:C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} manifestações`);
+ const q=Object.fromEntries(D.tipo);
+ document.getElementById('t-td').innerHTML=D.tipo_dias.sort((a,b)=>q[b[0]]-q[a[0]]).map(r=>`<tr><td>${r[0]}</td><td class="r">${q[r[0]]}</td><td class="r">${String(r[1]).replace('.',',')}</td><td class="r">${String(r[2]).replace('.',',')}</td></tr>`).join('');
+}
+function p3(){
+ donut(document.getElementById('g-form'),D.form.map(([k,v])=>({k,v})));
+ donut(document.getElementById('g-gen'),D.genero.map(([k,v])=>({k:N(k),v})));
+ donut(document.getElementById('g-raca'),D.raca.map(([k,v])=>({k:N(k),v})));
+ hbar(document.getElementById('g-mun'),D.mun.map(([k,v])=>({k:N(k).replace(/\b\w+/g,w=>w[0]+w.slice(1).toLowerCase()),v,c:k==='Não Informado'?'#C8C6C4':C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)}`);
+ const s=D.sat.filter(x=>x[0]!=='Não informado').sort((a,b)=>b[0].localeCompare(a[0]));
+ hbar(document.getElementById('g-sat'),s.map(([k,v])=>({k:k.replace(/^\(\d\) /,''),v,c:/Insatisf/.test(k)?C[2]:/Satisf/.test(k)?'#107C10':'#C8C6C4'})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} respostas`);
+ const nr=D.n-D.sat.find(x=>x[0]==='Não informado')[1];
+ document.getElementById('sat-note').textContent=`Só ${nr} das ${D.n} manifestações (${Math.round(nr/D.n*100)}%) têm pesquisa de satisfação respondida — amostra pequena para conclusões.`;
+}
+let cur='1';
+function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
+ document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
+ document.getElementById('pginfo').textContent=`Página ${p} de 3`;draw()}
+function draw(){({1:p1,2:p2,3:p3})[cur]()}
+document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
+document.getElementById('s-ano').onchange=draw;
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
+fetch('data/ouvidoria.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;anos=D.anos.map(a=>a[0]);
+ document.getElementById('s-ano').innerHTML='<option value="">Todos</option>'+anos.map(a=>`<option>${a}</option>`).join('');
+ const fd=d=>d.split('-').reverse().join('/');
+ document.querySelector('.ban .r').innerHTML=`Fonte: CGU — Painel Resolveu? / Fala.BR<br>Registros de ${fd(D.primeira)} a ${fd(D.ultima)}`;
+ go('1');}).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
+</script>
+</body>
+</html>

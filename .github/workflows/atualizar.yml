@@ -1,0 +1,27 @@
+name: Atualizar dados do painel
+on:
+  schedule:
+    - cron: '17 6 * * *'   # todo dia às 02:17 de Manaus (06:17 UTC)
+  workflow_dispatch: {}     # botão "Run workflow" para rodar na hora
+permissions:
+  contents: write
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pandas
+      - name: Coletar dados
+        env:
+          OUVIDORIA_URLS: ${{ vars.OUVIDORIA_URLS }}
+        run: cd scripts && python atualizar.py
+      - name: Publicar se houver mudança
+        run: |
+          git config user.name  "robo-painel"
+          git config user.email "robo-painel@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Atualização automática dos dados ($(date +%F))"
+          git push
