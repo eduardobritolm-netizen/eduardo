@@ -46,35 +46,50 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 @media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
 @media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
 
-.sel{font:inherit;font-size:13px;padding:6px 10px;border:1px solid #8A8886;background:#fff;min-width:320px;max-width:100%}
+.sel,.inp{font:inherit;font-size:12.5px;padding:6px 9px;border:1px solid #8A8886;background:#fff}
+.inp{width:100%}
 .ref{background:#DEECF9!important}
 .badge{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:2px;background:#F3F2F1;color:#605E5C;margin-left:6px}
 .proto{background:#FFF4CE;border:1px solid #F2D98D;padding:8px 12px;font-size:12px;color:#605E5C;border-radius:3px;margin-bottom:10px}
-.dl{font:inherit;font-size:12px;padding:5px 12px;border:1px solid #118DFF;background:#fff;color:#118DFF;cursor:pointer}
+.dl{font:inherit;font-size:12px;padding:6px 12px;border:1px solid #118DFF;background:#fff;color:#118DFF;cursor:pointer}
 .dl:hover{background:#118DFF;color:#fff}
-.desc{font-size:12px;color:#605E5C;margin:2px 0 8px}
+.desc{font-size:12px;color:#605E5C;margin:2px 0 0}
 td.p{text-align:right;font-variant-numeric:tabular-nums}
+.flt{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+.flt label{font-size:11px;color:#605E5C;display:flex;flex-direction:column;gap:3px}
+.lista{max-height:230px;overflow:auto;border:1px solid #E1DFDD;margin-top:6px}
+.lista .li{padding:6px 10px;font-size:12.5px;cursor:pointer;border-bottom:1px solid #F3F2F1}
+.lista .li:hover{background:#F3F8FD}.lista .li.on{background:#DEECF9;font-weight:600}
+.lista .li small{color:#605E5C;font-weight:400}
 </style></head><body>
-<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<header class="topnav"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="PGE-AM" class="logo"><span>Painel de Dados</span></a><nav>
 <a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precos.html" data-n="precos">Pesquisa de preços</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
-<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}.topnav .brand{display:flex;align-items:center;gap:10px}.topnav .brand .logo{height:30px;background:#fff;padding:5px 8px;border-radius:5px;display:block}.topnav .brand span{color:#fff;font-weight:600;font-size:14px}</style>
 <script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
 <div id="tip" class="tip"></div>
 <div class="canvas"><div class="page">
  <div class="ban"><div><h1>Pesquisa de Preços de Mercado</h1><div class="s">Apoio à Gerência de Material · preços praticados em compras públicas</div></div><div class="r" id="gen"></div></div>
 
- <div class="v k12">
-  <div class="proto">Protótipo de apoio. Metodologia da IN SEGES/ME nº 65/2021: saneamento de preços fora de média ± 1 desvio-padrão; referência pela mediana quando a dispersão (CV) passa de 25%. A decisão sobre o preço de referência cabe ao agente de contratação.</div>
-  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-   <select id="item" class="sel"></select>
-   <button class="dl" id="csv">Baixar CSV</button>
-   <span class="badge" id="orig"></span>
+ <div class="v k5">
+  <div class="t">Item</div>
+  <input class="inp" id="busca" placeholder="Buscar por descrição ou código CATMAT…">
+  <div class="lista" id="lista"></div>
+ </div>
+ <div class="v k7">
+  <div class="t">Filtros da pesquisa</div>
+  <div class="proto">Protótipo de apoio. IN SEGES/ME nº 65/2021: saneamento fora de média ± 1 desvio-padrão; referência pela mediana quando o CV passa de 25%. A decisão cabe ao agente de contratação.</div>
+  <div class="flt">
+   <label>UF<select class="sel" id="fUF"><option value="">Todas</option></select></label>
+   <label>Unidade de fornecimento<select class="sel" id="fUn"><option value="">Todas</option></select></label>
+   <label>Período<select class="sel" id="fPer"><option value="0">Tudo</option><option value="6">Últimos 6 meses</option><option value="12">Últimos 12 meses</option><option value="24">Últimos 24 meses</option></select></label>
+   <label>Preço (R$)<div style="display:flex;gap:4px"><input class="inp" id="fMin" type="number" step="0.01" placeholder="mín"><input class="inp" id="fMax" type="number" step="0.01" placeholder="máx"></div></label>
   </div>
+  <div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="dl" id="csv">Baixar CSV</button><button class="dl" id="limpar" style="border-color:#8A8886;color:#605E5C">Limpar filtros</button><span class="badge" id="orig"></span></div>
   <div class="desc" id="desc"></div>
  </div>
 
- <div class="v k2"><div class="t">Preços coletados</div><div class="n" id="kN">—</div><div class="u" id="uN"></div></div>
- <div class="v k2"><div class="t">Menor preço</div><div class="n" id="kMin">—</div><div class="u">na amostra</div></div>
+ <div class="v k2"><div class="t">Preços no filtro</div><div class="n" id="kN">—</div><div class="u" id="uN"></div></div>
+ <div class="v k2"><div class="t">Menor preço</div><div class="n" id="kMin">—</div><div class="u">no filtro</div></div>
  <div class="v k2"><div class="t">Mediana (saneada)</div><div class="n" id="kMed">—</div><div class="u" id="uCV"></div></div>
  <div class="v k2 ref"><div class="t">Preço de referência</div><div class="n" id="kRef">—</div><div class="u" id="uRef"></div></div>
 
@@ -83,11 +98,10 @@ td.p{text-align:right;font-variant-numeric:tabular-nums}
  <div class="v k12"><div class="t">Compras consideradas <span id="cnt" style="font-weight:400;color:#605E5C;font-size:12px"></span></div>
   <div class="tbl"><table><thead><tr><th>Data</th><th class="p">Preço</th><th>Unidade</th><th>Marca</th><th>Fornecedor</th><th>Órgão comprador</th><th>UF</th></tr></thead><tbody id="tb"></tbody></table></div></div>
 
- <div class="foot-note">Fonte: <b>Compras.gov.br — Preços Praticados</b> (dados abertos, SEGES/MGI). A lista de itens é mantida pela Gerência de Material no arquivo <code>fontes/itens_precos.txt</code>; o robô atualiza os preços a cada execução.</div>
+ <div class="foot-note">Fonte: <b>Compras.gov.br — Preços Praticados</b> (dados abertos, SEGES/MGI). A lista de itens é mantida pela Gerência de Material em <code>fontes/itens_precos.txt</code>; o robô atualiza os preços a cada execução. Os filtros acima recalculam o preço de referência na hora.</div>
 </div></div>
 <script>
 
-const pt=n=>n.toLocaleString('pt-BR');
 const tip=document.getElementById('tip');
 function tt(ev,h){tip.innerHTML=h;tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-300);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px'}
 function th(){tip.style.display='none'}
@@ -96,10 +110,21 @@ function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.set
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fd=d=>d?d.slice(0,10).split('-').reverse().join('/'):'—';
 const rs=v=>v==null?'—':'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:v<1?4:2});
+function estat(precos){
+ const v=precos.filter(x=>x>0).sort((a,b)=>a-b);if(!v.length)return null;
+ const media=v.reduce((a,b)=>a+b,0)/v.length,mediana=v[Math.floor((v.length-1)/2)];
+ const dp=Math.sqrt(v.reduce((a,b)=>a+(b-media)**2,0)/v.length),cv=media?dp/media*100:0;
+ const san=v.filter(x=>x>=media-dp&&x<=media+dp);const S=san.length?san:v;
+ const m2=S.reduce((a,b)=>a+b,0)/S.length,md2=S[Math.floor((S.length-1)/2)];
+ const dp2=Math.sqrt(S.reduce((a,b)=>a+(b-m2)**2,0)/S.length),cv2=m2?dp2/m2*100:0;
+ const ref=cv2>25?md2:m2;
+ return{n:v.length,menor:v[0],maior:v[v.length-1],media,mediana,cv,n_san:S.length,media_san:m2,mediana_san:md2,cv_san:cv2,ref,metodo:cv2>25?'mediana (alta dispersão)':'média'};
+}
 function hist(box,precos,ref){
  box.innerHTML='';const W=box.clientWidth||700,H=150,b=24,l=10;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
- const v=precos.filter(x=>x>0).sort((a,b)=>a-b);if(!v.length)return;const min=v[0],max=v[v.length-1],nb=12,rng=(max-min)||1,bw=(W-2*l)/nb;
- const bins=Array(nb).fill(0);v.forEach(x=>{let i=Math.min(nb-1,Math.floor((x-min)/rng*nb));bins[i]++});const mx=Math.max(...bins)||1;
+ const v=precos.filter(x=>x>0).sort((a,b)=>a-b);if(!v.length){box.innerHTML='<div class="foot-note">Sem preços no filtro atual.</div>';return}
+ const min=v[0],max=v[v.length-1],nb=12,rng=(max-min)||1,bw=(W-2*l)/nb;const bins=Array(nb).fill(0);
+ v.forEach(x=>{bins[Math.min(nb-1,Math.floor((x-min)/rng*nb))]++});const mx=Math.max(...bins)||1;
  bins.forEach((c,i)=>{const h=(H-b)*c/mx,x=l+i*bw;const r=el('rect',{x:x+1,y:H-b-h,width:bw-2,height:h,fill:'#118DFF'},s);
   const lo=min+rng*i/nb,hi=min+rng*(i+1)/nb;r.addEventListener('mousemove',e=>tt(e,`${rs(lo)} – ${rs(hi)}<br><b>${c}</b> compras`));r.addEventListener('mouseleave',th)});
  const xr=l+(W-2*l)*(ref-min)/rng;el('line',{x1:xr,x2:xr,y1:0,y2:H-b,stroke:'#E66C37','stroke-width':2,'stroke-dasharray':'4 3'},s);
@@ -107,26 +132,47 @@ function hist(box,precos,ref){
  [min,max].forEach((val,i)=>{const t=el('text',{x:i?W-l:l,y:H-8,'text-anchor':i?'end':'start','font-size':10,fill:'#605E5C'},s);t.textContent=rs(val)});
 }
 
-let D,atual;
-function render(it){atual=it;const e=it.estat;
- document.getElementById('desc').textContent=it.descricao||'';
+let D,item,filtrados;
+const col={data:0,preco:1,unid:2,marca:3,forn:4,orgao:5,uf:6};
+function opcoes(sel,vals){const atual=sel.value;sel.innerHTML='<option value="">'+(sel.id==='fUF'?'Todas':'Todas')+'</option>'+[...new Set(vals.filter(Boolean))].sort().map(v=>`<option>${esc(v)}</option>`).join('');sel.value=atual}
+function selItem(it){item=it;document.getElementById('desc').textContent=it.descricao||'';
  document.getElementById('orig').textContent=it.origem==='api'?'dados ao vivo da API':it.origem==='cache'?'cache (última coleta)':'sem dados';
- if(!e){['kN','kMin','kMed','kRef'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('tb').innerHTML='<tr><td colspan="7" style="color:#605E5C">Sem preços coletados ainda. Será preenchido na próxima execução do robô.</td></tr>';document.getElementById('cHist').innerHTML='';return}
- document.getElementById('kN').textContent=e.n;document.getElementById('uN').textContent=e.n_saneada+' após saneamento';
- document.getElementById('kMin').textContent=rs(e.menor);
- document.getElementById('kMed').textContent=rs(e.mediana_saneada);document.getElementById('uCV').textContent='CV '+String(e.cv_saneada).replace('.',',')+'%';
- document.getElementById('kRef').textContent=rs(e.referencia);document.getElementById('uRef').textContent='por '+e.metodo;
- hist(document.getElementById('cHist'),it.compras.map(r=>r[1]),e.referencia);
- document.getElementById('cnt').textContent='('+it.compras.length+')';
- document.getElementById('tb').innerHTML=it.compras.map(r=>`<tr><td>${fd(r[0])}</td><td class="p">${rs(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('');
+ document.querySelectorAll('#lista .li').forEach(x=>x.classList.toggle('on',x.dataset.cod===it.codigo));
+ opcoes(document.getElementById('fUF'),it.compras.map(r=>r[col.uf]));
+ opcoes(document.getElementById('fUn'),it.compras.map(r=>r[col.unid]));
+ aplicar();
 }
-document.getElementById('csv').onclick=()=>{if(!atual)return;const cab=['Data','Preco','Unidade','Marca','Fornecedor','Orgao','UF'];
- const linhas=atual.compras.map(r=>[fd(r[0]),r[1],r[2],r[3],r[4],r[5],r[6]].map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(';'));
+function aplicar(){
+ if(!item){return}
+ const uf=document.getElementById('fUF').value,un=document.getElementById('fUn').value,per=+document.getElementById('fPer').value;
+ const mn=parseFloat(document.getElementById('fMin').value),mx=parseFloat(document.getElementById('fMax').value);
+ const lim=per?new Date(Date.now()-per*30.44*864e5).toISOString().slice(0,10):'';
+ filtrados=item.compras.filter(r=>(!uf||r[col.uf]===uf)&&(!un||r[col.unid]===un)&&(!lim||(r[col.data]||'')>=lim)&&(isNaN(mn)||r[col.preco]>=mn)&&(isNaN(mx)||r[col.preco]<=mx));
+ const e=estat(filtrados.map(r=>r[col.preco]));
+ if(!e){['kN','kMin','kMed','kRef'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('uN').textContent='';document.getElementById('uCV').textContent='';document.getElementById('uRef').textContent='';
+  document.getElementById('cHist').innerHTML='<div class="foot-note">Nenhuma compra com esses filtros.</div>';document.getElementById('tb').innerHTML='<tr><td colspan="7" style="color:#605E5C">Sem resultados.</td></tr>';document.getElementById('cnt').textContent='';return}
+ document.getElementById('kN').textContent=e.n;document.getElementById('uN').textContent=e.n_san+' após saneamento';
+ document.getElementById('kMin').textContent=rs(e.menor);
+ document.getElementById('kMed').textContent=rs(e.mediana_san);document.getElementById('uCV').textContent='CV '+e.cv_san.toFixed(1).replace('.',',')+'%';
+ document.getElementById('kRef').textContent=rs(e.ref);document.getElementById('uRef').textContent='por '+e.metodo;
+ hist(document.getElementById('cHist'),filtrados.map(r=>r[col.preco]),e.ref);
+ document.getElementById('cnt').textContent='('+filtrados.length+')';
+ document.getElementById('tb').innerHTML=filtrados.slice().sort((a,b)=>a[col.preco]-b[col.preco]).map(r=>`<tr><td>${fd(r[0])}</td><td class="p">${rs(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('');
+}
+function listar(q){q=(q||'').toLowerCase();const L=D.itens.filter(it=>!q||(it.rotulo||'').toLowerCase().includes(q)||(it.descricao||'').toLowerCase().includes(q)||it.codigo.includes(q));
+ document.getElementById('lista').innerHTML=L.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||it.descricao.slice(0,50))}<br><small>CATMAT ${esc(it.codigo)} · ${it.estat?it.estat.n+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Nenhum item. Ajuste a busca ou cadastre o código na lista.</small></div>';
+ document.querySelectorAll('#lista .li').forEach(d=>d.onclick=()=>{const it=D.itens.find(x=>x.codigo===d.dataset.cod);if(it)selItem(it)});
+}
+document.getElementById('csv').onclick=()=>{if(!filtrados)return;const cab=['Data','Preco','Unidade','Marca','Fornecedor','Orgao','UF'];
+ const linhas=filtrados.map(r=>[fd(r[0]),r[1],r[2],r[3],r[4],r[5],r[6]].map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(';'));
  const blob=new Blob(['﻿'+[cab.join(';'),...linhas].join('\n')],{type:'text/csv'});const a=document.createElement('a');
- a.href=URL.createObjectURL(blob);a.download='precos_'+atual.codigo+'.csv';a.click();};
+ a.href=URL.createObjectURL(blob);a.download='precos_'+item.codigo+'.csv';a.click();};
+document.getElementById('limpar').onclick=()=>{['fUF','fUn'].forEach(id=>document.getElementById(id).value='');document.getElementById('fPer').value='0';document.getElementById('fMin').value='';document.getElementById('fMax').value='';aplicar()};
+['fUF','fUn','fPer'].forEach(id=>document.getElementById(id).onchange=aplicar);
+['fMin','fMax'].forEach(id=>document.getElementById(id).oninput=aplicar);
+document.getElementById('busca').oninput=e=>listar(e.target.value);
 fetch('data/precos.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;
- document.getElementById('gen').innerHTML='Atualizado em '+fd(j.atualizado_em)+'<br>Período: '+fd(j.periodo[0])+' a '+fd(j.periodo[1]);
- const sel=document.getElementById('item');sel.innerHTML=j.itens.map((it,i)=>`<option value="${i}">${esc(it.rotulo||it.codigo)} — CATMAT ${esc(it.codigo)}${it.estat?' ('+it.estat.n+' preços)':' (sem dados)'}</option>`).join('');
- sel.onchange=()=>render(j.itens[sel.value]);render(j.itens[0]);
+ document.getElementById('gen').innerHTML='Atualizado em '+fd(j.atualizado_em)+'<br>Período base: '+fd(j.periodo[0])+' a '+fd(j.periodo[1]);
+ listar('');if(j.itens[0])selItem(j.itens[0]);
 });
 </script></body></html>
