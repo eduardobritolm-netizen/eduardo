@@ -17,12 +17,13 @@ Depois de ativado o GitHub Pages: **https://eduardobritolm-netizen.github.io/edu
 
 Os arquivos já estão neste repositório. Falta só ligar duas chaves:
 
-1. (opcional) Quando a PGE tiver conta institucional, transfira o repositório em **Settings → Transfer ownership**.
-3. **Settings → Pages** → *Source: Deploy from a branch* → branch `main`, pasta `/ (root)` → Save.
+1. **Settings → Pages** → *Source: Deploy from a branch* → branch `main`, pasta `/ (root)` → Save.
    Em 1–2 minutos o site fica em `https://eduardobritolm-netizen.github.io/eduardo/`.
-4. **Settings → Actions → General** → *Workflow permissions* → marque **Read and write permissions** → Save.
-5. **Actions → Atualizar dados do painel → Run workflow** para testar na hora.
+2. **Settings → Actions → General** → *Workflow permissions* → marque **Read and write permissions** → Save.
+3. **Actions → Atualizar dados do painel → Run workflow** para testar na hora.
    Depois disso ele roda sozinho todo dia às 02h17 (horário de Manaus).
+
+Quando a PGE tiver conta institucional no GitHub, transfira o repositório em **Settings → Transfer ownership**.
 
 ## Ouvidoria (CGU)
 
