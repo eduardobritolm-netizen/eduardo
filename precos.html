@@ -71,9 +71,12 @@ td.p{text-align:right;font-variant-numeric:tabular-nums}
  <div class="ban"><div><h1>Pesquisa de Preços de Mercado</h1><div class="s">Preços praticados em compras públicas · versão 1.0</div></div><div class="r" id="gen"></div></div>
 
  <div class="v k5">
-  <div class="t">Item</div>
-  <input class="inp" id="busca" placeholder="Buscar por descrição ou código CATMAT…">
-  <div class="lista" id="lista"></div>
+  <div class="t">Buscar no catálogo do e-Compras</div>
+  <input class="inp" id="busca" placeholder="Digite o material ou serviço (ex.: papel A4, cadeira)…" autocomplete="off" aria-label="Buscar item no catálogo">
+  <div class="lista" id="hint"></div>
+  <div id="semproxy" class="foot-note" style="display:none;margin-top:6px">Busca ligada ao catálogo oficial. Para ver os <b>preços</b> de um item do catálogo é preciso configurar o proxy (veja <code>proxy/proxy.gs</code>). Sem ele, só os itens acompanhados abaixo têm preços.</div>
+  <div class="t" style="margin-top:12px">Itens acompanhados</div>
+  <div class="lista" id="lista" style="max-height:150px"></div>
  </div>
  <div class="v k7">
   <div class="t">Filtros da pesquisa</div>
@@ -98,7 +101,7 @@ td.p{text-align:right;font-variant-numeric:tabular-nums}
  <div class="v k12"><div class="t">Compras consideradas <span id="cnt" style="font-weight:400;color:#605E5C;font-size:12px"></span></div>
   <div class="tbl"><table><thead><tr><th>Data</th><th class="p">Preço</th><th>Unidade</th><th>Marca</th><th>Fornecedor</th><th>Órgão comprador</th><th>UF</th></tr></thead><tbody id="tb"></tbody></table></div></div>
 
- <div class="foot-note">Fonte: <b>Compras.gov.br — Preços Praticados</b> (dados abertos, SEGES/MGI). A lista de itens é mantida pela Gerência de Material em <code>fontes/itens_precos.txt</code>; o robô atualiza os preços a cada execução. Os filtros acima recalculam o preço de referência na hora.</div>
+ <div class="foot-note">Busca no <b>catálogo do e-Compras</b> (todos os materiais e serviços). Preços: <b>Compras.gov.br — Preços Praticados</b> (dados abertos, SEGES/MGI). Os itens acompanhados são atualizados pelo robô; com o proxy configurado, consulta-se o preço de qualquer item do catálogo ao vivo. Os filtros recalculam o preço de referência na hora.</div>
 </div></div>
 <script>
 
@@ -159,10 +162,49 @@ function aplicar(){
  document.getElementById('cnt').textContent='('+filtrados.length+')';
  document.getElementById('tb').innerHTML=filtrados.slice().sort((a,b)=>a[col.preco]-b[col.preco]).map(r=>`<tr><td>${fd(r[0])}</td><td class="p">${rs(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td><td>${esc(r[5])}</td><td>${esc(r[6])}</td></tr>`).join('');
 }
-function listar(q){q=(q||'').toLowerCase();const L=D.itens.filter(it=>!q||(it.rotulo||'').toLowerCase().includes(q)||(it.descricao||'').toLowerCase().includes(q)||it.codigo.includes(q));
- document.getElementById('lista').innerHTML=L.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||it.descricao.slice(0,50))}<br><small>CATMAT ${esc(it.codigo)} · ${it.estat?it.estat.n+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Nenhum item. Ajuste a busca ou cadastre o código na lista.</small></div>';
- document.querySelectorAll('#lista .li').forEach(d=>d.onclick=()=>{const it=D.itens.find(x=>x.codigo===d.dataset.cod);if(it)selItem(it)});
-}
+// ---- itens acompanhados (vindos do robô) ----
+function favoritos(){document.getElementById('lista').innerHTML=D.itens.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||it.descricao.slice(0,50))}<br><small>${esc(it.codigo)} · ${it.estat?it.estat.n+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Ainda sem itens — o robô preenche na próxima execução.</small></div>';
+ document.querySelectorAll('#lista .li').forEach(d=>d.onclick=()=>{const it=D.itens.find(x=>x.codigo===d.dataset.cod);if(it){hintBox.innerHTML='';selItem(it)}})}
+// ---- busca ao vivo no catálogo do e-Compras + preços via proxy ----
+const PROXY='';  // cole aqui a URL /exec do proxy (proxy/proxy.gs) para ver preços de qualquer item do catálogo
+const CNBS='https://cnbs.estaleiro.serpro.gov.br/cnbs-api/item/v1/hint';
+const hintBox=document.getElementById('hint');
+function prox(path,params){return fetch(PROXY.replace(/\/$/,'')+'?path='+encodeURIComponent(path)+'&qs='+encodeURIComponent(new URLSearchParams(params).toString())).then(r=>r.json())}
+let tdebounce;
+function buscarCatalogo(q){clearTimeout(tdebounce);if(!q||q.length<2){hintBox.innerHTML='';return}
+ tdebounce=setTimeout(()=>{hintBox.innerHTML='<div class="li"><small>Buscando no catálogo…</small></div>';
+  fetch(CNBS+'?pagina=1&tamanhoPagina=12&palavra='+encodeURIComponent(q)).then(r=>r.json()).then(res=>{
+   if(!res.length){hintBox.innerHTML='<div class="li"><small>Nada encontrado no catálogo.</small></div>';return}
+   hintBox.innerHTML=res.map(x=>`<div class="li" data-cod="${esc(x.codigo)}" data-tipo="${x.tipo}" data-nome="${esc(x.nome)}">${esc(x.nome)}<br><small>${x.tipo==='M'?'Material':'Serviço'} · código ${esc(x.codigo)}</small></div>`).join('');
+   hintBox.querySelectorAll('.li').forEach(d=>d.onclick=()=>escolher(d.dataset.cod,d.dataset.tipo,d.dataset.nome));
+  }).catch(()=>{hintBox.innerHTML='<div class="li"><small>Catálogo indisponível no momento.</small></div>'})},300)}
+function escolher(codigo,tipo,nome){
+ const fav=D.itens.find(x=>x.codigo===String(codigo));
+ if(fav){selItem(fav);hintBox.innerHTML='';return}
+ if(!PROXY){hintBox.innerHTML='<div class="li"><small><b>'+esc(nome)+'</b> não está entre os itens com preço. Para ver os preços de qualquer item do catálogo, configure o proxy (proxy/proxy.gs).</small></div>';return}
+ if(tipo==='S'){carregarPrecos('servico',codigo,nome);return}
+ // Material: o código do catálogo é um PDM; lista os itens (variações) para escolher o específico
+ hintBox.innerHTML='<div class="li"><small>Carregando variações de '+esc(nome)+'…</small></div>';
+ prox('/modulo-material/4_consultarItemMaterial',{pagina:1,tamanhoPagina:50,codigoPdm:codigo,statusItem:'true'}).then(j=>{
+  const its=(j.resultado||[]);
+  if(!its.length){carregarPrecos('material',codigo,nome,'codigoPdm');return}
+  hintBox.innerHTML='<div class="foot-note" style="padding:6px 10px">Escolha a especificação de <b>'+esc(nome)+'</b>:</div>'+its.map(x=>`<div class="li" data-cod="${x.codigoItem}">${esc((x.descricaoItem||'').slice(0,80))}<br><small>CATMAT ${x.codigoItem}</small></div>`).join('');
+  hintBox.querySelectorAll('.li[data-cod]').forEach(d=>d.onclick=()=>carregarPrecos('material',d.dataset.cod,nome));
+ }).catch(()=>{hintBox.innerHTML='<div class="li"><small>Falha ao consultar o proxy.</small></div>'})}
+function carregarPrecos(tipo,codigo,nome,chave){
+ hintBox.innerHTML='<div class="li"><small>Consultando preços de '+esc(nome)+'…</small></div>';
+ const ep=tipo==='servico'?'/modulo-pesquisa-preco/3_consultarServico':'/modulo-pesquisa-preco/1_consultarMaterial';
+ const base={pagina:1,tamanhoPagina:500,dataCompraInicio:D.periodo[0],dataCompraFim:D.periodo[1]};
+ if(tipo==='material'){base.tipo=chave||'codigoItemCatalogo';base.codigo=codigo}else{base.codigoItemCatalogo=codigo}
+ const todos=[];
+ function pag(p){base.pagina=p;return prox(ep,base).then(j=>{todos.push(...(j.resultado||[]));if(p<(j.totalPaginas||1)&&p<6)return pag(p+1)})}
+ pag(1).then(()=>{
+  if(!todos.length){hintBox.innerHTML='<div class="li"><small>Sem preços publicados para este item no período.</small></div>';return}
+  const compras=todos.filter(r=>r.precoUnitario>0).sort((a,b)=>a.precoUnitario-b.precoUnitario)
+   .map(r=>[r.dataResultado,Math.round(r.precoUnitario*1e4)/1e4,(r.nomeUnidadeFornecimento||''),(r.marca||'').trim(),r.nomeFornecedor||'',r.nomeOrgao||'',r.estado||'']);
+  hintBox.innerHTML='';
+  selItem({codigo:String(codigo),rotulo:nome,descricao:todos[0].descricaoItem||nome,origem:'api',compras:compras});
+ }).catch(()=>{hintBox.innerHTML='<div class="li"><small>Falha ao consultar o proxy.</small></div>'})}
 document.getElementById('csv').onclick=()=>{if(!filtrados)return;const cab=['Data','Preco','Unidade','Marca','Fornecedor','Orgao','UF'];
  const linhas=filtrados.map(r=>[fd(r[0]),r[1],r[2],r[3],r[4],r[5],r[6]].map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(';'));
  const blob=new Blob(['﻿'+[cab.join(';'),...linhas].join('\n')],{type:'text/csv'});const a=document.createElement('a');
@@ -170,9 +212,10 @@ document.getElementById('csv').onclick=()=>{if(!filtrados)return;const cab=['Dat
 document.getElementById('limpar').onclick=()=>{['fUF','fUn'].forEach(id=>document.getElementById(id).value='');document.getElementById('fPer').value='0';document.getElementById('fMin').value='';document.getElementById('fMax').value='';aplicar()};
 ['fUF','fUn','fPer'].forEach(id=>document.getElementById(id).onchange=aplicar);
 ['fMin','fMax'].forEach(id=>document.getElementById(id).oninput=aplicar);
-document.getElementById('busca').oninput=e=>listar(e.target.value);
+document.getElementById('busca').oninput=e=>buscarCatalogo(e.target.value);
+if(!PROXY)document.getElementById('semproxy').style.display='block';
 fetch('data/precos.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;
  document.getElementById('gen').innerHTML='Atualizado em '+fd(j.atualizado_em)+'<br>Período base: '+fd(j.periodo[0])+' a '+fd(j.periodo[1]);
- listar('');if(j.itens[0])selItem(j.itens[0]);
+ favoritos();if(j.itens[0])selItem(j.itens[0]);
 });
 </script><script>(function(){var d=document,r=d.documentElement;function esc(z){try{localStorage.setItem('pge_zoom',z)}catch(e){}}function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;esc(z)}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script></body></html>
