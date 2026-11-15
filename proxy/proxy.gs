@@ -1,27 +1,34 @@
 /**
- * Proxy de preços da PGE-AM (Google Apps Script).
+ * Proxy de preços da PGE-AM (Google Apps Script) — versão JSONP.
  * Deixa a página estática consultar a API de Preços Praticados do Compras.gov.br,
  * que não libera CORS. Só repassa consultas GET de leitura; não grava nada.
  *
- * COMO PUBLICAR (uma vez):
- *  1. https://script.google.com  ->  Novo projeto  ->  cole este arquivo.
- *  2. Implantar  ->  Nova implantação  ->  tipo "App da Web".
+ * COMO PUBLICAR / ATUALIZAR:
+ *  1. https://script.google.com -> abra o projeto -> cole/substitua este código -> Salve (Ctrl+S).
+ *  2. Implantar -> Gerenciar implantações -> lápis (editar) -> Versão: NOVA VERSÃO -> Implantar.
+ *     (Manter a implantação existente conserva a mesma URL /exec.)
  *  3. Executar como: Eu.  Quem tem acesso: "Qualquer pessoa".
- *  4. Implantar  ->  copie a URL que termina em /exec.
- *  5. Cole essa URL na constante PROXY no topo de precos.html.
  */
 var BASE = 'https://dadosabertos.compras.gov.br';
 var ROTAS_OK = /^\/modulo-(pesquisa-preco|material|servico)\//;  // só endpoints de consulta
 
 function doGet(e) {
-  var path = (e.parameter.path || '');
-  var qs = (e.parameter.qs || '');
+  e = e || {};
+  var p = e.parameter || {};
+  var path = p.path || '';
+  var qs = p.qs || '';
+  var cb = p.callback || '';
+  var body;
   if (!ROTAS_OK.test(path)) {
-    return ContentService.createTextOutput(JSON.stringify({ erro: 'rota não permitida' }))
-      .setMimeType(ContentService.MimeType.JSON);
+    body = JSON.stringify({ erro: 'rota nao permitida' });
+  } else {
+    var url = BASE + path + (qs ? '?' + qs : '');
+    var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { 'Accept': 'application/json' } });
+    body = resp.getContentText() || 'null';
   }
-  var url = BASE + path + (qs ? '?' + qs : '');
-  var resp = UrlFetchApp.fetch(url, { muteHttpExceptions: true, headers: { 'Accept': 'application/json' } });
-  return ContentService.createTextOutput(resp.getContentText())
-    .setMimeType(ContentService.MimeType.JSON);
+  if (cb) {
+    return ContentService.createTextOutput(cb + '(' + body + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(body).setMimeType(ContentService.MimeType.JSON);
 }

@@ -169,7 +169,18 @@ function favoritos(){document.getElementById('lista').innerHTML=D.itens.map(it=>
 const PROXY='https://script.google.com/macros/s/AKfycbxlYRB_J-KXjn7xzvgsBBZBreLiPkv8agIfk2vgKUS7v1hMsr4c7Wzj__NXvkdhcMNmvQ/exec';  // proxy Apps Script
 const CNBS='https://cnbs.estaleiro.serpro.gov.br/cnbs-api/item/v1/hint';
 const hintBox=document.getElementById('hint');
-function prox(path,params){return fetch(PROXY.replace(/\/$/,'')+'?path='+encodeURIComponent(path)+'&qs='+encodeURIComponent(new URLSearchParams(params).toString())).then(r=>r.json())}
+let cbSeq=0;
+function prox(path,params){return new Promise((resolve,reject)=>{
+ if(!PROXY){reject(new Error('sem proxy'));return}
+ const cb='__pge_cb_'+(++cbSeq);let s;
+ const timer=setTimeout(()=>{limpar();reject(new Error('timeout'))},25000);
+ function limpar(){clearTimeout(timer);try{delete window[cb]}catch(e){window[cb]=undefined}if(s)s.remove()}
+ window[cb]=data=>{limpar();resolve(data)};
+ s=document.createElement('script');
+ s.onerror=()=>{limpar();reject(new Error('falha no proxy'))};
+ s.src=PROXY.replace(/\/$/,'')+'?callback='+cb+'&path='+encodeURIComponent(path)+'&qs='+encodeURIComponent(new URLSearchParams(params).toString());
+ document.body.appendChild(s);
+})}
 let tdebounce;
 function buscarCatalogo(q){clearTimeout(tdebounce);if(!q||q.length<2){hintBox.innerHTML='';return}
  tdebounce=setTimeout(()=>{hintBox.innerHTML='<div class="li"><small>Buscando no catálogo…</small></div>';
