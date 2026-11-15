@@ -168,6 +168,36 @@
     "decisao": "resultado",
     "ementa": "síntese"
    }
+  },
+  {
+   "identificador": "despesas",
+   "titulo": "Despesas da PGE-AM e do FUNDPGE (execução orçamentária)",
+   "descricao": "Dotação, empenho, liquidação e pagamento por mês, elemento de despesa, programa e fonte. Apenas totais agregados.",
+   "fonte": "Portal da Transparência Fiscal do Amazonas (SEFAZ) — Execução Orçamentária",
+   "atualizado_em": "2026-11-15",
+   "periodicidade": "mensal (carga manual)",
+   "licenca": "https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/despesas.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/despesas-mensal.csv"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/despesas-elemento.csv"
+    }
+   ],
+   "campos": {
+    "empenhado": "R$ empenhado no mês",
+    "liquidado": "R$ liquidado no mês",
+    "pago": "R$ pago no mês",
+    "elemento_despesa": "natureza do gasto"
+   }
   }
  ]
 }

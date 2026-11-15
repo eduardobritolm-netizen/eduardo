@@ -54,7 +54,7 @@ pre{background:#F3F2F1;border:1px solid #E1DFDD;padding:10px 12px;overflow-x:aut
 code{font-family:Consolas,monospace}
 </style></head><body>
 <header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
-<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
 <style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
 <script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
 <div class="canvas"><div class="page">
@@ -80,7 +80,7 @@ fetch('api/catalogo.json?v='+Date.now()).then(r=>r.json()).then(c=>{
  document.getElementById('gen').innerHTML=`Arquivos JSON e CSV · leitura livre, sem cadastro<br>Catálogo gerado em ${fd(c.gerado_em)} · CC BY 4.0`;
  document.getElementById('lista').innerHTML=c.conjuntos.map(d=>`<div class="v k6 ds"><h3>${esc(d.titulo)}</h3><p>${esc(d.descricao)}</p>
   <div>${d.distribuicoes.map(x=>{const n=x.url.split('/').pop();return `<a class="fmt" href="api/${n}">${esc(x.formato)} · ${esc(n)}</a>`}).join('')}</div>
-  <div class="meta">Fonte: ${esc(d.fonte)} · Atualizado em ${fd(d.atualizado_em)}</div>
+  <div class="meta">Fonte: ${esc(d.fonte)} · Atualizado em ${fd(d.atualizado_em)}${/by-nc/.test(d.licenca||'')?' · <b>Licença CC BY-NC 4.0</b> (uso não comercial)':''}</div>
   <table style="margin-top:6px"><thead><tr><th>Campo</th><th>Descrição</th></tr></thead><tbody>${Object.entries(d.campos).map(([k,v])=>`<tr><td><code>${esc(k)}</code></td><td>${esc(v)}</td></tr>`).join('')}</tbody></table></div>`).join('');
 });
 </script></body></html>

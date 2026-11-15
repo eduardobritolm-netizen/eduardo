@@ -76,6 +76,21 @@ def main():
         reg('precedentes-lai', 'Precedentes em recursos da Lei de Acesso à Informação', 'Decisões recursais da PGE-AM e, como referência, decisões da CGU (3ª instância) e da CMRI (4ª instância) do Executivo federal.',
             'PGE-AM e CGU – Busca de Precedentes (dados abertos)', R['atualizado_em'], ['precedentes-lai.json', 'precedentes-pge.csv'],
             {'numero': 'número da decisão', 'instancia': 'instância recursal', 'tema': 'assunto', 'dispositivo': 'fundamento legal', 'decisao': 'resultado', 'ementa': 'síntese'})
+    D2 = ler('despesas.json')
+    if D2:
+        shutil.copy(os.path.join(DADOS, 'despesas.json'), os.path.join(API, 'despesas.json'))
+        csv_out('despesas-mensal.csv', ['mes', 'mes_nome', 'empenhado', 'liquidado', 'pago'], D2['serie_mensal'])
+        csv_out('despesas-elemento.csv', ['elemento_despesa', 'pago'], D2['por_elemento'])
+        cat.append({'identificador': 'despesas', 'titulo': 'Despesas da PGE-AM e do FUNDPGE (execução orçamentária)',
+                    'descricao': 'Dotação, empenho, liquidação e pagamento por mês, elemento de despesa, programa e fonte. Apenas totais agregados.',
+                    'fonte': 'Portal da Transparência Fiscal do Amazonas (SEFAZ) — Execução Orçamentária',
+                    'atualizado_em': D2['atualizado_em'], 'periodicidade': 'mensal (carga manual)',
+                    'licenca': 'https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br',
+                    'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
+                    'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/despesas.json'},
+                                      {'formato': 'CSV', 'url': f'{BASE}/despesas-mensal.csv'},
+                                      {'formato': 'CSV', 'url': f'{BASE}/despesas-elemento.csv'}],
+                    'campos': {'empenhado': 'R$ empenhado no mês', 'liquidado': 'R$ liquidado no mês', 'pago': 'R$ pago no mês', 'elemento_despesa': 'natureza do gasto'}})
     json.dump({'titulo': 'API de Dados Abertos da Procuradoria Geral do Estado do Amazonas', 'gerado_em': hoje(),
                'licenca': LICENCA, 'conjuntos': cat}, open(os.path.join(API, 'catalogo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 

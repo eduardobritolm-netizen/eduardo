@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Despesas — PGE-AM</title><style>
+:root{--c1:#118DFF;--c2:#12239E;--c3:#E66C37;--c4:#6B007B;--c5:#E044A7;--ink:#252423;--mut:#605E5C;--line:#E1DFDD;--bg:#EAEAEA;--hd:#1F3A5F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 "Segoe UI","Segoe UI Web",Selawik,system-ui,-apple-system,Roboto,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+.canvas{flex:1;padding:14px;display:flex;justify-content:center}
+.page{width:100%;max-width:1280px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);display:grid;grid-template-columns:repeat(12,1fr);gap:10px;padding:0 14px 14px;align-content:start}
+.ban{grid-column:1/-1;margin:0 -14px;background:var(--hd);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;flex-wrap:wrap}
+.ban h1{margin:0;font-size:20px;font-weight:600}
+.ban .s{font-size:11.5px;opacity:.8}
+.ban .r{font-size:11px;text-align:right;opacity:.85;line-height:1.5}
+.slicers{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;padding-top:4px}
+.sl{border:1px solid var(--line);padding:6px 8px;min-width:170px}
+.sl label{display:block;font-size:11px;color:var(--mut);margin-bottom:3px}
+.sl select{width:100%;border:0;border-bottom:1px solid #8A8886;font:inherit;padding:2px 0;background:#fff;color:var(--ink)}
+.sl .fixed{font-size:13px;border-bottom:1px solid #C8C6C4;padding:2px 0}
+.v{border:1px solid var(--line);padding:8px 10px;min-width:0;position:relative;background:#fff}
+.v h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink)}
+.card{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:96px}
+.card .n{font-size:32px;font-weight:300;color:var(--ink);font-variant-numeric:tabular-nums}
+.card .l{font-size:12px;color:var(--mut);margin-top:2px}
+.card.acc .n{color:var(--c3)}
+.k3{grid-column:span 3}.k4{grid-column:span 4}.k5{grid-column:span 5}.k6{grid-column:span 6}.k7{grid-column:span 7}.k8{grid-column:span 8}.k12{grid-column:span 12}
+svg{display:block;width:100%;overflow:visible}
+svg text{font-family:inherit;fill:var(--mut);font-size:11px}
+svg .lbl{fill:var(--ink)}
+.tbl{max-height:260px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+th{position:sticky;top:0;background:#fff;text-align:left;font-weight:600;border-bottom:1px solid #8A8886;padding:4px 6px}
+td{padding:4px 6px;border-bottom:1px solid #F3F2F1}
+tbody tr:nth-child(even) td{background:#FAF9F8}
+td.r,th.r{text-align:right}
+tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
+.legend{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-bottom:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #C8C6C4;box-shadow:0 2px 6px rgba(0,0,0,.2);padding:6px 9px;font-size:12px;z-index:9;display:none;max-width:280px}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.foot-note{grid-column:1/-1;font-size:11px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px}
+.pages{background:#F3F2F1;border-top:1px solid #C8C6C4;display:flex;align-items:stretch;padding:0 10px;position:sticky;bottom:0;overflow-x:auto}
+.pages button{all:unset;cursor:pointer;padding:8px 16px;font-size:12.5px;color:var(--mut);border-top:3px solid transparent;white-space:nowrap}
+.pages button[aria-selected=true]{background:#fff;color:var(--ink);border-top-color:#F2C811;font-weight:600}
+.pages button:focus-visible{outline:2px solid var(--c1);outline-offset:-2px}
+.pages .info{margin-left:auto;align-self:center;font-size:11px;color:var(--mut);padding-left:12px;white-space:nowrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.k3{grid-column:span 6}.k4,.k5,.k6,.k7,.k8{grid-column:span 12}}
+@media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
+
+.leg{display:flex;gap:14px;font-size:11px;color:#605E5C;margin:2px 0 6px}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.exbar{height:10px;background:#EDEBE9;border-radius:5px;overflow:hidden;margin-top:6px}
+.exbar>i{display:block;height:100%;background:#118DFF}
+</style></head><body>
+<header class="topnav"><a class="brand" href="index.html">PGE-AM · Painel de Dados</a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
+<style>.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}</style>
+<script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
+<div id="tip" class="tip"></div>
+<div class="canvas"><div class="page">
+ <div class="ban"><div><h1>Despesas da PGE e do FUNDPGE</h1><div class="s">Execução orçamentária — empenhado, liquidado e pago</div></div><div class="r" id="gen"></div></div>
+
+ <div class="v k2"><div class="t">Dotação autorizada</div><div class="n" id="kAut">—</div><div class="u" id="uAut"></div></div>
+ <div class="v k2"><div class="t">Empenhado</div><div class="n" id="kEmp">—</div><div class="u" id="uEmp"></div></div>
+ <div class="v k2"><div class="t">Liquidado</div><div class="n" id="kLiq">—</div><div class="u"></div></div>
+ <div class="v k2"><div class="t">Pago</div><div class="n" id="kPag">—</div><div class="u" id="uPag"></div></div>
+
+ <div class="v k7"><div class="t">Execução mês a mês</div>
+  <div class="leg"><span><i style="background:#12239E"></i>Empenhado</span><span><i style="background:#118DFF"></i>Pago</span></div>
+  <div id="cSerie"></div></div>
+ <div class="v k5"><div class="t">Por unidade</div><div id="cUG"></div>
+  <div class="foot-note" style="margin-top:4px">PGE: administração direta · FUNDPGE: Fundo Especial da Procuradoria</div></div>
+
+ <div class="v k6"><div class="t">Maiores elementos de despesa (pago)</div><div id="cElem"></div></div>
+ <div class="v k6"><div class="t">Por fonte de recurso (pago)</div><div id="cFonte"></div></div>
+
+ <div class="v k12"><div class="t">Por programa de governo (pago)</div><div id="cProg"></div></div>
+
+ <div class="foot-note">Fonte: <b>Portal da Transparência Fiscal do Amazonas (SEFAZ)</b> — arquivo de Execução Orçamentária. Licença CC BY-NC 4.0. Valores de pagamentos incluem restos a pagar quando informados pela fonte.</div>
+</div></div>
+<script>
+
+const pt=n=>n.toLocaleString('pt-BR');
+const C=['#118DFF','#12239E','#E66C37','#6B007B','#E044A7','#744EC2','#D9B300','#4C9F38','#B0A3C9','#A4262C'];
+const tip=document.getElementById('tip');
+function tt(ev,h){tip.innerHTML=h;tip.style.display='block';const x=Math.min(ev.clientX+14,innerWidth-300);tip.style.left=x+'px';tip.style.top=(ev.clientY+14)+'px'}
+function th(){tip.style.display='none'}
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
+const brl=v=>v>=1e6?'R$ '+(v/1e6).toFixed(2).replace('.',',')+' mi':v>=1e3?'R$ '+(v/1e3).toFixed(0)+' mil':'R$ '+pt(Math.round(v));
+const brlf=v=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=d=>d?d.split('-').reverse().join('/'):'—';
+function hbar(box,rows,color){
+ box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(260,W*.5),rh=26,H=rows.length*rh+22;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-80;
+ [0,.5,1].forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-20,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-5,'text-anchor':'middle'},s);t.textContent=brl(m*f)});
+ rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+16,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>40?r.k.slice(0,38)+'…':r.k;
+  const b=el('rect',{x:lw,y:y+5,height:rh-9,width:Math.max(1,bw*r.v/m),fill:r.c||color},s);
+  b.addEventListener('mousemove',e=>tt(e,`<b>${esc(r.k)}</b>${brlf(r.v)}`));b.addEventListener('mouseleave',th);
+  const v=el('text',{x:lw+bw*r.v/m+5,y:y+16,class:'lbl'},s);v.textContent=brl(r.v)});
+}
+function barras(box,serie){
+ box.innerHTML='';const W=box.clientWidth||700,H=260,b=34,l=56,t=14;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+ const m=Math.max(...serie.flatMap(x=>[x[2],x[4]]),1),n=serie.length,gw=(W-l-10)/n;
+ [0,.25,.5,.75,1].forEach(f=>{const y=H-b-(H-b-t)*f;el('line',{x1:l,x2:W-10,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=brl(m*f)});
+ serie.forEach((r,i)=>{const x=l+i*gw;
+  [['vaempenhado',2,'#12239E',0],['vapago',4,'#118DFF',1]].forEach(([nm,ci,cor,oi])=>{const v=r[ci],h=(H-b-t)*v/m;
+   const bar=el('rect',{x:x+gw*(.15+oi*.36),y:H-b-h,width:gw*.32,height:Math.max(h,0),fill:cor},s);
+   bar.addEventListener('mousemove',e=>tt(e,`<b>${r[1]}</b>Empenhado: ${brlf(r[2])}<br>Liquidado: ${brlf(r[3])}<br>Pago: ${brlf(r[4])}`));bar.addEventListener('mouseleave',th)});
+  const tx=el('text',{x:x+gw*.5,y:H-20,'text-anchor':'middle'},s);tx.textContent=r[1];
+  const tx2=el('text',{x:x+gw*.5,y:H-8,'text-anchor':'middle','font-size':9,fill:'#A19F9D'},s);tx2.textContent=r[0].slice(5)});
+}
+
+fetch('data/despesas.json?v='+Date.now()).then(r=>r.json()).then(D=>{
+ document.getElementById('gen').innerHTML='Referência: '+D.referencia+'<br>Atualizado em '+fd(D.atualizado_em);
+ const T=D.totais;
+ document.getElementById('kAut').textContent=brl(T.vaautorizado);
+ document.getElementById('uAut').textContent='Dotação inicial: '+brl(T.vadotacaoinicial);
+ document.getElementById('kEmp').textContent=brl(T.vaempenhado);
+ document.getElementById('uEmp').textContent=(T.vaempenhado/T.vaautorizado*100).toFixed(1).replace('.',',')+'% da dotação';
+ document.getElementById('kLiq').textContent=brl(T.valiquidado);
+ document.getElementById('kPag').textContent=brl(T.vapago);
+ document.getElementById('uPag').textContent=(T.vapago/T.vaempenhado*100).toFixed(1).replace('.',',')+'% do empenhado';
+ barras(document.getElementById('cSerie'),D.serie_mensal);
+ const ug=Object.entries(D.por_ug).map((e,i)=>({k:e[0],v:e[1].vapago,c:C[i]}));
+ hbar(document.getElementById('cUG'),ug);
+ hbar(document.getElementById('cElem'),D.por_elemento.map(r=>({k:r[0],v:r[1]})),'#118DFF');
+ hbar(document.getElementById('cFonte'),D.por_fonte.map(r=>({k:r[0],v:r[1]})),'#12239E');
+ hbar(document.getElementById('cProg'),D.por_programa.map(r=>({k:r[0],v:r[1]})),'#E66C37');
+});
+</script></body></html>

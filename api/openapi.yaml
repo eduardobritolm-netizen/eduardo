@@ -126,3 +126,27 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /despesas.json:
+    get:
+      summary: "Despesas da PGE-AM e do FUNDPGE (execução orçamentária) (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /despesas-mensal.csv:
+    get:
+      summary: "Despesas da PGE-AM e do FUNDPGE (execução orçamentária) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /despesas-elemento.csv:
+    get:
+      summary: "Despesas da PGE-AM e do FUNDPGE (execução orçamentária) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}

@@ -3,3 +3,4 @@ __pycache__/
 fontes/ouvidoria/*.csv
 fontes/ouvidoria/*.zip
 fontes/ouvidoria/api/
+fontes/sefaz/

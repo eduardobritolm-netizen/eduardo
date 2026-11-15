@@ -86,3 +86,10 @@ só para este repositório, permissão **Contents: Read and write**. O Colab nã
 O robô gera, a cada execução, a pasta `api/` com JSON e CSV de cada conjunto, o catálogo (`api/catalogo.json`)
 e a especificação OpenAPI (`api/openapi.yaml`). Documentação para o público: `api.html`.
 Endereço base: https://eduardobritolm-netizen.github.io/eduardo/api/
+
+## Despesas (execução orçamentária — SEFAZ)
+
+O arquivo de Execução Orçamentária do Portal da Transparência Fiscal (SEFAZ) tem download protegido,
+por isso não é automatizado. Baixe-o à mão (uma vez por mês basta) e envie pela célula 3b do Colab,
+ou coloque em `fontes/sefaz/*.csv`. O robô filtra só a PGE e o FUNDPGE e gera `data/despesas.json`
+com totais agregados; o CSV de ~48 MB nunca vai para o repositório. Licença da fonte: CC BY-NC 4.0.
