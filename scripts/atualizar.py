@@ -6,5 +6,8 @@ for nome, mod in [('DataJud', datajud), ('Transparência AM', transparencia), ('
     try: mod.main()
     except Exception:
         falhas += 1; traceback.print_exc(); print(f'!!! {nome} falhou — mantidos os dados anteriores')
+import api
+try: api.main()
+except Exception: falhas += 1; traceback.print_exc()
 print(f'Concluído com {falhas} falha(s).')
 sys.exit(0)

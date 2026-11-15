@@ -80,3 +80,9 @@ Se algum site recusar o robô do GitHub, rode a coleta pelo Colab:
 Precisa de um token do GitHub: **Settings (do seu perfil) → Developer settings → Fine-grained tokens → Generate**,
 só para este repositório, permissão **Contents: Read and write**. O Colab não agenda sozinho no plano gratuito:
 é uma execução manual (≈5 min), por exemplo uma vez por semana.
+
+## API de Dados Abertos
+
+O robô gera, a cada execução, a pasta `api/` com JSON e CSV de cada conjunto, o catálogo (`api/catalogo.json`)
+e a especificação OpenAPI (`api/openapi.yaml`). Documentação para o público: `api.html`.
+Endereço base: https://eduardobritolm-netizen.github.io/eduardo/api/

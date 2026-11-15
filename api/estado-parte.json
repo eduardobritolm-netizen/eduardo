@@ -1,0 +1,166 @@
+{
+ "U": [
+  [
+   "2º Juizado Especial da Fazenda Pública",
+   "Juizado Especial",
+   8588,
+   10
+  ],
+  [
+   "2º Grau — Pleno, Câmaras e Seções",
+   "2º Grau",
+   7289,
+   5728
+  ],
+  [
+   "3º Juizado Especial da Fazenda Pública",
+   "Juizado Especial",
+   6247,
+   2
+  ],
+  [
+   "1º Juizado Especial da Fazenda Pública",
+   "Juizado Especial",
+   4516,
+   16
+  ],
+  [
+   "4ª Vara da Fazenda Pública",
+   "1º Grau",
+   3016,
+   79
+  ],
+  [
+   "1ª Vara Tributária e da Dívida Ativa",
+   "1º Grau",
+   2753,
+   8688
+  ],
+  [
+   "Turmas Recursais",
+   "Turma Recursal",
+   2058,
+   1894
+  ],
+  [
+   "1ª Vara da Fazenda Pública",
+   "1º Grau",
+   1973,
+   71
+  ],
+  [
+   "2ª Vara da Fazenda Pública",
+   "1º Grau",
+   1913,
+   76
+  ],
+  [
+   "3ª Vara da Fazenda Pública",
+   "1º Grau",
+   1568,
+   47
+  ]
+ ],
+ "IND": [
+  [
+   "Fundação Amazonprev",
+   3098
+  ],
+  [
+   "PGE-AM",
+   2347
+  ],
+  [
+   "Detran-AM",
+   1042
+  ],
+  [
+   "FVS",
+   976
+  ],
+  [
+   "FHAJ",
+   389
+  ],
+  [
+   "Sefaz",
+   326
+  ],
+  [
+   "UEA",
+   249
+  ],
+  [
+   "FCECON",
+   203
+  ],
+  [
+   "SES/Susam",
+   201
+  ],
+  [
+   "Seduc",
+   159
+  ]
+ ],
+ "LIT": [
+  [
+   "Estado do Amazonas",
+   "Passivo",
+   "Pendentes (1º grau e juizados)",
+   35169,
+   "3º"
+  ],
+  [
+   "Estado do Amazonas",
+   "Passivo",
+   "Casos novos — 12 meses",
+   25664,
+   "2º"
+  ],
+  [
+   "Estado do Amazonas",
+   "Ativo",
+   "Pendentes",
+   9577,
+   "—"
+  ],
+  [
+   "Procuradoria Geral do Estado do Amazonas",
+   "Ativo",
+   "Pendentes",
+   3361,
+   "—"
+  ],
+  [
+   "Procuradoria Geral do Estado do Amazonas",
+   "Ativo",
+   "Casos novos — 12 meses",
+   1358,
+   "—"
+  ],
+  [
+   "Procuradoria Geral do Estado do Amazonas",
+   "Passivo",
+   "Pendentes",
+   2347,
+   "4º"
+  ]
+ ],
+ "TRIB": [
+  [
+   "TJAM",
+   42458
+  ],
+  [
+   "TRT11",
+   1909
+  ],
+  [
+   "TRF1 — Manaus",
+   554
+  ]
+ ],
+ "atualizado_em": "2026-09-30",
+ "_leia": "Dados transcritos do painel Grandes Litigantes do CNJ (sem API). Atualize à mão: U = [órgão, grau, réu, autor]; IND = [entidade, réu]; LIT = [litigante, polo, indicador, processos, posição]; TRIB = [tribunal, réu]."
+}

@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: API de Dados Abertos da PGE-AM
+  version: "1.0"
+  description: Arquivos estáticos (JSON e CSV) atualizados diariamente. Leitura livre, sem cadastro. Licença CC BY 4.0.
+servers:
+  - url: https://eduardobritolm-netizen.github.io/eduardo/api
+paths:
+  /catalogo.json:
+    get:
+      summary: "Catálogo de conjuntos de dados (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /processual-classes.json:
+    get:
+      summary: "Processos por classe e ano – TJAM (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /processual-classes.csv:
+    get:
+      summary: "Processos por classe e ano – TJAM (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /estado-parte.json:
+    get:
+      summary: "Estado do Amazonas como parte – por órgão julgador e tribunal (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /estado-parte-orgaos.csv:
+    get:
+      summary: "Estado do Amazonas como parte – por órgão julgador e tribunal (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /ouvidoria.json:
+    get:
+      summary: "Manifestações de ouvidoria da PGE-AM (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /ouvidoria-anos.csv:
+    get:
+      summary: "Manifestações de ouvidoria da PGE-AM (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /pessoal.json:
+    get:
+      summary: "Folha de pagamento, diárias e passagens da PGE-AM (agregados) (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /pessoal-folha.csv:
+    get:
+      summary: "Folha de pagamento, diárias e passagens da PGE-AM (agregados) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /pessoal-diarias.csv:
+    get:
+      summary: "Folha de pagamento, diárias e passagens da PGE-AM (agregados) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /contratacoes.json:
+    get:
+      summary: "Contratos e licitações da PGE-AM e do FUNDPGE (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /contratos.csv:
+    get:
+      summary: "Contratos e licitações da PGE-AM e do FUNDPGE (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /licitacoes.csv:
+    get:
+      summary: "Contratos e licitações da PGE-AM e do FUNDPGE (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}

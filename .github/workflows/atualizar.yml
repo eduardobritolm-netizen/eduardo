@@ -22,6 +22,6 @@ jobs:
         run: |
           git config user.name  "robo-painel"
           git config user.email "robo-painel@users.noreply.github.com"
-          git add data/
+          git add data/ api/
           git diff --cached --quiet || git commit -m "Atualização automática dos dados ($(date +%F))"
           git push

@@ -1,0 +1,49 @@
+﻿classe;nome;ano;processos_ajuizados
+MS;Mandado de Segurança;2015;318
+MS;Mandado de Segurança;2016;454
+MS;Mandado de Segurança;2017;699
+MS;Mandado de Segurança;2018;1116
+MS;Mandado de Segurança;2019;1197
+MS;Mandado de Segurança;2020;2041
+MS;Mandado de Segurança;2021;2540
+MS;Mandado de Segurança;2022;3883
+MS;Mandado de Segurança;2023;3718
+MS;Mandado de Segurança;2024;3210
+MS;Mandado de Segurança;2025;2921
+MS;Mandado de Segurança;2026;3397
+JEFazPub;Juizado Especial da Fazenda Pública;2015;0
+JEFazPub;Juizado Especial da Fazenda Pública;2016;0
+JEFazPub;Juizado Especial da Fazenda Pública;2017;0
+JEFazPub;Juizado Especial da Fazenda Pública;2018;0
+JEFazPub;Juizado Especial da Fazenda Pública;2019;6
+JEFazPub;Juizado Especial da Fazenda Pública;2020;8
+JEFazPub;Juizado Especial da Fazenda Pública;2021;1359
+JEFazPub;Juizado Especial da Fazenda Pública;2022;1464
+JEFazPub;Juizado Especial da Fazenda Pública;2023;2227
+JEFazPub;Juizado Especial da Fazenda Pública;2024;6472
+JEFazPub;Juizado Especial da Fazenda Pública;2025;10175
+JEFazPub;Juizado Especial da Fazenda Pública;2026;14871
+ACP;Ação Civil Pública;2015;191
+ACP;Ação Civil Pública;2016;176
+ACP;Ação Civil Pública;2017;240
+ACP;Ação Civil Pública;2018;323
+ACP;Ação Civil Pública;2019;240
+ACP;Ação Civil Pública;2020;298
+ACP;Ação Civil Pública;2021;409
+ACP;Ação Civil Pública;2022;269
+ACP;Ação Civil Pública;2023;241
+ACP;Ação Civil Pública;2024;481
+ACP;Ação Civil Pública;2025;610
+ACP;Ação Civil Pública;2026;436
+Improbidade;Improbidade Administrativa;2015;65
+Improbidade;Improbidade Administrativa;2016;51
+Improbidade;Improbidade Administrativa;2017;138
+Improbidade;Improbidade Administrativa;2018;146
+Improbidade;Improbidade Administrativa;2019;75
+Improbidade;Improbidade Administrativa;2020;120
+Improbidade;Improbidade Administrativa;2021;100
+Improbidade;Improbidade Administrativa;2022;42
+Improbidade;Improbidade Administrativa;2023;52
+Improbidade;Improbidade Administrativa;2024;78
+Improbidade;Improbidade Administrativa;2025;156
+Improbidade;Improbidade Administrativa;2026;103

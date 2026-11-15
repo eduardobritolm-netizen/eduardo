@@ -1,0 +1,145 @@
+{
+ "titulo": "API de Dados Abertos da Procuradoria Geral do Estado do Amazonas",
+ "gerado_em": "2026-11-15",
+ "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+ "conjuntos": [
+  {
+   "identificador": "processual-classes",
+   "titulo": "Processos por classe e ano – TJAM",
+   "descricao": "Ações ajuizadas no TJAM por classe processual (mandado de segurança, ação civil pública, juizado da Fazenda etc.).",
+   "fonte": "CNJ – API Pública do DataJud",
+   "atualizado_em": "2026-11-13",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/processual-classes.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/processual-classes.csv"
+    }
+   ],
+   "campos": {
+    "classe": "código interno da classe",
+    "nome": "nome da classe (TPU/CNJ)",
+    "ano": "ano de ajuizamento",
+    "processos_ajuizados": "quantidade"
+   }
+  },
+  {
+   "identificador": "estado-parte",
+   "titulo": "Estado do Amazonas como parte – por órgão julgador e tribunal",
+   "descricao": "Processos pendentes em que o Estado é réu ou autor, por unidade do TJAM, e comparação com TRT11 e TRF1.",
+   "fonte": "CNJ – Painel Grandes Litigantes (transcrição)",
+   "atualizado_em": "2026-09-30",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/estado-parte.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/estado-parte-orgaos.csv"
+    }
+   ],
+   "campos": {
+    "orgao_julgador": "unidade judiciária",
+    "grau": "grau de jurisdição",
+    "estado_reu": "pendentes com o Estado no polo passivo",
+    "estado_autor": "pendentes com o Estado no polo ativo"
+   }
+  },
+  {
+   "identificador": "ouvidoria",
+   "titulo": "Manifestações de ouvidoria da PGE-AM",
+   "descricao": "Manifestações recebidas pela PGE no Fala.BR, agregadas por ano, tipo, assunto e prazo de resposta. Sem dados pessoais.",
+   "fonte": "CGU – Painel Resolveu? / Fala.BR",
+   "atualizado_em": "2026-09-29",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/ouvidoria.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/ouvidoria-anos.csv"
+    }
+   ],
+   "campos": {
+    "ano": "ano de registro",
+    "manifestacoes": "quantidade",
+    "mediana_dias_resposta": "mediana de dias até a resposta",
+    "pct_no_prazo": "% respondidas até a data-limite"
+   }
+  },
+  {
+   "identificador": "pessoal",
+   "titulo": "Folha de pagamento, diárias e passagens da PGE-AM (agregados)",
+   "descricao": "Totais mensais da folha (servidores, bruto, líquido) e de diárias e passagens. Sem identificação de servidores.",
+   "fonte": "Portal da Transparência do Governo do Estado do Amazonas (APIs de Remuneração e SCDP)",
+   "atualizado_em": "2026-11-14",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/pessoal.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/pessoal-folha.csv"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/pessoal-diarias.csv"
+    }
+   ],
+   "campos": {
+    "mes": "AAAA-MM",
+    "servidores": "linhas na folha do mês",
+    "remuneracao_bruta": "R$",
+    "liquido": "R$"
+   }
+  },
+  {
+   "identificador": "contratacoes",
+   "titulo": "Contratos e licitações da PGE-AM e do FUNDPGE",
+   "descricao": "Contratos, processos de contratação e empenhos publicados no PNCP (Lei 14.133/2021).",
+   "fonte": "PNCP – Portal Nacional de Contratações Públicas",
+   "atualizado_em": "2026-11-14",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/contratacoes.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/contratos.csv"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/licitacoes.csv"
+    }
+   ],
+   "campos": {
+    "unidade": "PGE ou FUNDPGE",
+    "valor_global": "R$",
+    "modalidade": "modalidade de contratação",
+    "situacao": "situação no PNCP"
+   }
+  }
+ ]
+}
