@@ -106,6 +106,18 @@ def main():
                     'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
                     'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/precos.json'}, {'formato': 'CSV', 'url': f'{BASE}/precos-referencia.csv'}],
                     'campos': {'codigo_catalogo': 'código CATMAT/CATSER', 'mediana_saneada': 'mediana após saneamento (R$)', 'referencia': 'preço de referência sugerido (R$)', 'metodo': 'média ou mediana'}})
+    PC = ler('pca.json')
+    if PC:
+        shutil.copy(os.path.join(DADOS, 'pca.json'), os.path.join(API, 'pca.json'))
+        linp = [[i['org'], 'CATSER' if i['tipo'] == 'S' else 'CATMAT', i['cod'], i['descricao'], i['categoria'], i['unidade'], i['qtd'], i['vUnit'], i['vTotal'], i['data']] for i in PC['itens']]
+        csv_out('pca.csv', ['orgao', 'catalogo', 'codigo_item', 'descricao', 'categoria', 'unidade', 'quantidade', 'valor_unit_estimado', 'valor_total_estimado', 'data_desejada'], linp)
+        cat.append({'identificador': 'pca', 'titulo': 'Plano de Contratações Anual (PCA) — PGE e FUNDPGE',
+                    'descricao': 'Itens planejados no PCA da PGE-AM e do Fundo Especial (FUNDPGE), com código CATMAT/CATSER, unidade, quantidade e valor unitário estimado.',
+                    'fonte': 'PNCP — Portal Nacional de Contratações Públicas (Lei 14.133/2021)',
+                    'atualizado_em': PC['atualizado'], 'periodicidade': 'anual',
+                    'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
+                    'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/pca.json'}, {'formato': 'CSV', 'url': f'{BASE}/pca.csv'}],
+                    'campos': {'codigo_item': 'código CATMAT (material) ou CATSER (serviço)', 'valor_unit_estimado': 'valor unitário estimado (R$)', 'valor_total_estimado': 'valor total estimado (R$)'}})
     json.dump({'titulo': 'API de Dados Abertos da Procuradoria Geral do Estado do Amazonas', 'gerado_em': hoje(),
                'licenca': LICENCA, 'conjuntos': cat}, open(os.path.join(API, 'catalogo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 

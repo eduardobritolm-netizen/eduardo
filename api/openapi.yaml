@@ -166,3 +166,19 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /pca.json:
+    get:
+      summary: "Plano de Contratações Anual (PCA) — PGE e FUNDPGE (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /pca.csv:
+    get:
+      summary: "Plano de Contratações Anual (PCA) — PGE e FUNDPGE (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
