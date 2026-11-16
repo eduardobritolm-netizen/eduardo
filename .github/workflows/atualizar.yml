@@ -13,7 +13,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - run: pip install pandas
+      - run: pip install pandas playwright
+      - name: Instalar navegador para o download da SEFAZ (Dados Abertos)
+        run: python -m playwright install --with-deps chromium
       - name: Coletar dados
         env:
           FALABR_CLIENT_ID: ${{ secrets.FALABR_CLIENT_ID }}
