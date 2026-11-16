@@ -1,7 +1,7 @@
 """Roda todas as coletas. Se uma fonte falhar, as outras seguem e o arquivo antigo daquela fonte é mantido."""
-import sys, traceback, falabr_api, datajud, transparencia, ouvidoria, pncp, precedentes, sefaz_exec, precos, pca
+import sys, traceback, falabr_api, datajud, transparencia, ouvidoria, pncp, precedentes, sefaz_exec, precos, pca, contratos_sgc
 falhas = 0
-for nome, mod in [('DataJud', datajud), ('Transparência AM', transparencia), ('Fala.BR API', falabr_api), ('Ouvidoria CGU', ouvidoria), ('PNCP', pncp), ('PCA (PNCP)', pca), ('Precedentes LAI', precedentes), ('Despesas SEFAZ', sefaz_exec), ('Preços de mercado', precos)]:
+for nome, mod in [('DataJud', datajud), ('Transparência AM', transparencia), ('Fala.BR API', falabr_api), ('Ouvidoria CGU', ouvidoria), ('PNCP', pncp), ('PCA (PNCP)', pca), ('Contratos SGC', contratos_sgc), ('Precedentes LAI', precedentes), ('Despesas SEFAZ', sefaz_exec), ('Preços de mercado', precos)]:
     print(f'=== {nome}')
     try: mod.main()
     except Exception:

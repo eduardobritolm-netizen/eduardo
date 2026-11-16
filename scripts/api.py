@@ -106,6 +106,18 @@ def main():
                     'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
                     'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/precos.json'}, {'formato': 'CSV', 'url': f'{BASE}/precos-referencia.csv'}],
                     'campos': {'codigo_catalogo': 'código CATMAT/CATSER', 'mediana_saneada': 'mediana após saneamento (R$)', 'referencia': 'preço de referência sugerido (R$)', 'metodo': 'média ou mediana'}})
+    CT = ler('contratos.json')
+    if CT:
+        shutil.copy(os.path.join(DADOS, 'contratos.json'), os.path.join(API, 'contratos.json'))
+        linct = [[i['org'], i['termo'], i['tipo'], i['cnpj'], i['fornecedor'], i['inicio'], i['fim'], i['vAtual'], 'vigente' if i['vigente'] else 'encerrado', i['objeto']] for i in CT['itens']]
+        csv_out('contratos.csv', ['orgao', 'termo', 'tipo', 'cnpj_cpf', 'fornecedor', 'inicio', 'termino', 'valor_atual', 'situacao', 'objeto'], linct)
+        cat.append({'identificador': 'contratos', 'titulo': 'Contratos e convênios — PGE e FUNDPGE (Portal SGC)',
+                    'descricao': 'Contratos, convênios, acordos e demais termos da PGE-AM e do FUNDPGE, com fornecedor, vigência, valor e situação (vigente/encerrado).',
+                    'fonte': 'Portal SGC — Sistema de Gestão de Contratos (SEFAZ-AM)',
+                    'atualizado_em': CT['atualizado'], 'periodicidade': 'mensal',
+                    'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
+                    'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/contratos.json'}, {'formato': 'CSV', 'url': f'{BASE}/contratos.csv'}],
+                    'campos': {'valor_atual': 'valor global atualizado do termo (R$)', 'situacao': 'vigente ou encerrado na data de referência'}})
     PC = ler('pca.json')
     if PC:
         shutil.copy(os.path.join(DADOS, 'pca.json'), os.path.join(API, 'pca.json'))

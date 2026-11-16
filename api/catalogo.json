@@ -226,6 +226,30 @@
    }
   },
   {
+   "identificador": "contratos",
+   "titulo": "Contratos e convênios — PGE e FUNDPGE (Portal SGC)",
+   "descricao": "Contratos, convênios, acordos e demais termos da PGE-AM e do FUNDPGE, com fornecedor, vigência, valor e situação (vigente/encerrado).",
+   "fonte": "Portal SGC — Sistema de Gestão de Contratos (SEFAZ-AM)",
+   "atualizado_em": "2026-11-15",
+   "periodicidade": "mensal",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/contratos.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/contratos.csv"
+    }
+   ],
+   "campos": {
+    "valor_atual": "valor global atualizado do termo (R$)",
+    "situacao": "vigente ou encerrado na data de referência"
+   }
+  },
+  {
    "identificador": "pca",
    "titulo": "Plano de Contratações Anual (PCA) — PGE e FUNDPGE",
    "descricao": "Itens planejados no PCA da PGE-AM e do Fundo Especial (FUNDPGE), com código CATMAT/CATSER, unidade, quantidade e valor unitário estimado.",

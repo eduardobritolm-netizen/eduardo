@@ -166,6 +166,22 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /contratos.json:
+    get:
+      summary: "Contratos e convênios — PGE e FUNDPGE (Portal SGC) (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /contratos.csv:
+    get:
+      summary: "Contratos e convênios — PGE e FUNDPGE (Portal SGC) (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
   /pca.json:
     get:
       summary: "Plano de Contratações Anual (PCA) — PGE e FUNDPGE (JSON)"
