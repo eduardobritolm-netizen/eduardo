@@ -317,13 +317,37 @@ function pcaAplicar(){
   +(pcaFiltrados.length>600?`<tr><td colspan="10" style="color:#605E5C">Mostrando 600 de ${pcaFiltrados.length} — refine o filtro para ver o restante.</td></tr>`:'');
  document.querySelectorAll('#pcaTb .btn-cmp').forEach(b=>b.onclick=()=>compararItem(P.itens[+b.dataset.idx]));
 }
-function compararItem(it){
+function coletar(ep,extra){
+ const base=Object.assign({tamanhoPagina:500,dataCompraInicio:D.periodo[0],dataCompraFim:D.periodo[1]},extra);
+ const todos=[];
+ function pag(p){base.pagina=p;return prox(ep,base).then(j=>{todos.push(...(j.resultado||[]));if(p<(j.totalPaginas||1)&&p<6)return pag(p+1)})}
+ return pag(1).then(()=>todos,()=>todos);
+}
+async function compararItem(it){
  if(!PROXY){alert('Para comparar com o preço de mercado é preciso configurar o proxy (proxy/proxy.gs). Enquanto isso, a referência de mercado não fica disponível.');return}
  pcaRef={cod:String(it.cod),titulo:it.titulo,vUnit:it.vUnit,qtd:it.qtd};
  mostrarAba('tab-precos');
  document.getElementById('cmpBox').hidden=false;
  document.getElementById('cmp').innerHTML='<div class="cmp-l">Consultando preços de mercado para <b>'+esc(it.titulo)+'</b> (código '+esc(it.cod)+')…</div>';
- carregarPrecos(it.tipo==='S'?'servico':'material',it.cod,it.titulo,'codigoItemCatalogo');
+ // tenta o código exato e, para material, cai para o PDM (família do item) se não houver preço
+ const tentativas = it.tipo==='S'
+  ? [['/modulo-pesquisa-preco/3_consultarServico',{codigoItemCatalogo:it.cod}]]
+  : [['/modulo-pesquisa-preco/1_consultarMaterial',{tipo:'codigoItemCatalogo',codigo:it.cod}],
+     ['/modulo-pesquisa-preco/1_consultarMaterial',{tipo:'codigoPdm',codigo:it.cod}]];
+ let todos=[];
+ for(const [ep,extra] of tentativas){todos=await coletar(ep,extra);if(todos.length)break}
+ if(pcaRef.cod!==String(it.cod))return;  // usuário já clicou em outro item
+ if(!todos.length){
+  const est=it.vUnit;
+  document.getElementById('cmp').innerHTML=
+   `<div><div class="cmp-l">Item do PCA</div><div style="max-width:320px">${esc(it.titulo)} <span class="cmp-l">(${it.tipo==='S'?'CATSER':'CATMAT'} ${esc(it.cod)})</span></div></div>`+
+   `<div><div class="cmp-l">Estimado no PCA (unit.)</div><div class="cmp-v">${rs(est)}</div></div>`+
+   `<div><div class="cmp-l">Referência de mercado</div><div class="cmp-v" style="color:#8A8886">— sem dados —</div><div class="cmp-l">Sem preços publicados no Compras.gov.br para este código no período.</div></div>`;
+  return;
+ }
+ const compras=todos.filter(r=>r.precoUnitario>0).sort((a,b)=>a.precoUnitario-b.precoUnitario)
+  .map(r=>[r.dataResultado,Math.round(r.precoUnitario*1e4)/1e4,(r.nomeUnidadeFornecimento||''),(r.marca||'').trim(),r.nomeFornecedor||'',r.nomeOrgao||'',r.estado||'']);
+ selItem({codigo:String(it.cod),rotulo:it.titulo,descricao:(todos[0].descricaoItem||it.titulo),origem:'api',compras:compras});
 }
 document.getElementById('pcaCsv').onclick=()=>{if(!pcaFiltrados.length)return;
  const cab=['Orgao','Tipo','Codigo','Item','Categoria','Unidade','Quantidade','ValorUnitEstimado','ValorTotalEstimado','DataDesejada'];
