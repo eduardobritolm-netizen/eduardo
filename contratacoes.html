@@ -181,7 +181,17 @@ function p2(){const L=K.licitacoes;
  donut(document.getElementById('g-mod'),g(x=>x.modalidade));hbar(document.getElementById('g-sit'),g(x=>x.situacao),C[0],r=>`<b>${r.k}</b>${pt(r.v)} processos`);
  document.getElementById('t-lc').innerHTML=[...L].sort((a,b)=>b.publicacao.localeCompare(a.publicacao)).map(x=>`<tr><td>${fd(x.publicacao)}</td><td>${esc(x.modalidade)}</td><td>${esc(x.objeto)}</td><td>${esc(x.situacao)}</td><td class="r">${brl(x.estimado)}</td><td class="r">${x.homologado?brl(x.homologado):'—'}</td></tr>`).join('')}
 let S,CTS=[];
-function montarCTS(){CTS=(S&&S.itens?S.itens:[]).map(x=>({org:x.org,cat:x.tipo,tipo:(x.sigla==='NE'?'Empenho':'Contrato'),forn:x.fornecedor,objeto:x.objeto,valor:x.vAtual,inicio:x.inicio,fim:x.fim||'9999-12-31',aberto:!x.fim,ano:(x.assinatura||x.inicio||'').slice(0,4)}))}
+const ck=x=>`${x.org}|${(x.forn||'').toLowerCase().replace(/\s+/g,'')}|${x.inicio||''}`;
+function montarCTS(){
+ // base: Portal SGC (registro completo, histórico)
+ CTS=(S&&S.itens?S.itens:[]).map(x=>({org:x.org,cat:x.tipo,tipo:(x.sigla==='NE'?'Empenho':'Contrato'),forn:x.fornecedor,objeto:x.objeto,valor:x.vAtual,inicio:x.inicio,fim:x.fim||'9999-12-31',aberto:!x.fim,ano:+( (x.assinatura||x.inicio||'').slice(0,4))||'',fonte:'SGC'}));
+ // complemento automático: contratos do PNCP que o SGC ainda não tem (robô diário)
+ const vistos=new Set(CTS.map(ck));
+ (K&&K.contratos?K.contratos:[]).filter(x=>x.tipo!=='Empenho').forEach(x=>{
+  const o={org:x.org,cat:x.cat,tipo:'Contrato',forn:x.forn,objeto:x.objeto,valor:x.valor,inicio:x.inicio,fim:x.fim||'9999-12-31',aberto:!x.fim,ano:x.ano,fonte:'PNCP'};
+  if(!vistos.has(ck(o))){vistos.add(ck(o));CTS.push(o)}
+ });
+}
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
  document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
@@ -195,7 +205,7 @@ Promise.all([
 ]).then(([sgc,pncp])=>{S=sgc;K=pncp;montarCTS();
  const cats=[...new Set(CTS.filter(x=>x.tipo!=='Empenho').map(x=>x.cat))].sort();document.getElementById('s-cat').innerHTML+=cats.map(c=>`<option>${esc(c)}</option>`).join('');
  ['s-org','s-cat'].forEach(id=>document.getElementById(id).onchange=draw);
- const ref=S?`Fonte dos contratos: Portal SGC (SEFAZ-AM) · atualizado em ${fd(S.atualizado)}<br>Licitações: PNCP · vigência apurada em ${fd(S.referencia_vigencia)}`:'Fonte: PNCP';
+ const ref=S?`Contratos: Portal SGC (SEFAZ-AM, base) + PNCP (novos, automático)<br>SGC atualizado em ${fd(S.atualizado)} · vigência apurada em ${fd(S.referencia_vigencia)}`:'Fonte: PNCP — Portal Nacional de Contratações Públicas';
  document.getElementById('ban-r').innerHTML=ref;go('1');
 }).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
 </script>
