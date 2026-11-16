@@ -93,7 +93,7 @@ td.p{text-align:right;font-variant-numeric:tabular-nums}
   <input class="inp" id="busca" placeholder="Digite o material ou serviço (ex.: papel A4, cadeira)…" autocomplete="off" aria-label="Buscar item no catálogo">
   <div class="lista" id="hint"></div>
   <div id="semproxy" class="foot-note" style="display:none;margin-top:6px">Busca ligada ao catálogo oficial. Para ver os <b>preços</b> de um item do catálogo é preciso configurar o proxy (veja <code>proxy/proxy.gs</code>). Sem ele, só os itens acompanhados abaixo têm preços.</div>
-  <div class="t" style="margin-top:12px">Itens acompanhados</div>
+  <div class="t" style="margin-top:12px">Itens pesquisados</div>
   <div class="lista" id="lista" style="max-height:150px"></div>
  </div>
  <div class="v k7">
@@ -180,11 +180,13 @@ function hist(box,precos,ref){
  [min,max].forEach((val,i)=>{const t=el('text',{x:i?W-l:l,y:H-8,'text-anchor':i?'end':'start','font-size':10,fill:'#605E5C'},s);t.textContent=rs(val)});
 }
 
-let D,item,filtrados;
+let D,item,filtrados,pesquisados=[];
 const col={data:0,preco:1,unid:2,marca:3,forn:4,orgao:5,uf:6};
 function opcoes(sel,vals){const atual=sel.value;sel.innerHTML='<option value="">'+(sel.id==='fUF'?'Todas':'Todas')+'</option>'+[...new Set(vals.filter(Boolean))].sort().map(v=>`<option>${esc(v)}</option>`).join('');sel.value=atual}
 function selItem(it){item=it;document.getElementById('desc').textContent=it.descricao||'';
  if(pcaRef&&String(it.codigo)!==pcaRef.cod){pcaRef=null;document.getElementById('cmpBox').hidden=true}
+ if(!pesquisados.some(x=>x.codigo===it.codigo)){pesquisados.unshift(it);if(pesquisados.length>20)pesquisados.pop()}
+ favoritos();
  document.getElementById('orig').textContent=it.origem==='api'?'dados ao vivo da API':it.origem==='cache'?'cache (última coleta)':'sem dados';
  document.querySelectorAll('#lista .li').forEach(x=>x.classList.toggle('on',x.dataset.cod===it.codigo));
  opcoes(document.getElementById('fUF'),it.compras.map(r=>r[col.uf]));
@@ -210,8 +212,8 @@ function aplicar(){
  renderCmp(e);
 }
 // ---- itens acompanhados (vindos do robô) ----
-function favoritos(){document.getElementById('lista').innerHTML=D.itens.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||it.descricao.slice(0,50))}<br><small>${esc(it.codigo)} · ${it.estat?it.estat.n+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Ainda sem itens — o robô preenche na próxima execução.</small></div>';
- document.querySelectorAll('#lista .li').forEach(d=>d.onclick=()=>{const it=D.itens.find(x=>x.codigo===d.dataset.cod);if(it){hintBox.innerHTML='';selItem(it)}})}
+function favoritos(){document.getElementById('lista').innerHTML=pesquisados.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||(it.descricao||'').slice(0,50))}<br><small>${esc(it.codigo)} · ${it.compras?it.compras.length+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Pesquise um item no catálogo acima — ele aparece aqui.</small></div>';
+ document.querySelectorAll('#lista .li[data-cod]').forEach(d=>d.onclick=()=>{const it=pesquisados.find(x=>x.codigo===d.dataset.cod);if(it){hintBox.innerHTML='';selItem(it)}})}
 // ---- busca ao vivo no catálogo do e-Compras + preços via proxy ----
 const PROXY='https://script.google.com/macros/s/AKfycbwpPtyYC6Iej1bB0wekF09hL71tS5d5e2-XdT7PQl7Jzj9CBV_aR2oCs7VPyMar_huP/exec';  // proxy Apps Script
 const CNBS='https://cnbs.estaleiro.serpro.gov.br/cnbs-api/item/v1/hint';
@@ -274,7 +276,7 @@ document.getElementById('busca').oninput=e=>buscarCatalogo(e.target.value);
 if(!PROXY)document.getElementById('semproxy').style.display='block';
 fetch('data/precos.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;
  document.getElementById('gen').innerHTML='Atualizado em '+fd(j.atualizado_em)+'<br>Período base: '+fd(j.periodo[0])+' a '+fd(j.periodo[1]);
- favoritos();if(j.itens[0])selItem(j.itens[0]);
+ favoritos();
 });
 
 // ===== Abas =====
