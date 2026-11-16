@@ -118,6 +118,18 @@ def main():
                     'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
                     'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/contratos.json'}, {'formato': 'CSV', 'url': f'{BASE}/contratos.csv'}],
                     'campos': {'valor_atual': 'valor global atualizado do termo (R$)', 'situacao': 'vigente ou encerrado na data de referência'}})
+    CV = ler('convenios.json')
+    if CV:
+        shutil.copy(os.path.join(DADOS, 'convenios.json'), os.path.join(API, 'convenios.json'))
+        lincv = [[i['org'], i['plano'], i['termo'], i['titulo'], i['cnpjConvenente'], i['convenente'], i['inicio'], i['fim'], i['valor'], 'vigente' if i['vigente'] else 'encerrado', i['objeto']] for i in CV['itens']]
+        csv_out('convenios.csv', ['orgao_concedente', 'plano_trabalho', 'termo', 'titulo', 'cnpj_convenente', 'convenente', 'inicio', 'fim', 'valor_repasse', 'situacao', 'objeto'], lincv)
+        cat.append({'identificador': 'convenios', 'titulo': 'Transferências voluntárias de saída (convênios) — PGE e FUNDPGE',
+                    'descricao': 'Convênios e contratos de gestão em que a PGE-AM/FUNDPGE é concedente, com convenente, objeto, vigência e valor de repasse.',
+                    'fonte': 'sisconv — Transferências Voluntárias de Saída (SEFAZ-AM)',
+                    'atualizado_em': CV['atualizado'], 'periodicidade': 'diária',
+                    'licenca': LICENCA, 'publicador': 'Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria',
+                    'distribuicoes': [{'formato': 'JSON', 'url': f'{BASE}/convenios.json'}, {'formato': 'CSV', 'url': f'{BASE}/convenios.csv'}],
+                    'campos': {'plano_trabalho': 'nº do plano de trabalho', 'valor_repasse': 'valor do repasse (R$)', 'situacao': 'vigente ou encerrado na data de referência'}})
     PC = ler('pca.json')
     if PC:
         shutil.copy(os.path.join(DADOS, 'pca.json'), os.path.join(API, 'pca.json'))

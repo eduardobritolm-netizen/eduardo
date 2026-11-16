@@ -87,11 +87,18 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="v k6" data-pg="2" hidden><h3>Por situação</h3><div id="g-sit"></div></div>
   <div class="v k12" data-pg="2" hidden><h3>Processos de contratação</h3><div class="tbl" style="max-height:420px"><table><thead><tr><th>Publicação</th><th>Modalidade</th><th>Objeto</th><th>Situação</th><th class="r">Estimado</th><th class="r">Homologado</th></tr></thead><tbody id="t-lc"></tbody></table></div></div>
 
-  <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
+  <div class="v card acc k4" data-pg="3" hidden><div class="n" id="k-tv">—</div><div class="l">Transferências vigentes (saída)</div><div class="kpi-sub" id="k-tv-c"></div></div>
+  <div class="v card k4" data-pg="3" hidden><div class="n" id="k-tvv">—</div><div class="l">Valor de repasse vigente</div></div>
+  <div class="v card k4" data-pg="3" hidden><div class="n" id="k-tvt">—</div><div class="l">Total de transferências registradas</div></div>
+  <div class="v k12" data-pg="3" hidden><h3>Transferências voluntárias de saída — convênios em que a PGE/FUNDPGE é concedente</h3>
+    <div class="tbl" style="max-height:440px"><table><thead><tr><th>Órgão</th><th>Termo</th><th>Objeto</th><th>Convenente</th><th class="r">Repasse</th><th>Vigência</th><th>Situação</th></tr></thead><tbody id="t-tv"></tbody></table></div></div>
+
+  <div class="v k12" data-pg="4" hidden><h3>Notas metodológicas</h3>
     <table><tbody>
       <tr><td>Fonte</td><td>API pública de consulta do PNCP (Lei 14.133/2021). O Decreto estadual 47.133/2023 integra o Portal e-Compras.AM ao PNCP. Unidades: PGE-AM (CNPJ 19.477.848/0001-34) e Fundo Especial da PGE — FUNDPGE (CNPJ 14.877.478/0001-09).</td></tr>
       <tr><td>Contratos</td><td>Contratos, termos e arrendamentos publicados no PNCP. Empenhos que substituem contrato são contados à parte. Fornecedores pessoa física aparecem só como "Pessoa física".</td></tr>
       <tr><td>Limitação</td><td>Contratações anteriores à Lei 14.133 ou não publicadas no PNCP não aparecem. Pagamentos (execução financeira) ficam no sistema da SEFAZ, que não oferece API aberta.</td></tr>
+      <tr><td>Transferências de saída</td><td>Convênios e contratos de gestão em que a PGE/FUNDPGE é concedente, do sistema sisconv da SEFAZ-AM (Transferências Voluntárias de Saída). Coleta automática diária, por órgão e ano.</td></tr>
       <tr><td>Atualização</td><td>Coleta automática diária.</td></tr>
     </tbody></table>
   </div>
@@ -101,8 +108,9 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 <nav class="pages" role="tablist" aria-label="Páginas do relatório">
   <button role="tab" data-p="1" aria-selected="true">Contratos</button>
   <button role="tab" data-p="2" aria-selected="false">Licitações</button>
-  <button role="tab" data-p="3" aria-selected="false">Notas</button>
-  <span class="info" id="pginfo">Página 1 de 3</span>
+  <button role="tab" data-p="3" aria-selected="false">Transferências</button>
+  <button role="tab" data-p="4" aria-selected="false">Notas</button>
+  <span class="info" id="pginfo">Página 1 de 4</span>
 </nav>
 <div class="tip" id="tip"></div>
 <script>
@@ -195,14 +203,21 @@ function montarCTS(){
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
  document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
- document.getElementById('pginfo').textContent=`Página ${p} de 3`;draw()}
-function draw(){if(cur==='1')p1();if(cur==='2')p2()}
+ document.getElementById('pginfo').textContent=`Página ${p} de 4`;draw()}
+function draw(){if(cur==='1')p1();if(cur==='2')p2();if(cur==='3')p3()}
+let TV;
+function p3(){const its=(TV&&TV.itens)?TV.itens:[];const vig=its.filter(x=>x.vigente);
+ document.getElementById('k-tv').textContent=pt(vig.length);document.getElementById('k-tv-c').textContent=`de ${pt(its.length)} registradas`;
+ document.getElementById('k-tvv').textContent=brl(vig.reduce((s,x)=>s+x.valor,0));
+ document.getElementById('k-tvt').textContent=pt(its.length);
+ document.getElementById('t-tv').innerHTML=its.length?its.map(x=>{const st=x.vigente?'<span class="tag v">Vigente</span>':'<span class="tag x">Encerrado</span>';const vg=(x.inicio&&x.fim)?`${fd(x.inicio)} a ${fd(x.fim)}`:'—';return `<tr><td>${esc(x.org)}</td><td>${esc(x.termo)}</td><td>${esc(x.objeto)}</td><td>${esc(x.convenente)}</td><td class="r">${brl(x.valor)}</td><td>${vg}</td><td>${st}</td></tr>`}).join(''):'<tr><td colspan="7" style="color:#605E5C">Nenhuma transferência de saída registrada para a PGE/FUNDPGE.</td></tr>'}
 document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
 Promise.all([
  fetch('data/contratos.json?v='+Date.now()).then(r=>r.json()).catch(()=>null),
- fetch('data/contratacoes.json?v='+Date.now()).then(r=>r.json()).catch(()=>({contratos:[],licitacoes:[]}))
-]).then(([sgc,pncp])=>{S=sgc;K=pncp;montarCTS();
+ fetch('data/contratacoes.json?v='+Date.now()).then(r=>r.json()).catch(()=>({contratos:[],licitacoes:[]})),
+ fetch('data/convenios.json?v='+Date.now()).then(r=>r.json()).catch(()=>null)
+]).then(([sgc,pncp,conv])=>{S=sgc;K=pncp;TV=conv;montarCTS();
  const cats=[...new Set(CTS.filter(x=>x.tipo!=='Empenho').map(x=>x.cat))].sort();document.getElementById('s-cat').innerHTML+=cats.map(c=>`<option>${esc(c)}</option>`).join('');
  ['s-org','s-cat'].forEach(id=>document.getElementById(id).onchange=draw);
  const ref=S?`Contratos: Portal SGC (SEFAZ-AM, base) + PNCP (novos, automático)<br>SGC atualizado em ${fd(S.atualizado)} · vigência apurada em ${fd(S.referencia_vigencia)}`:'Fonte: PNCP — Portal Nacional de Contratações Públicas';

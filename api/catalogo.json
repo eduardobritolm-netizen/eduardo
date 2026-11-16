@@ -250,6 +250,31 @@
    }
   },
   {
+   "identificador": "convenios",
+   "titulo": "Transferências voluntárias de saída (convênios) — PGE e FUNDPGE",
+   "descricao": "Convênios e contratos de gestão em que a PGE-AM/FUNDPGE é concedente, com convenente, objeto, vigência e valor de repasse.",
+   "fonte": "sisconv — Transferências Voluntárias de Saída (SEFAZ-AM)",
+   "atualizado_em": "2026-11-15",
+   "periodicidade": "diária",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/convenios.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/convenios.csv"
+    }
+   ],
+   "campos": {
+    "plano_trabalho": "nº do plano de trabalho",
+    "valor_repasse": "valor do repasse (R$)",
+    "situacao": "vigente ou encerrado na data de referência"
+   }
+  },
+  {
    "identificador": "pca",
    "titulo": "Plano de Contratações Anual (PCA) — PGE e FUNDPGE",
    "descricao": "Itens planejados no PCA da PGE-AM e do Fundo Especial (FUNDPGE), com código CATMAT/CATSER, unidade, quantidade e valor unitário estimado.",

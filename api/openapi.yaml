@@ -182,6 +182,22 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /convenios.json:
+    get:
+      summary: "Transferências voluntárias de saída (convênios) — PGE e FUNDPGE (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /convenios.csv:
+    get:
+      summary: "Transferências voluntárias de saída (convênios) — PGE e FUNDPGE (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
   /pca.json:
     get:
       summary: "Plano de Contratações Anual (PCA) — PGE e FUNDPGE (JSON)"
