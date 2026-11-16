@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Gestão e Transparência — Despesas SICA</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- Configuração de Tema e Tipografia -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              900: '#0f172a',
+              800: '#1e3a8a',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Ajustes sutis de barra de rolagem e transições */
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .card-shadow {
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+    }
+    .card-shadow-hover:hover {
+      box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- =====================================================================
+       BARRA DE NAVEGAÇÃO SUPERIOR (PORTAL INSTITUCIONAL)
+  ====================================================================== -->
+  <header class="bg-[#0f172a] text-white border-b border-slate-800 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3.5 gap-3">
+        <!-- Identidade do Portal -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center shadow-inner border border-blue-400/30 shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-blue-400">Painel Executivo</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-xs text-slate-400 font-mono">SICA / Custos</span>
+            </div>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">
+              Gestão Orçamentária e Custos Controláveis
+            </h1>
+          </div>
+        </div>
+
+        <!-- Abas de Navegação do Portal -->
+        <nav class="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0" aria-label="Navegação do Portal">
+          <a href="index.html" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition whitespace-nowrap">
+            Visão Geral
+          </a>
+          <a href="despesas.html" aria-current="page" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Despesas — SICA
+          </a>
+          <a href="#sec-pessoal" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition whitespace-nowrap">
+            Pessoal Ativo
+          </a>
+          <a href="#sec-tabela" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition whitespace-nowrap">
+            Analítico
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       SUB-BARRA DE CONTROLE: SELETOR DE CENÁRIO SICA & IMPORTAÇÃO CSV
+  ====================================================================== -->
+  <section class="bg-white border-b border-[#e2e8f0]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <!-- Seletor de Base / Cenário SICA -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 flex-wrap">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            Recorte SICA:
+          </span>
+
+          <div class="inline-flex flex-wrap p-1 rounded-xl bg-slate-100 border border-slate-200/80 gap-1" role="group" aria-label="Seleção de Base SICA">
+            <button type="button" id="btn-cenario-1" onclick="selecionarCenario('cenario1')"
+              class="cenario-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-left">
+              <span id="label-btn-1" class="block">Base 1 • Unidade Principal</span>
+              <span id="sub-btn-1" class="text-[11px] font-normal opacity-80 tabular-nums">R$ 99.664.887,72</span>
+            </button>
+
+            <button type="button" id="btn-cenario-2" onclick="selecionarCenario('cenario2')"
+              class="cenario-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-left">
+              <span id="label-btn-2" class="block">Base 2 • Unidade Secundária</span>
+              <span id="sub-btn-2" class="text-[11px] font-normal opacity-80 tabular-nums">R$ 2.226.493,52</span>
+            </button>
+
+            <button type="button" id="btn-cenario-consolidado" onclick="selecionarCenario('consolidado')"
+              class="cenario-btn px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all text-left">
+              <span class="block">Consolidado Geral</span>
+              <span id="sub-btn-consolidado" class="text-[11px] font-normal opacity-80 tabular-nums">R$ 101.891.381,24</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ações Rápidas: Renomear Unidades & Importar CSV -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" onclick="toggleEditarNomes()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs">
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+            </svg>
+            Nomear Unidades
+          </button>
+
+          <button type="button" onclick="abrirModalImportacao()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-[#1e3a8a] hover:bg-blue-800 transition shadow-xs">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+            </svg>
+            Importar novos CSVs do SICA
+          </button>
+        </div>
+      </div>
+
+      <!-- Painel Retrátil para Personalização dos Nomes das Bases/Unidades -->
+      <div id="painel-editar-nomes" class="hidden mt-4 pt-4 border-t border-slate-200/80">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200/70">
+          <div>
+            <label for="input-nome-1" class="block text-xs font-semibold text-slate-700 mb-1">
+              Identificação da Base 1 (Arquivos 04515 / 04522 — R$ 99,66 Mi)
+            </label>
+            <input type="text" id="input-nome-1" value="Base 1 • Unidade Principal"
+              oninput="atualizarNomesUnidades()"
+              placeholder="Ex: Folha / Sede Principal"
+              class="w-full px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600" />
+          </div>
+          <div>
+            <label for="input-nome-2" class="block text-xs font-semibold text-slate-700 mb-1">
+              Identificação da Base 2 (Arquivos 04520 / 04524 — R$ 2,23 Mi)
+            </label>
+            <input type="text" id="input-nome-2" value="Base 2 • Unidade Secundária"
+              oninput="atualizarNomesUnidades()"
+              placeholder="Ex: Custeio / Unidade 2"
+              class="w-full px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       CONTEÚDO PRINCIPAL DO DASHBOARD
+  ====================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Faixa de Contexto da Visão Ativa -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white px-4 py-3 rounded-2xl border border-[#e2e8f0] card-shadow">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/70">
+          SICA • Extraído 16/11/2026
+        </span>
+        <h2 id="titulo-visao-ativa" class="text-sm sm:text-base font-bold text-[#0f172a]">
+          Base 1 • Unidade Principal
+        </h2>
+      </div>
+      <p id="subtitulo-visao-ativa" class="text-xs text-slate-500">
+        Referência: CUSTO CONTROLÁVEL (04515) e PESSOAL ATIVO (04522) • 18 rubricas ativas
+      </p>
+    </div>
+
+    <!-- ===================================================================
+         1. CARDS DE KPIS EXECUTIVOS
+    ==================================================================== -->
+    <section aria-label="Indicadores Principais" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+      <!-- KPI 1: Custo Controlável Total -->
+      <div class="bg-white rounded-2xl border border-[#e2e8f0] p-5 card-shadow card-shadow-hover transition-all relative overflow-hidden">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Custo Controlável Total</p>
+            <p id="kpi-total-valor" class="mt-2 text-2xl font-extrabold text-[#0f172a] tabular-nums tracking-tight">
+              R$ 99.664.887,72
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center shrink-0 border border-blue-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500">Base de cálculo SICA</span>
+          <span class="font-semibold text-[#2563eb] bg-blue-50 px-2 py-0.5 rounded-md">100,00%</span>
+        </div>
+      </div>
+
+      <!-- KPI 2: Grupo Pessoal Ativo & Encargos -->
+      <div class="bg-white rounded-2xl border border-[#e2e8f0] p-5 card-shadow card-shadow-hover transition-all">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pessoal Ativo & Encargos</p>
+            <p id="kpi-pessoal-valor" class="mt-2 text-2xl font-extrabold text-[#0f172a] tabular-nums tracking-tight">
+              R$ 92.726.153,33
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#059669] flex items-center justify-center shrink-0 border border-emerald-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500">Folha + Encargos Patronais</span>
+          <span id="kpi-pessoal-pct" class="font-semibold text-[#059669] bg-emerald-50 px-2 py-0.5 rounded-md tabular-nums">93,04%</span>
+        </div>
+      </div>
+
+      <!-- KPI 3: Demais Custos Operacionais / Custeio -->
+      <div class="bg-white rounded-2xl border border-[#e2e8f0] p-5 card-shadow card-shadow-hover transition-all">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Demais Custos / Custeio</p>
+            <p id="kpi-custeio-valor" class="mt-2 text-2xl font-extrabold text-[#0f172a] tabular-nums tracking-tight">
+              R$ 6.938.734,39
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-amber-50 text-[#d97706] flex items-center justify-center shrink-0 border border-amber-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500">TI, Contratos, Serviços e Outros</span>
+          <span id="kpi-custeio-pct" class="font-semibold text-[#d97706] bg-amber-50 px-2 py-0.5 rounded-md tabular-nums">6,96%</span>
+        </div>
+      </div>
+
+      <!-- KPI 4: Maior Rubrica de Despesa -->
+      <div class="bg-white rounded-2xl border border-[#e2e8f0] p-5 card-shadow card-shadow-hover transition-all">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Maior Rubrica</p>
+            <p id="kpi-maior-valor" class="mt-2 text-2xl font-extrabold text-[#1e3a8a] tabular-nums tracking-tight">
+              R$ 82.528.442,29
+            </p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-[#1e3a8a] flex items-center justify-center shrink-0 border border-indigo-100">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+          <span id="kpi-maior-nome" class="font-semibold text-slate-700 truncate" title="PESSOAL ATIVO">PESSOAL ATIVO</span>
+          <span id="kpi-maior-pct" class="font-semibold text-[#1e3a8a] bg-indigo-50 px-2 py-0.5 rounded-md tabular-nums shrink-0">82,81%</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         2. SUB-PAINEL DEDICADO: DETALHAMENTO PESSOAL ATIVO - ITENS
+    ==================================================================== -->
+    <section id="sec-pessoal" class="bg-white rounded-2xl border border-[#e2e8f0] p-5 sm:p-6 card-shadow">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#059669]"></span>
+            <h3 class="text-base sm:text-lg font-bold text-[#0f172a]">
+              Detalhamento: Pessoal Ativo — Itens (Sub-relatório SICA)
+            </h3>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Composição interna do grupo de despesas com pessoal e obrigações patronais.
+          </p>
+        </div>
+        <div class="bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200/80 text-right">
+          <span class="text-[11px] uppercase tracking-wider font-semibold text-slate-500 block">Total do Sub-relatório Pessoal</span>
+          <span id="pessoal-sub-total" class="text-base sm:text-lg font-extrabold text-[#059669] tabular-nums">
+            R$ 92.726.153,33
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Progresso Comparativa -->
+      <div class="mb-5">
+        <div class="flex justify-between text-xs font-semibold mb-1.5">
+          <span class="text-[#1e3a8a] flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-xs bg-[#2563eb] inline-block"></span>
+            Pessoal Ativo (<span id="barra-pessoal-pct-grupo" class="tabular-nums">89,00%</span> do grupo)
+          </span>
+          <span class="text-[#059669] flex items-center gap-1.5">
+            Encargos Patronais (<span id="barra-encargos-pct-grupo" class="tabular-nums">11,00%</span> do grupo)
+            <span class="w-2.5 h-2.5 rounded-xs bg-[#059669] inline-block"></span>
+          </span>
+        </div>
+        <div class="w-full h-4 bg-slate-100 rounded-full overflow-hidden flex p-0.5 border border-slate-200/70">
+          <div id="barra-pessoal-fill" style="width: 89%" class="h-full bg-[#2563eb] rounded-l-full transition-all duration-500"></div>
+          <div id="barra-encargos-fill" style="width: 11%" class="h-full bg-[#059669] rounded-r-full transition-all duration-500"></div>
+        </div>
+      </div>
+
+      <!-- Cards Comparativos dos 2 Componentes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Componente 1: Pessoal Ativo -->
+        <div class="rounded-xl bg-slate-50/80 border border-slate-200/80 p-4 flex items-center justify-between gap-4">
+          <div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-blue-100/80 text-blue-800 mb-1.5">
+              Rubrica 01 • Remuneração Direta
+            </span>
+            <h4 class="text-sm font-bold text-[#0f172a]">PESSOAL ATIVO</h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Representa <strong id="card-pessoal-pct-total" class="text-slate-700 tabular-nums">82,81%</strong> do Custo Controlável Total
+            </p>
+          </div>
+          <div class="text-right">
+            <p id="card-pessoal-valor" class="text-lg sm:text-xl font-extrabold text-[#1e3a8a] tabular-nums">
+              R$ 82.528.442,29
+            </p>
+            <span id="card-pessoal-pct-grupo" class="text-xs font-semibold text-[#2563eb] tabular-nums">
+              89,00% do grupo
+            </span>
+          </div>
+        </div>
+
+        <!-- Componente 2: Encargos Patronais -->
+        <div class="rounded-xl bg-slate-50/80 border border-slate-200/80 p-4 flex items-center justify-between gap-4">
+          <div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-100/80 text-emerald-800 mb-1.5">
+              Rubrica 02 • Obrigações Patronais
+            </span>
+            <h4 class="text-sm font-bold text-[#0f172a]">ENCARGOS PATRONAIS</h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Representa <strong id="card-encargos-pct-total" class="text-slate-700 tabular-nums">10,23%</strong> do Custo Controlável Total
+            </p>
+          </div>
+          <div class="text-right">
+            <p id="card-encargos-valor" class="text-lg sm:text-xl font-extrabold text-[#059669] tabular-nums">
+              R$ 10.197.711,04
+            </p>
+            <span id="card-encargos-pct-grupo" class="text-xs font-semibold text-[#059669] tabular-nums">
+              11,00% do grupo
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. GRÁFICOS INTERATIVOS (CHART.JS)
+    ==================================================================== -->
+    <section aria-label="Visualizações Gráficas" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Gráfico 1: Barras Horizontais — Top 10 Rubricas -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-[#e2e8f0] p-5 sm:p-6 card-shadow flex flex-col">
+        <div class="flex items-start justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-[#0f172a]">Top 10 Rubricas de Custo Controlável</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Ranking das maiores despesas ordenadas por valor executado (R$)</p>
+          </div>
+          <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">Valores em R$</span>
+        </div>
+        <div class="relative flex-1 min-h-[340px] w-full">
+          <canvas id="chartTop10"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico 2: Rosca (Doughnut) — Composição Macro -->
+      <div class="lg:col-span-5 bg-white rounded-2xl border border-[#e2e8f0] p-5 sm:p-6 card-shadow flex flex-col">
+        <div class="mb-4">
+          <h3 class="text-base font-bold text-[#0f172a]">Composição Macro das Despesas</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Distribuição percentual por grandes grupos de custo</p>
+        </div>
+        <div class="relative h-[240px] w-full flex items-center justify-center">
+          <canvas id="chartMacro"></canvas>
+        </div>
+        <!-- Legenda Detalhada Customizada -->
+        <div id="legenda-macro" class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs">
+          <!-- Preenchido via JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         4. TABELA ANALÍTICA COMPLETA COM BUSCA, ORDENAÇÃO E EXPORTAÇÃO
+    ==================================================================== -->
+    <section id="sec-tabela" class="bg-white rounded-2xl border border-[#e2e8f0] card-shadow overflow-hidden">
+      <!-- Cabeçalho e Ferramentas da Tabela -->
+      <div class="p-5 sm:p-6 border-b border-[#e2e8f0] flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-[#0f172a]">
+            Demonstrativo Analítico de Itens — Custo Controlável
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Consulte, filtre e exporte todas as rubricas da base SICA selecionada.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Campo de Busca em Tempo Real -->
+          <div class="relative flex-1 sm:flex-initial sm:w-64">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="text" id="input-busca" oninput="renderizarTabela()"
+              placeholder="Filtrar rubrica..."
+              class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-600 transition" />
+          </div>
+
+          <!-- Botão Exportar CSV -->
+          <button type="button" onclick="exportarCSVAtual()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition">
+            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Exportar CSV
+          </button>
+
+          <!-- Botão Copiar Tabela HTML -->
+          <button type="button" onclick="copiarHTMLTabela()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition">
+            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+            </svg>
+            Copiar HTML
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela Responsiva -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/90 border-b border-[#e2e8f0] text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <th class="py-3.5 pl-6 pr-3 w-14 text-center">#</th>
+              <th class="py-3.5 px-3">
+                <button type="button" onclick="alternarOrdenacao('descricao')" class="inline-flex items-center gap-1 hover:text-[#0f172a] transition">
+                  Descrição do Item / Rubrica
+                  <span id="sort-icon-descricao" class="text-slate-400">↕</span>
+                </button>
+              </th>
+              <th class="py-3.5 px-3 hidden md:table-cell">Grupo Macro</th>
+              <th class="py-3.5 px-3 text-right">
+                <button type="button" onclick="alternarOrdenacao('valor')" class="inline-flex items-center justify-end gap-1 hover:text-[#0f172a] transition ml-auto">
+                  Valor Executado (R$)
+                  <span id="sort-icon-valor" class="text-blue-600">↓</span>
+                </button>
+              </th>
+              <th class="py-3.5 pl-3 pr-6 w-48 text-right">Representatividade (%)</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-corpo" class="divide-y divide-slate-100 text-sm">
+            <!-- Linhas renderizadas dinamicamente via JS -->
+          </tbody>
+          <tfoot>
+            <tr class="bg-slate-50 border-t-2 border-slate-200 font-bold text-[#0f172a]">
+              <td colspan="3" class="py-3.5 pl-6 pr-3 text-xs sm:text-sm">
+                TOTAL GERAL DO RECORTE (<span id="tabela-qtd-itens">18</span> itens exibidos)
+              </td>
+              <td id="tabela-total-valor" class="py-3.5 px-3 text-right tabular-nums text-sm sm:text-base text-[#1e3a8a]">
+                R$ 99.664.887,72
+              </td>
+              <td id="tabela-total-pct" class="py-3.5 pl-3 pr-6 text-right tabular-nums text-xs sm:text-sm text-slate-600">
+                100,00%
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       RODAPÉ INSTITUCIONAL
+  ====================================================================== -->
+  <footer class="bg-white border-t border-[#e2e8f0] mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <p>
+        Painel Executivo de Despesas Públicas • Fonte: Sistema de Custos (SICA)
+      </p>
+      <p class="tabular-nums">
+        Consolidado Geral Auditado: <strong class="text-slate-700">R$ 101.891.381,24</strong>
+      </p>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       MODAL DE IMPORTAÇÃO DE NOVOS CSVS DO SICA (DRAG & DROP)
+  ====================================================================== -->
+  <div id="modal-importacao" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="text-base font-bold text-[#0f172a]">Importar Novos Arquivos CSV do SICA</h3>
+        <button type="button" onclick="fecharModalImportacao()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Arraste um ou mais relatórios CSV exportados do SICA (ex: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">CUSTO CONTROLÁVEL - Itens.csv</code> ou <code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-800">PESSOAL ATIVO - Itens.csv</code>) para atualizar o painel instantaneamente no navegador.
+        </p>
+
+        <!-- Seletor de Destino -->
+        <div>
+          <label for="select-destino-csv" class="block text-xs font-semibold text-slate-700 mb-1">
+            Atualizar qual base de dados?
+          </label>
+          <select id="select-destino-csv" class="w-full px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+            <option value="cenario1">Base 1 (Unidade Principal)</option>
+            <option value="cenario2">Base 2 (Unidade Secundária)</option>
+          </select>
+        </div>
+
+        <!-- Zona Drag and Drop -->
+        <div id="dropzone-csv"
+          class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/70 hover:bg-blue-50/40 rounded-2xl p-8 text-center cursor-pointer transition-all">
+          <input type="file" id="input-arquivo-csv" accept=".csv,.txt" multiple class="hidden" onchange="processarArquivosSelecionados(this.files)" />
+          <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+            </svg>
+          </div>
+          <p class="text-sm font-semibold text-slate-800">Clique ou arraste os arquivos CSV aqui</p>
+          <p class="text-xs text-slate-500 mt-1">Suporta separador ponto-e-vírgula (;) ou vírgula (,) no padrão brasileiro</p>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+        <button type="button" onclick="fecharModalImportacao()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       TOAST DE NOTIFICAÇÃO (SUBSTITUI ALERT)
+  ====================================================================== -->
+  <div id="toast-notificacao" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 bg-[#0f172a] text-white text-xs sm:text-sm font-medium px-4 py-3 rounded-xl shadow-xl border border-slate-700 transition-all">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toast-mensagem">Operação realizada com sucesso!</span>
+  </div>
+
+  <!-- =====================================================================
+       LÓGICA JAVASCRIPT: DADOS EXATOS DO SICA, GRÁFICOS E INTERATIVIDADE
+  ====================================================================== -->
+  <script>
+    // =========================================================================
+    // 1. BASE DE DADOS EXATA EXTRAÍDA DOS 4 ARQUIVOS CSV DO SICA
+    // =========================================================================
+    const dadosSICA = {
+      cenario1: {
+        nome: 'Base 1 • Unidade Principal',
+        referencia: 'Referência: CUSTO CONTROLÁVEL (04515) e PESSOAL ATIVO (04522)',
+        pessoalSubRelatorio: {
+          pessoalAtivo: 82528442.29,
+          encargosPatronais: 10197711.04
+        },
+        itens: [
+          { descricao: 'PESSOAL ATIVO', valor: 82528442.29 },
+          { descricao: 'ENCARGOS PATRONAIS', valor: 10197711.04 },
+          { descricao: 'TECNOLOGIA DA INFORMAÇÃO', valor: 2417963.59 },
+          { descricao: 'CONTRATOS DE GESTÃO', valor: 1696014.77 },
+          { descricao: 'DEMAIS SERVIÇOS DE TERCEIROS', valor: 1021268.57 },
+          { descricao: 'APOIO ADMINISTRATIVO, TÉCNICO OPERACIONAL', valor: 639857.76 },
+          { descricao: 'VIGILÂNCIA', valor: 430620.99 },
+          { descricao: 'ENERGIA ELÉTRICA', valor: 255861.15 },
+          { descricao: 'MANUTENCAO E CONSERVAÇÃO DE BENS MÓVEIS', valor: 132702.56 },
+          { descricao: 'LOCAÇÃO DE VEÍCULOS, CAMINHÕES E TRATORES', valor: 98111.14 },
+          { descricao: 'PASSAGENS', valor: 87045.87 },
+          { descricao: 'DIÁRIAS E HOSPEDAGENS', valor: 52943.70 },
+          { descricao: 'MANUTENCAO E CONSERVAÇÃO DE BENS IMÓVEIS', valor: 26637.49 },
+          { descricao: 'LIMPEZA', valor: 23835.36 },
+          { descricao: 'MATERIAL DE CONSUMO', valor: 19967.52 },
+          { descricao: 'ÁGUA E ESGOTO', valor: 17742.66 },
+          { descricao: 'TELEFONIA', valor: 17647.68 },
+          { descricao: 'SERVIÇOS DE LOGÍSTICA', valor: 513.58 }
+        ]
+      },
+      cenario2: {
+        nome: 'Base 2 • Unidade Secundária',
+        referencia: 'Referência: CUSTO CONTROLÁVEL (04520) e PESSOAL ATIVO (04524)',
+        pessoalSubRelatorio: {
+          pessoalAtivo: 152617.50,
+          encargosPatronais: 0.00
+        },
+        itens: [
+          { descricao: 'TECNOLOGIA DA INFORMAÇÃO', valor: 909509.07 },
+          { descricao: 'APOIO ADMINISTRATIVO, TÉCNICO OPERACIONAL', valor: 317292.98 },
+          { descricao: 'MANUTENCAO E CONSERVAÇÃO DE BENS IMÓVEIS', valor: 184783.08 },
+          { descricao: 'MATERIAL DE CONSUMO', valor: 160391.30 },
+          { descricao: 'PESSOAL ATIVO', valor: 152617.50 },
+          { descricao: 'DEMAIS TRNSFERÊNCIAS', valor: 120000.00 },
+          { descricao: 'VIGILÂNCIA', valor: 118738.04 },
+          { descricao: 'DEMAIS SERVIÇOS DE TERCEIROS', valor: 65114.73 },
+          { descricao: 'MANUTENCAO E CONSERVAÇÃO DE BENS MÓVEIS', valor: 61604.76 },
+          { descricao: 'SERVIÇOS TÉCNICOS ESPECIALIZADOS', valor: 59477.60 },
+          { descricao: 'DEMAIS CUSTOS CONTROLÁVEIS', valor: 40297.18 },
+          { descricao: 'INDENIZAÇÕES E RESTITUIÇÕES', valor: 23944.59 },
+          { descricao: 'LOCAÇÃO DE VEÍCULOS, CAMINHÕES E TRATORES', valor: 7334.24 },
+          { descricao: 'MANUTENCAO E CONSERVAÇÃO DE VEÍCULOS', valor: 5388.45 }
+        ]
+      }
+    };
+
+    // Estado da aplicação
+    let estado = {
+      cenarioAtivo: 'cenario1', // 'cenario1' | 'cenario2' | 'consolidado'
+      ordenacaoCampo: 'valor',  // 'valor' | 'descricao'
+      ordenacaoDirecao: 'desc'  // 'asc' | 'desc'
+    };
+
+    // Instâncias globais dos gráficos Chart.js
+    let chartTop10Instance = null;
+    let chartMacroInstance = null;
+
+    // =========================================================================
+    // 2. UTILITÁRIOS DE FORMATAÇÃO E CLASSIFICAÇÃO
+    // =========================================================================
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function formatarPercentual(valor) {
+      return valor.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) + '%';
+    }
+
+    function classificarGrupoMacro(descricao) {
+      const desc = descricao.toUpperCase();
+      if (desc.includes('PESSOAL ATIVO') || desc.includes('ENCARGOS PATRONAIS')) {
+        return 'Pessoal & Encargos';
+      }
+      if (desc.includes('TECNOLOGIA DA INFORMAÇÃO')) {
+        return 'Tecnologia da Informação';
+      }
+      if (
+        desc.includes('SERVIÇOS') ||
+        desc.includes('APOIO ADMINISTRATIVO') ||
+        desc.includes('VIGILÂNCIA') ||
+        desc.includes('LIMPEZA') ||
+        desc.includes('CONTRATOS DE GESTÃO')
+      ) {
+        return 'Serviços & Apoio';
+      }
+      return 'Demais Despesas';
+    }
+
+    function obterBadgeGrupo(grupo) {
+      const estilos = {
+        'Pessoal & Encargos': 'bg-blue-50 text-blue-700 border-blue-200/70',
+        'Tecnologia da Informação': 'bg-indigo-50 text-indigo-700 border-indigo-200/70',
+        'Serviços & Apoio': 'bg-emerald-50 text-emerald-700 border-emerald-200/70',
+        'Demais Despesas': 'bg-amber-50 text-amber-700 border-amber-200/70'
+      };
+      return estilos[grupo] || 'bg-slate-100 text-slate-700 border-slate-200';
+    }
+
+    // Gera dinamicamente o recorte ativo (incluindo a soma automática no Consolidado Geral)
+    function obterDadosRecorte(chave) {
+      if (chave === 'cenario1' || chave === 'cenario2') {
+        const base = dadosSICA[chave];
+        const total = base.itens.reduce((acc, item) => acc + item.valor, 0);
+        return {
+          nome: base.nome,
+          referencia: `${base.referencia} • ${base.itens.length} rubricas ativas`,
+          total: total,
+          pessoalSubRelatorio: { ...base.pessoalSubRelatorio },
+          itens: base.itens.map(i => ({ ...i }))
+        };
+      }
+
+      // Consolidado Geral: soma automática das rubricas correspondentes
+      const mapaItens = new Map();
+      [...dadosSICA.cenario1.itens, ...dadosSICA.cenario2.itens].forEach(item => {
+        const chaveDesc = item.descricao.trim().toUpperCase();
+        const atual = mapaItens.get(chaveDesc) || 0;
+        mapaItens.set(chaveDesc, atual + item.valor);
+      });
+
+      const itensConsolidados = Array.from(mapaItens.entries())
+        .map(([descricao, valor]) => ({ descricao, valor }))
+        .sort((a, b) => b.valor - a.valor);
+
+      const totalConsolidado = itensConsolidados.reduce((acc, item) => acc + item.valor, 0);
+
+      return {
+        nome: `Consolidado Geral (${dadosSICA.cenario1.nome} + ${dadosSICA.cenario2.nome})`,
+        referencia: `Soma consolidada dos 4 relatórios SICA • ${itensConsolidados.length} rubricas distintas`,
+        total: totalConsolidado,
+        pessoalSubRelatorio: {
+          pessoalAtivo:
+            dadosSICA.cenario1.pessoalSubRelatorio.pessoalAtivo +
+            dadosSICA.cenario2.pessoalSubRelatorio.pessoalAtivo,
+          encargosPatronais:
+            dadosSICA.cenario1.pessoalSubRelatorio.encargosPatronais +
+            dadosSICA.cenario2.pessoalSubRelatorio.encargosPatronais
+        },
+        itens: itensConsolidados
+      };
+    }
+
+    // =========================================================================
+    // 3. ATUALIZAÇÃO DA INTERFACE (KPIS, SUB-PAINEL PESSOAL, GRÁFICOS E TABELA)
+    // =========================================================================
+    function atualizarInterfaceCompleta() {
+      const dados = obterDadosRecorte(estado.cenarioAtivo);
+
+      // Atualizar totais nos botões superiores
+      const tot1 = dadosSICA.cenario1.itens.reduce((a, b) => a + b.valor, 0);
+      const tot2 = dadosSICA.cenario2.itens.reduce((a, b) => a + b.valor, 0);
+      document.getElementById('sub-btn-1').textContent = formatarMoeda(tot1);
+      document.getElementById('sub-btn-2').textContent = formatarMoeda(tot2);
+      document.getElementById('sub-btn-consolidado').textContent = formatarMoeda(tot1 + tot2);
+
+      // Atualizar estilo dos botões de seleção de cenário
+      document.querySelectorAll('.cenario-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-[#0f172a]', 'shadow-xs', 'ring-1', 'ring-slate-200');
+        btn.classList.add('text-slate-600', 'hover:text-slate-900');
+      });
+      const btnAtivo = document.getElementById(`btn-${estado.cenarioAtivo}`);
+      if (btnAtivo) {
+        btnAtivo.classList.remove('text-slate-600', 'hover:text-slate-900');
+        btnAtivo.classList.add('bg-white', 'text-[#0f172a]', 'shadow-xs', 'ring-1', 'ring-slate-200');
+      }
+
+      // Faixa de contexto
+      document.getElementById('titulo-visao-ativa').textContent = dados.nome;
+      document.getElementById('subtitulo-visao-ativa').textContent = dados.referencia;
+
+      // Cálculos dos KPIs
+      const totalGeral = dados.total;
+      const totalPessoalGrupo =
+        dados.pessoalSubRelatorio.pessoalAtivo + dados.pessoalSubRelatorio.encargosPatronais;
+      const totalCusteio = Math.max(0, totalGeral - totalPessoalGrupo);
+
+      const pctPessoal = totalGeral > 0 ? (totalPessoalGrupo / totalGeral) * 100 : 0;
+      const pctCusteio = totalGeral > 0 ? (totalCusteio / totalGeral) * 100 : 0;
+
+      // Maior rubrica
+      const itensOrdenados = [...dados.itens].sort((a, b) => b.valor - a.valor);
+      const maiorRubrica = itensOrdenados[0] || { descricao: '-', valor: 0 };
+      const pctMaior = totalGeral > 0 ? (maiorRubrica.valor / totalGeral) * 100 : 0;
+
+      // Preencher KPIs
+      document.getElementById('kpi-total-valor').textContent = formatarMoeda(totalGeral);
+      document.getElementById('kpi-pessoal-valor').textContent = formatarMoeda(totalPessoalGrupo);
+      document.getElementById('kpi-pessoal-pct').textContent = formatarPercentual(pctPessoal);
+      document.getElementById('kpi-custeio-valor').textContent = formatarMoeda(totalCusteio);
+      document.getElementById('kpi-custeio-pct').textContent = formatarPercentual(pctCusteio);
+
+      document.getElementById('kpi-maior-valor').textContent = formatarMoeda(maiorRubrica.valor);
+      document.getElementById('kpi-maior-nome').textContent = maiorRubrica.descricao;
+      document.getElementById('kpi-maior-nome').title = maiorRubrica.descricao;
+      document.getElementById('kpi-maior-pct').textContent = formatarPercentual(pctMaior);
+
+      // Preencher Sub-painel Pessoal Ativo
+      const pAtivo = dados.pessoalSubRelatorio.pessoalAtivo;
+      const pEncargos = dados.pessoalSubRelatorio.encargosPatronais;
+      const pctAtivoNoGrupo = totalPessoalGrupo > 0 ? (pAtivo / totalPessoalGrupo) * 100 : 0;
+      const pctEncargosNoGrupo = totalPessoalGrupo > 0 ? (pEncargos / totalPessoalGrupo) * 100 : 0;
+      const pctAtivoNoTotal = totalGeral > 0 ? (pAtivo / totalGeral) * 100 : 0;
+      const pctEncargosNoTotal = totalGeral > 0 ? (pEncargos / totalGeral) * 100 : 0;
+
+      document.getElementById('pessoal-sub-total').textContent = formatarMoeda(totalPessoalGrupo);
+      document.getElementById('barra-pessoal-pct-grupo').textContent = formatarPercentual(pctAtivoNoGrupo);
+      document.getElementById('barra-encargos-pct-grupo').textContent = formatarPercentual(pctEncargosNoGrupo);
+      document.getElementById('barra-pessoal-fill').style.width = `${pctAtivoNoGrupo}%`;
+      document.getElementById('barra-encargos-fill').style.width = `${pctEncargosNoGrupo}%`;
+
+      document.getElementById('card-pessoal-valor').textContent = formatarMoeda(pAtivo);
+      document.getElementById('card-pessoal-pct-grupo').textContent = `${formatarPercentual(pctAtivoNoGrupo)} do grupo`;
+      document.getElementById('card-pessoal-pct-total').textContent = formatarPercentual(pctAtivoNoTotal);
+
+      document.getElementById('card-encargos-valor').textContent = formatarMoeda(pEncargos);
+      document.getElementById('card-encargos-pct-grupo').textContent = `${formatarPercentual(pctEncargosNoGrupo)} do grupo`;
+      document.getElementById('card-encargos-pct-total').textContent = formatarPercentual(pctEncargosNoTotal);
+
+      // Atualizar Gráficos e Tabela
+      atualizarGraficos(dados);
+      renderizarTabela();
+    }
+
+    // =========================================================================
+    // 4. GRÁFICOS INTERATIVOS (CHART.JS)
+    // =========================================================================
+    function atualizarGraficos(dados) {
+      // --- Gráfico 1: Top 10 Rubricas (Barras Horizontais) ---
+      const top10 = [...dados.itens].sort((a, b) => b.valor - a.valor).slice(0, 10);
+      const labelsTop10 = top10.map(i =>
+        i.descricao.length > 32 ? i.descricao.substring(0, 30) + '…' : i.descricao
+      );
+      const valoresTop10 = top10.map(i => i.valor);
+
+      const ctxTop10 = document.getElementById('chartTop10').getContext('2d');
+      if (chartTop10Instance) {
+        chartTop10Instance.destroy();
+      }
+
+      chartTop10Instance = new Chart(ctxTop10, {
+        type: 'bar',
+        data: {
+          labels: labelsTop10,
+          datasets: [
+            {
+              label: 'Valor Executado (R$)',
+              data: valoresTop10,
+              backgroundColor: top10.map((_, idx) =>
+                idx === 0 ? '#1e3a8a' : idx === 1 ? '#2563eb' : '#3b82f6'
+              ),
+              borderRadius: 6,
+              barThickness: 20
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              padding: 12,
+              cornerRadius: 8,
+              callbacks: {
+                title: (items) => top10[items[0].dataIndex].descricao,
+                label: (ctx) => {
+                  const val = ctx.raw;
+                  const pct = dados.total > 0 ? (val / dados.total) * 100 : 0;
+                  return ` ${formatarMoeda(val)} (${formatarPercentual(pct)})`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                color: '#64748b',
+                font: { size: 11, family: 'Inter' },
+                callback: (value) => {
+                  if (value >= 1000000) return 'R$ ' + (value / 1000000).toFixed(1).replace('.', ',') + ' Mi';
+                  if (value >= 1000) return 'R$ ' + (value / 1000).toFixed(0) + ' mil';
+                  return 'R$ ' + value;
+                }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                color: '#334155',
+                font: { size: 11, weight: '600', family: 'Inter' }
+              }
+            }
+          }
+        }
+      });
+
+      // --- Gráfico 2: Composição Macro (Doughnut) ---
+      const grupos = {
+        'Pessoal & Encargos': 0,
+        'Tecnologia da Informação': 0,
+        'Serviços & Apoio': 0,
+        'Demais Despesas': 0
+      };
+
+      dados.itens.forEach(item => {
+        const g = classificarGrupoMacro(item.descricao);
+        grupos[g] += item.valor;
+      });
+
+      const nomesGrupos = Object.keys(grupos);
+      const valoresGrupos = Object.values(grupos);
+      const coresGrupos = ['#1e3a8a', '#2563eb', '#059669', '#d97706'];
+
+      const ctxMacro = document.getElementById('chartMacro').getContext('2d');
+      if (chartMacroInstance) {
+        chartMacroInstance.destroy();
+      }
+
+      chartMacroInstance = new Chart(ctxMacro, {
+        type: 'doughnut',
+        data: {
+          labels: nomesGrupos,
+          datasets: [
+            {
+              data: valoresGrupos,
+              backgroundColor: coresGrupos,
+              borderColor: '#ffffff',
+              borderWidth: 3,
+              hoverOffset: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '66%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              padding: 12,
+              cornerRadius: 8,
+              callbacks: {
+                label: (ctx) => {
+                  const val = ctx.raw;
+                  const pct = dados.total > 0 ? (val / dados.total) * 100 : 0;
+                  return ` ${ctx.label}: ${formatarMoeda(val)} (${formatarPercentual(pct)})`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Renderizar Legenda Customizada Rica
+      const legendaContainer = document.getElementById('legenda-macro');
+      legendaContainer.innerHTML = nomesGrupos
+        .map((nome, idx) => {
+          const val = valoresGrupos[idx];
+          const pct = dados.total > 0 ? (val / dados.total) * 100 : 0;
+          return `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${coresGrupos[idx]}"></span>
+                <span class="font-medium text-slate-700 truncate">${nome}</span>
+              </div>
+              <div class="text-right tabular-nums shrink-0">
+                <span class="font-bold text-[#0f172a]">${formatarMoeda(val)}</span>
+                <span class="text-slate-400 ml-1">(${formatarPercentual(pct)})</span>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    // =========================================================================
+    // 5. TABELA ANALÍTICA: BUSCA, ORDENAÇÃO E RENDERIZAÇÃO
+    // =========================================================================
+    function alternarOrdenacao(campo) {
+      if (estado.ordenacaoCampo === campo) {
+        estado.ordenacaoDirecao = estado.ordenacaoDirecao === 'asc' ? 'desc' : 'asc';
+      } else {
+        estado.ordenacaoCampo = campo;
+        estado.ordenacaoDirecao = campo === 'valor' ? 'desc' : 'asc';
+      }
+
+      document.getElementById('sort-icon-descricao').textContent =
+        estado.ordenacaoCampo === 'descricao'
+          ? estado.ordenacaoDirecao === 'asc' ? '↑' : '↓'
+          : '↕';
+
+      document.getElementById('sort-icon-valor').textContent =
+        estado.ordenacaoCampo === 'valor'
+          ? estado.ordenacaoDirecao === 'asc' ? '↑' : '↓'
+          : '↕';
+
+      renderizarTabela();
+    }
+
+    function renderizarTabela() {
+      const dados = obterDadosRecorte(estado.cenarioAtivo);
+      const termoBusca = document.getElementById('input-busca').value.trim().toLowerCase();
+
+      // Filtragem
+      let listaFiltrada = dados.itens.filter(item =>
+        item.descricao.toLowerCase().includes(termoBusca)
+      );
+
+      // Ordenação
+      listaFiltrada.sort((a, b) => {
+        if (estado.ordenacaoCampo === 'descricao') {
+          return estado.ordenacaoDirecao === 'asc'
+            ? a.descricao.localeCompare(b.descricao, 'pt-BR')
+            : b.descricao.localeCompare(a.descricao, 'pt-BR');
+        } else {
+          return estado.ordenacaoDirecao === 'asc' ? a.valor - b.valor : b.valor - a.valor;
+        }
+      });
+
+      const tbody = document.getElementById('tabela-corpo');
+      if (listaFiltrada.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-10 text-center text-sm text-slate-500">
+              Nenhuma rubrica encontrada para "<strong>${termoBusca}</strong>".
+            </td>
+          </tr>
+        `;
+        document.getElementById('tabela-qtd-itens').textContent = '0';
+        document.getElementById('tabela-total-valor').textContent = formatarMoeda(0);
+        document.getElementById('tabela-total-pct').textContent = '0,00%';
+        return;
+      }
+
+      let somaFiltrada = 0;
+
+      tbody.innerHTML = listaFiltrada
+        .map((item, idx) => {
+          somaFiltrada += item.valor;
+          const pct = dados.total > 0 ? (item.valor / dados.total) * 100 : 0;
+          const grupo = classificarGrupoMacro(item.descricao);
+          const badgeClass = obterBadgeGrupo(grupo);
+          const larguraBarra = Math.min(100, Math.max(pct, pct > 0 ? 1.5 : 0));
+
+          return `
+            <tr class="hover:bg-slate-50/90 transition-colors">
+              <td class="py-3.5 pl-6 pr-3 text-center text-xs font-semibold text-slate-400 tabular-nums">
+                ${idx + 1}
+              </td>
+              <td class="py-3.5 px-3 font-semibold text-[#0f172a] text-xs sm:text-sm">
+                ${item.descricao}
+              </td>
+              <td class="py-3.5 px-3 hidden md:table-cell">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-medium border ${badgeClass}">
+                  ${grupo}
+                </span>
+              </td>
+              <td class="py-3.5 px-3 text-right font-bold text-[#0f172a] tabular-nums text-xs sm:text-sm">
+                ${formatarMoeda(item.valor)}
+              </td>
+              <td class="py-3.5 pl-3 pr-6 text-right">
+                <div class="flex items-center justify-end gap-2.5">
+                  <div class="w-20 h-2 bg-slate-100 rounded-full overflow-hidden hidden sm:block">
+                    <div class="h-full bg-[#2563eb] rounded-full" style="width: ${larguraBarra}%"></div>
+                  </div>
+                  <span class="text-xs font-semibold text-slate-700 tabular-nums w-14 text-right">
+                    ${formatarPercentual(pct)}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      const pctSomaFiltrada = dados.total > 0 ? (somaFiltrada / dados.total) * 100 : 0;
+      document.getElementById('tabela-qtd-itens').textContent = listaFiltrada.length;
+      document.getElementById('tabela-total-valor').textContent = formatarMoeda(somaFiltrada);
+      document.getElementById('tabela-total-pct').textContent = formatarPercentual(pctSomaFiltrada);
+    }
+
+    // =========================================================================
+    // 6. CONTROLES DE CENÁRIO, EDIÇÃO DE NOMES, EXPORTAÇÃO E IMPORTAÇÃO CSV
+    // =========================================================================
+    function selecionarCenario(chave) {
+      estado.cenarioAtivo = chave;
+      atualizarInterfaceCompleta();
+    }
+
+    function toggleEditarNomes() {
+      const painel = document.getElementById('painel-editar-nomes');
+      painel.classList.toggle('hidden');
+    }
+
+    function atualizarNomesUnidades() {
+      const n1 = document.getElementById('input-nome-1').value.trim() || 'Base 1 • Unidade Principal';
+      const n2 = document.getElementById('input-nome-2').value.trim() || 'Base 2 • Unidade Secundária';
+
+      dadosSICA.cenario1.nome = n1;
+      dadosSICA.cenario2.nome = n2;
+
+      document.getElementById('label-btn-1').textContent = n1;
+      document.getElementById('label-btn-2').textContent = n2;
+
+      atualizarInterfaceCompleta();
+    }
+
+    function exportarCSVAtual() {
+      const dados = obterDadosRecorte(estado.cenarioAtivo);
+      const linhas = ['"Item / Rubrica";"Grupo Macro";"Valor (R$)";"Representatividade (%)"'];
+
+      dados.itens.forEach(item => {
+        const pct = dados.total > 0 ? (item.valor / dados.total) * 100 : 0;
+        const grupo = classificarGrupoMacro(item.descricao);
+        const valFormatado = item.valor.toFixed(2).replace('.', ',');
+        const pctFormatado = pct.toFixed(2).replace('.', ',') + '%';
+        linhas.push(`"${item.descricao}";"${grupo}";"${valFormatado}";"${pctFormatado}"`);
+      });
+
+      const csvConteudo = '\uFEFF' + linhas.join('\n');
+      const blob = new Blob([csvConteudo], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `SICA_Despesas_${estado.cenarioAtivo}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      mostrarToast('Arquivo CSV exportado com sucesso!');
+    }
+
+    function copiarHTMLTabela() {
+      const tabela = document.querySelector('#sec-tabela table');
+      if (!tabela) return;
+
+      const areaTemp = document.createElement('textarea');
+      areaTemp.value = tabela.outerHTML;
+      document.body.appendChild(areaTemp);
+      areaTemp.select();
+      try {
+        document.execCommand('copy');
+        mostrarToast('Código HTML da tabela copiado para a área de transferência!');
+      } catch (err) {
+        mostrarToast('Não foi possível copiar o HTML.');
+      }
+      document.body.removeChild(areaTemp);
+    }
+
+    // --- Modal e Parser de Novos CSVs do SICA ---
+    function abrirModalImportacao() {
+      const modal = document.getElementById('modal-importacao');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function fecharModalImportacao() {
+      const modal = document.getElementById('modal-importacao');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function parseValorBrasileiro(str) {
+      if (!str) return NaN;
+      const limpo = str
+        .replace(/R\$/gi, '')
+        .replace(/\s+/g, '')
+        .replace(/"/g, '')
+        .trim();
+
+      // Detecta formato 1.234.567,89
+      if (limpo.includes(',')) {
+        const semMilhar = limpo.replace(/\./g, '').replace(',', '.');
+        return parseFloat(semMilhar);
+      }
+      return parseFloat(limpo);
+    }
+
+    function processarArquivosSelecionados(files) {
+      if (!files || files.length === 0) return;
+      const destino = document.getElementById('select-destino-csv').value;
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const texto = e.target.result;
+          const linhas = texto.split(/\r?\n/).filter(l => l.trim().length > 0);
+          const novosItens = [];
+
+          linhas.forEach(linha => {
+            const sep = linha.includes(';') ? ';' : ',';
+            const colunas = linha.split(sep).map(c => c.replace(/^"|"$/g, '').trim());
+            if (colunas.length >= 2) {
+              const desc = colunas[0];
+              const val = parseValorBrasileiro(colunas[1]);
+              if (
+                desc &&
+                !isNaN(val) &&
+                val > 0 &&
+                !desc.toUpperCase().includes('TOTAL') &&
+                !desc.toUpperCase().includes('ITEM') &&
+                !desc.toUpperCase().includes('DESCRI')
+              ) {
+                novosItens.push({ descricao: desc.toUpperCase(), valor: val });
+              }
+            }
+          });
+
+          if (novosItens.length > 0) {
+            const isSubRelatorioPessoal =
+              file.name.toUpperCase().includes('PESSOAL') ||
+              (novosItens.length <= 3 &&
+                novosItens.every(
+                  i => i.descricao.includes('PESSOAL') || i.descricao.includes('ENCARGOS')
+                ));
+
+            if (isSubRelatorioPessoal) {
+              let pAtivo = 0;
+              let pEnc = 0;
+              novosItens.forEach(i => {
+                if (i.descricao.includes('ENCARGOS')) pEnc += i.valor;
+                else pAtivo += i.valor;
+              });
+              dadosSICA[destino].pessoalSubRelatorio = {
+                pessoalAtivo: pAtivo,
+                encargosPatronais: pEnc
+              };
+            } else {
+              dadosSICA[destino].itens = novosItens;
+              dadosSICA[destino].referencia = `Atualizado via importação (${file.name})`;
+
+              // Sincroniza sub-relatório pessoal caso existam essas rubricas no arquivo principal
+              const itemP = novosItens.find(i => i.descricao.includes('PESSOAL ATIVO'));
+              const itemE = novosItens.find(i => i.descricao.includes('ENCARGOS PATRONAIS'));
+              if (itemP || itemE) {
+                dadosSICA[destino].pessoalSubRelatorio = {
+                  pessoalAtivo: itemP ? itemP.valor : 0,
+                  encargosPatronais: itemE ? itemE.valor : 0
+                };
+              }
+            }
+
+            selecionarCenario(destino);
+            fecharModalImportacao();
+            mostrarToast(`Arquivo "${file.name}" importado com sucesso!`);
+          } else {
+            mostrarToast(`Nenhum dado numérico válido encontrado em "${file.name}".`);
+          }
+        };
+        reader.readAsText(file, 'UTF-8');
+      });
+    }
+
+    function mostrarToast(mensagem) {
+      const toast = document.getElementById('toast-notificacao');
+      document.getElementById('toast-mensagem').textContent = mensagem;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3500);
+    }
+
+    // =========================================================================
+    // 7. INICIALIZAÇÃO AO CARREGAR A PÁGINA
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Configurar Drag & Drop no modal
+      const dropzone = document.getElementById('dropzone-csv');
+      const inputCsv = document.getElementById('input-arquivo-csv');
+
+      dropzone.addEventListener('click', () => inputCsv.click());
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-blue-600', 'bg-blue-50/70');
+      });
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('border-blue-600', 'bg-blue-50/70');
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-blue-600', 'bg-blue-50/70');
+        processarArquivosSelecionados(e.dataTransfer.files);
+      });
+
+      // Renderizar estado inicial
+      atualizarInterfaceCompleta();
+    });
+  </script>
+</body>
+</html>
