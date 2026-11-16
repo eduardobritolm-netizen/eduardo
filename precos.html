@@ -213,7 +213,7 @@ function aplicar(){
 function favoritos(){document.getElementById('lista').innerHTML=D.itens.map(it=>`<div class="li${item&&it.codigo===item.codigo?' on':''}" data-cod="${it.codigo}">${esc(it.rotulo||it.descricao.slice(0,50))}<br><small>${esc(it.codigo)} · ${it.estat?it.estat.n+' preços':'sem dados'}</small></div>`).join('')||'<div class="li"><small>Ainda sem itens — o robô preenche na próxima execução.</small></div>';
  document.querySelectorAll('#lista .li').forEach(d=>d.onclick=()=>{const it=D.itens.find(x=>x.codigo===d.dataset.cod);if(it){hintBox.innerHTML='';selItem(it)}})}
 // ---- busca ao vivo no catálogo do e-Compras + preços via proxy ----
-const PROXY='https://script.google.com/macros/s/AKfycbwlCAvr-JfbATcmYWyXdoMAzc06zANdpycZwGl4dXkD-fj8OV-mYH2YWg_KFDUw8iQQZw/exec';  // proxy Apps Script
+const PROXY='https://script.google.com/macros/s/AKfycbwpPtyYC6Iej1bB0wekF09hL71tS5d5e2-XdT7PQl7Jzj9CBV_aR2oCs7VPyMar_huP/exec';  // proxy Apps Script
 const CNBS='https://cnbs.estaleiro.serpro.gov.br/cnbs-api/item/v1/hint';
 const hintBox=document.getElementById('hint');
 let cbSeq=0;
