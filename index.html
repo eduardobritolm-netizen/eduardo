@@ -63,30 +63,39 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
  <a class="tile k3" href="processual.html"><h3>Inteligência Processual</h3><p>O Estado do Amazonas como parte no TJAM, TRT11 e TRF1</p><div class="kp" id="t1"></div></a>
  <a class="tile k3" href="ouvidoria.html"><h3>Ouvidoria</h3><p>Manifestações recebidas pela PGE no Fala.BR</p><div class="kp" id="t2"></div></a>
  <a class="tile k3" href="transparencia.html"><h3>Gestão e Transparência</h3><p>Folha de pagamento, diárias e passagens</p><div class="kp" id="t3"></div></a>
- <a class="tile k3" href="contratacoes.html"><h3>Contratações</h3><p>Contratos e licitações da PGE no PNCP</p><div class="kp" id="t4"></div></a>
+ <a class="tile k3" href="contratacoes.html"><h3>Contratações</h3><p>Contratos, convênios e licitações da PGE e do FUNDPGE</p><div class="kp" id="t4"></div></a>
  <a class="tile k3" href="despesas.html"><h3>Despesas</h3><p>Execução orçamentária — empenhado e pago</p><div class="kp" id="t5"></div></a>
+ <a class="tile k3" href="precos.html"><h3>Preços e Contratações</h3><p>Preços de mercado e Plano de Contratações Anual (PCA)</p><div class="kp" id="t6"></div></a>
+ <a class="tile k3" href="precedentes.html"><h3>Precedentes LAI</h3><p>Precedentes de acesso à informação da PGE e da CGU</p><div class="kp" id="t7"></div></a>
+ <a class="tile k3" href="api.html"><h3>Dados abertos (API)</h3><p>Todos os conjuntos em JSON e CSV, com catálogo</p><div class="kp" id="t8"></div></a>
  <div class="v k12"><h3>Situação das fontes</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Fonte</th><th>Conteúdo</th><th>Atualização</th><th class="r">Dados até</th></tr></thead><tbody id="fontes"></tbody></table></div></div>
- <div class="foot-note">Fontes: CNJ (DataJud e Grandes Litigantes), CGU (Painel Resolveu? / Fala.BR) e Portal da Transparência do Governo do Estado do Amazonas. Nenhum dado pessoal é exibido.</div>
+ <div class="foot-note">Fontes: CNJ (DataJud e Grandes Litigantes), CGU (Painel Resolveu? / Fala.BR), Portal da Transparência do Amazonas, Portal SGC e sisconv (SEFAZ-AM), PNCP e Compras.gov.br. Atualização automática diária, exceto onde indicado. Nenhum dado pessoal é exibido.</div>
 </div></div>
 <script>
 const pt=n=>n.toLocaleString('pt-BR');const fd=d=>d?d.split('-').reverse().join('/'):'—';
 const brl=v=>v>=1e6?'R$ '+(v/1e6).toFixed(1).replace('.',',')+' mi':'R$ '+pt(Math.round(v));
 const k=(id,arr)=>document.getElementById(id).innerHTML=arr.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('');
 const get=u=>fetch(u+'?v='+Date.now()).then(r=>r.json()).catch(()=>null);
-Promise.all(['data/processual.json','data/manual.json','data/ouvidoria.json','data/transparencia.json','data/contratacoes.json','data/despesas.json','data/precos.json'].map(get)).then(([P,M,O,T,K,D,PR])=>{
+const somaResumo=(o,campo)=>o&&o.resumo?Object.values(o.resumo).reduce((s,r)=>s+(r[campo]||0),0):0;
+Promise.all(['data/processual.json','data/manual.json','data/ouvidoria.json','data/transparencia.json','data/contratacoes.json','data/despesas.json','data/contratos.json','data/convenios.json','data/pca.json','data/precedentes.json','api/catalogo.json'].map(get)).then(([P,M,O,T,K,D,CT,CV,PCA,R,CAT])=>{
  if(M){const tj=M.TRIB.find(t=>t[0]==='TJAM');k('t1',[[pt(tj?tj[1]:0),'processos com o Estado como réu no TJAM'],[P?pt(P.classes.MS.total):'—','mandados de segurança na base']])}
  if(O)k('t2',[[pt(O.n),'manifestações desde 2018'],[String(O.prazo).replace('.',',')+'%','respondidas no prazo']]);
  if(T){const u=T.folha[T.folha.length-1];k('t3',[[pt(u[1]),'servidores na folha'],[brl(u[2]),'folha bruta do mês']])}
-
- if(K){const H=new Date().toISOString().slice(0,10),v=K.contratos.filter(x=>x.tipo!=='Empenho'&&x.fim>=H);k('t4',[[pt(v.length),'contratos vigentes'],[brl(v.reduce((s,x)=>s+x.valor,0)),'valor global vigente']])}
+ if(CT)k('t4',[[pt(somaResumo(CT,'vigentes')),'contratos vigentes'],[brl(somaResumo(CT,'valor_vigente')),'valor global vigente']]);
+ if(D){k('t5',[[brl(D.totais.vapago),'pago no exercício '+D.ano],[(D.totais.vaempenhado/D.totais.vaautorizado*100).toFixed(0)+'%','da dotação empenhada']])}
+ if(PCA)k('t6',[[pt(somaResumo(PCA,'itens')),'itens no PCA 2026'],[brl(somaResumo(PCA,'valor')),'planejado no exercício']]);
+ k('t7',[['LAI','busca de precedentes'],['PGE + CGU','fontes de decisões']]);
+ if(CAT)k('t8',[[pt(CAT.conjuntos.length),'conjuntos de dados'],['JSON + CSV','formatos abertos']]);
  const rows=[['CNJ — DataJud (API)','Classes processuais no TJAM','Diária, automática',P&&P.atualizado_em],
   ['CNJ — Grandes Litigantes','Estado como parte por vara e tribunal','Manual (sem API)',M&&M.atualizado_em],
   ['CGU — Painel Resolveu? / Fala.BR','Manifestações de ouvidoria da PGE','Automática quando a CGU publica',O&&O.ultima],
   ['Portal da Transparência AM (API)','Folha, diárias e passagens da PGE','Diária, automática',T&&T.atualizado_em],
-  ['PNCP (API)','Contratos e licitações da PGE e do FUNDPGE','Diária, automática',K&&K.atualizado_em],
+  ['Portal SGC (SEFAZ) + PNCP','Contratos e convênios da PGE e do FUNDPGE','Diária, automática',CT&&CT.atualizado],
+  ['sisconv (SEFAZ)','Transferências voluntárias de saída (repasse)','Diária, automática',CV&&CV.atualizado],
+  ['PNCP (API)','Licitações e processos de contratação','Diária, automática',K&&K.atualizado_em],
+  ['PNCP — Plano de Contratações','Itens planejados (PCA) da PGE e do FUNDPGE','Anual, automática',PCA&&PCA.atualizado],
   ['SEFAZ — Transparência Fiscal AM','Execução orçamentária (empenhado, liquidado, pago)','Mensal (carga manual)',D&&D.atualizado_em],
-  ['Compras.gov.br — Preços Praticados','Pesquisa de preços de mercado (Gerência de Material)','Diária, automática',PR&&PR.atualizado_em]];
- if(D){k('t5',[[brl(D.totais.vapago),'pago no exercício '+D.ano],[(D.totais.vaempenhado/D.totais.vaautorizado*100).toFixed(0)+'%','da dotação empenhada']])}
+  ['Compras.gov.br — Preços Praticados','Pesquisa de preços de mercado','Diária, automática',null]];
  document.getElementById('fontes').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="r">${fd(r[3])}</td></tr>`).join('');
 });
 </script><script>(function(){var d=document,r=d.documentElement;function esc(z){try{localStorage.setItem('pge_zoom',z)}catch(e){}}function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;esc(z)}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script></body></html>
