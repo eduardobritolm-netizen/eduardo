@@ -81,14 +81,20 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <!-- PÁGINA 2 -->
   <div class="slicers" data-pg="2" hidden>
     <div class="sl"><label>Tribunal</label><div class="fixed">TJAM</div></div>
-    <div class="sl"><label>Classe processual</label><select id="s-cls"></select></div>
+    <div class="sl" style="min-width:260px"><label for="s-grp">Grupo de classes</label><select id="s-grp"></select></div>
+    <div class="sl" style="min-width:300px"><label for="s-cls">Classe processual</label><select id="s-cls"></select></div>
   </div>
-  <div class="v card k4" data-pg="2" hidden><div class="n" id="c2-tot">—</div><div class="l">Processos na base</div></div>
-  <div class="v card k4" data-pg="2" hidden><div class="n" id="c2-25">—</div><div class="l" id="c2-25-l">Ajuizados em 2025</div></div>
-  <div class="v card acc k4" data-pg="2" hidden><div class="n" id="c2-26">—</div><div class="l">Ajuizados em 2026 (até 13/11)</div></div>
+  <div class="v card k3" data-pg="2" hidden><div class="n" id="c2-tot">—</div><div class="l">Processos na base</div></div>
+  <div class="v card k3" data-pg="2" hidden><div class="n" id="c2-25">—</div><div class="l" id="c2-25-l">Ajuizados no ano anterior</div></div>
+  <div class="v card acc k3" data-pg="2" hidden><div class="n" id="c2-26">—</div><div class="l" id="c2-26-l">Ajuizados no ano corrente</div></div>
+  <div class="v card k3" data-pg="2" hidden><div id="c2-ass" style="font-size:16px;font-weight:600;line-height:1.3;color:var(--ink);overflow-wrap:anywhere">—</div><div class="l" id="c2-ass-l">Principal assunto (causa)</div></div>
   <div class="v k8" data-pg="2" hidden><h3 id="h-ano">Ações ajuizadas por ano</h3><div id="g-ano"></div></div>
-  <div class="v k4" data-pg="2" hidden><h3>Processos por classe</h3><div id="g-cls"></div></div>
-  <div class="v k12" data-pg="2" hidden><h3>Série histórica por classe</h3><div class="legend" id="lg-lin"></div><div id="g-lin"></div></div>
+  <div class="v k4" data-pg="2" hidden><h3>Distribuição por grau</h3><div id="g-cgrau"></div></div>
+  <div class="v k6" data-pg="2" hidden><h3 id="h-ass">Principais assuntos (causas)</h3><div id="g-ass"></div></div>
+  <div class="v k6" data-pg="2" hidden><h3 id="h-org">Órgãos julgadores com mais processos</h3><div id="g-org"></div></div>
+  <div class="v k5" data-pg="2" hidden><h3 id="h-cls">Processos por classe</h3><div id="g-cls"></div></div>
+  <div class="v k7" data-pg="2" hidden><h3>Série histórica — maiores classes do grupo</h3><div class="legend" id="lg-lin"></div><div id="g-lin"></div></div>
+  <div class="v k12" data-pg="2" hidden><h3>Todas as classes do recorte</h3><div class="tbl" style="max-height:360px"><table><thead><tr><th>Classe</th><th>Grupo</th><th class="r">Processos</th><th class="r" id="th-a1">Ano anterior</th><th class="r" id="th-a2">Ano corrente</th><th class="r">Variação</th><th>Principal assunto</th></tr></thead><tbody id="t-cls"></tbody></table></div><p style="font-size:11px;color:#605E5C;margin:6px 0 0">Clique em uma linha para detalhar a classe. Variação: último ano completo contra o anterior.</p></div>
 
   <!-- PÁGINA 3 -->
   <div class="v card acc k4" data-pg="3" hidden><div class="n">1º</div><div class="l">Maior réu no TRT da 11ª Região (AM/RR)</div></div>
@@ -107,7 +113,8 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
     <table><tbody>
       <tr><td>Estado como parte</td><td>Transcrito do painel Grandes Litigantes do CNJ, filtrando TJAM por grau e por órgão julgador. Pendentes em 30/09/2026.</td></tr>
-      <tr><td>Classes processuais</td><td>API Pública do DataJud. A API não informa as partes: os totais incluem processos de outros entes e de particulares.</td></tr>
+      <tr><td>Classes processuais</td><td>API Pública do DataJud. Entram as classes com mais processos no TJAM, agrupadas por natureza; ficam de fora as criminais, de família, infância e registros. A API não informa as partes: os totais incluem processos de outros entes e de particulares.</td></tr>
+      <tr><td>Assuntos (causas)</td><td>Tabela Processual Unificada do CNJ. Um processo pode ter mais de um assunto, por isso a soma dos assuntos pode superar o total da classe. São listados os doze assuntos mais frequentes de cada classe.</td></tr>
       <tr><td>Dívida ativa</td><td>A cobrança estadual tramita na 1ª Vara Tributária e da Dívida Ativa; a Vara Especializada da Dívida Ativa é municipal.</td></tr>
       <tr><td>Órgãos de 1º grau</td><td>Listadas as oito unidades com mais processos do Estado; demais unidades de 1º grau não estão no detalhamento.</td></tr>
     </tbody></table>
@@ -134,13 +141,16 @@ const NS='http://www.w3.org/2000/svg';
 function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
 
 /* ---------- dados ---------- */
-let U,IND,LIT,TRIB,CL,YR,META={};
+let U,IND,LIT,TRIB,CL,CLX,YR,META={};
+const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function vazio(box,msg){box.innerHTML='<p style="color:#605E5C;font-size:12px;margin:18px 4px">'+msg+'</p>'}
 /* ---------- visuais genéricos ---------- */
 function hbar(box,rows,color,fmtTip){
  box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(240,W*.45),rh=24,H=rows.length*rh+20;
  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-60;
- [0,.25,.5,.75,1].forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-18,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-4,'text-anchor':'middle'},s);t.textContent=pt(Math.round(m*f))});
- rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+15,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>38?r.k.slice(0,36)+'…':r.k;
+ const mc=Math.max(8,Math.floor(lw/6.3));
+ (bw<260?[0,.5,1]:[0,.25,.5,.75,1]).forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-18,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-4,'text-anchor':'middle'},s);t.textContent=pt(Math.round(m*f))});
+ rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+15,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>mc?r.k.slice(0,mc-1)+'…':r.k;
   const b=el('rect',{x:lw,y:y+4,height:rh-8,width:Math.max(1,bw*r.v/m),fill:r.c||color},s);
   b.addEventListener('mousemove',e=>tt(e,fmtTip(r)));b.addEventListener('mouseleave',th);
   const v=el('text',{x:lw+bw*r.v/m+5,y:y+15,class:'lbl'},s);v.textContent=pt(r.v)});
@@ -160,13 +170,13 @@ function vcol(box,vals,color){
  const m=Math.max(...vals)||1,bw=(W-l)/vals.length;
  [0,.5,1].forEach(f=>{const y=H-b-(H-b-t)*f;el('line',{x1:l,x2:W,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
  vals.forEach((v,i)=>{const h=(H-b-t)*v/m,x=l+i*bw+bw*.18;const r=el('rect',{x,y:H-b-h,width:bw*.64,height:Math.max(h,0),fill:i===vals.length-1?'#9FCBF5':color},s);
-  r.addEventListener('mousemove',e=>tt(e,`<b>${YR[i]}${i===11?' (parcial)':''}</b>${pt(v)} ações`));r.addEventListener('mouseleave',th);
+  r.addEventListener('mousemove',e=>tt(e,`<b>${YR[i]}${i===vals.length-1?' (parcial)':''}</b>${pt(v)} ações`));r.addEventListener('mouseleave',th);
   const yy=el('text',{x:x+bw*.32,y:H-6,'text-anchor':'middle'},s);yy.textContent=W<500?String(YR[i]).slice(2):YR[i];
   if(W>=500){const lv=el('text',{x:x+bw*.32,y:H-b-h-4,'text-anchor':'middle',class:'lbl','font-size':10},s);lv.textContent=pt(v)}});
 }
 function lines(box,series){
  box.innerHTML='';const W=box.clientWidth||900,H=230,b=22,l=48,t=10;const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
- const m=Math.max(...series.flatMap(x=>x.v)),sx=i=>l+(W-l-10)*i/11,sy=v=>H-b-(H-b-t)*v/m;
+ const m=Math.max(...series.flatMap(x=>x.v)),sx=i=>l+(W-l-10)*i/Math.max(1,YR.length-1),sy=v=>H-b-(H-b-t)*v/m;
  [0,.25,.5,.75,1].forEach(f=>{const y=sy(m*f);el('line',{x1:l,x2:W-10,y1:y,y2:y,stroke:'#EDEBE9'},s);const tx=el('text',{x:l-6,y:y+4,'text-anchor':'end'},s);tx.textContent=pt(Math.round(m*f))});
  YR.forEach((y,i)=>{const tx=el('text',{x:sx(i),y:H-5,'text-anchor':'middle'},s);tx.textContent=W<600?String(y).slice(2):y});
  series.forEach(se=>{el('path',{d:se.v.map((v,i)=>(i?'L':'M')+sx(i)+' '+sy(v)).join(''),fill:'none',stroke:se.c,'stroke-width':2},s);
@@ -188,15 +198,44 @@ function p1(){
  hbar(document.getElementById('g-ind'),IND.map(r=>({k:r[0],v:r[1]})),C[2],r=>`<b>${r.k}</b>${pt(r.v)} processos como réu`);
 }
 /* ---------- página 2 ---------- */
-const sc=document.getElementById('s-cls');
+const sc=document.getElementById('s-cls'),sg=document.getElementById('s-grp');
+const SEM='Detalhamento disponível após a próxima atualização automática dos dados.';
+const grp=k=>CLX[k].grupo||'Classes acompanhadas';
+const doGrupo=()=>Object.keys(CL).filter(k=>!sg.value||grp(k)===sg.value).sort((a,b)=>CL[b][1]-CL[a][1]);
+function fillCls(){const ks=doGrupo(),at=sc.value;
+ sc.innerHTML=ks.map(k=>`<option value="${k}">${esc(CL[k][0])}</option>`).join('');
+ sc.value=ks.includes(at)?at:ks[0]}
 function p2(){
- const d=CL[sc.value];document.getElementById('c2-tot').textContent=pt(d[1]);document.getElementById('c2-25').textContent=pt(d[2][10]);document.getElementById('c2-26').textContent=pt(d[2][11]);
- const vr=d[2][9]?((d[2][10]-d[2][9])/d[2][9]*100):null;document.getElementById('c2-25-l').textContent='Ajuizados em 2025'+(vr==null?'':` · ${vr>=0?'▲':'▼'} ${Math.abs(vr).toFixed(0)}% vs 2024`);
+ const k=sc.value,d=CL[k],x=CLX[k],n=YR.length,an=d[2]||[],pc=v=>(v/(d[1]||1)*100).toFixed(1).replace('.',',')+'%';
+ document.getElementById('c2-tot').textContent=pt(d[1]);
+ document.getElementById('c2-25').textContent=an.length?pt(an[n-2]):'—';document.getElementById('c2-26').textContent=an.length?pt(an[n-1]):'—';
+ const vr=an[n-3]?((an[n-2]-an[n-3])/an[n-3]*100):null;
+ document.getElementById('c2-25-l').textContent=`Ajuizados em ${YR[n-2]}`+(vr==null?'':` · ${vr>=0?'▲':'▼'} ${Math.abs(vr).toFixed(0)}% vs ${YR[n-3]}`);
+ document.getElementById('c2-26-l').textContent=`Ajuizados em ${YR[n-1]} (até ${META.ate})`;
+ const A=x.assuntos||[];
+ document.getElementById('c2-ass').textContent=A.length?A[0][1]:'—';
+ document.getElementById('c2-ass-l').textContent=A.length?`Principal assunto (causa) · ${pc(A[0][2])} da classe`:'Principal assunto (causa)';
  document.getElementById('h-ano').textContent=`Ações ajuizadas por ano — ${d[0]}`;
- vcol(document.getElementById('g-ano'),d[2],C[0]);
- hbar(document.getElementById('g-cls'),Object.values(CL).map((x,i)=>({k:x[0],v:x[1],c:x[0]===d[0]?C[0]:'#C8C6C4'})).sort((a,b)=>b.v-a.v),C[0],r=>`<b>${r.k}</b>${pt(r.v)} processos`);
- const ser=Object.values(CL).filter(x=>x[2]).map((x,i)=>({k:x[0],v:x[2],c:C[i]}));
- document.getElementById('lg-lin').innerHTML=ser.map(x=>`<span><i style="background:${x.c}"></i>${x.k}</span>`).join('');lines(document.getElementById('g-lin'),ser);
+ an.length?vcol(document.getElementById('g-ano'),an,C[0]):vazio(document.getElementById('g-ano'),SEM);
+ const G=Object.entries(x.graus||{}).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v);
+ G.length?donut(document.getElementById('g-cgrau'),G):vazio(document.getElementById('g-cgrau'),SEM);
+ document.getElementById('h-ass').textContent=`Principais assuntos (causas) — ${d[0]}`;
+ A.length?hbar(document.getElementById('g-ass'),A.map(r=>({k:r[1],v:r[2],cod:r[0]})),C[2],r=>`<b>${esc(r.k)}</b>${pt(r.v)} processos · ${pc(r.v)} da classe<br>Código TPU ${r.cod}`):vazio(document.getElementById('g-ass'),SEM);
+ const O=x.orgaos||[];
+ document.getElementById('h-org').textContent=`Órgãos julgadores com mais processos — ${d[0]}`;
+ O.length?hbar(document.getElementById('g-org'),O.map(r=>({k:r[0],v:r[1]})),C[1],r=>`<b>${esc(r.k)}</b>${pt(r.v)} processos · ${pc(r.v)} da classe`):vazio(document.getElementById('g-org'),SEM);
+ const ks=doGrupo();
+ document.getElementById('h-cls').textContent='Processos por classe — '+(sg.value||'todos os grupos')+(ks.length>12?' (12 maiores)':'');
+ hbar(document.getElementById('g-cls'),ks.slice(0,12).map(q=>({k:CL[q][0],v:CL[q][1],c:q===k?C[0]:'#C8C6C4'})),C[0],r=>`<b>${esc(r.k)}</b>${pt(r.v)} processos`);
+ let top=ks.filter(q=>CL[q][2]).slice(0,5);if(d[2]&&!top.includes(k))top=[...top.slice(0,4),k];
+ const ser=top.map((q,i)=>({k:CL[q][0],v:CL[q][2],c:C[i]}));
+ document.getElementById('lg-lin').innerHTML=ser.map(z=>`<span><i style="background:${z.c}"></i>${esc(z.k)}</span>`).join('');
+ ser.length?lines(document.getElementById('g-lin'),ser):vazio(document.getElementById('g-lin'),SEM);
+ document.getElementById('th-a1').textContent=YR[n-2];document.getElementById('th-a2').textContent=YR[n-1];
+ const tb=document.getElementById('t-cls');
+ tb.innerHTML=ks.map(q=>{const c=CL[q],y=c[2]||[],v=y[n-3]?((y[n-2]-y[n-3])/y[n-3]*100):null,a=(CLX[q].assuntos||[])[0];
+  return `<tr data-k="${q}" tabindex="0" style="cursor:pointer${q===k?';font-weight:600':''}"><td>${esc(c[0])}</td><td>${esc(grp(q))}</td><td class="r">${pt(c[1])}</td><td class="r">${y.length?pt(y[n-2]):'—'}</td><td class="r">${y.length?pt(y[n-1]):'—'}</td><td class="r">${v==null?'—':(v>=0?'▲ ':'▼ ')+Math.abs(v).toFixed(0)+'%'}</td><td>${a?esc(a[1]):'—'}</td></tr>`}).join('');
+ tb.querySelectorAll('tr').forEach(tr=>{const f=()=>{sc.value=tr.dataset.k;p2()};tr.onclick=f;tr.onkeydown=e=>{if(e.key==='Enter')f()}});
 }
 /* ---------- página 3 ---------- */
 function fillLit(){document.getElementById('t-lit').innerHTML=LIT.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="r">${pt(r[3])}</td><td class="r">${r[4]}</td></tr>`).join('');}
@@ -210,12 +249,14 @@ function p3(){hbar(document.getElementById('g-trib'),TRIB.map((t,i)=>({k:t[0],v:
 function draw(){if(cur==='1')p1();if(cur==='2')p2();if(cur==='3')p3()}
 document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 ['s-ind','s-grau','s-cls'].forEach(id=>document.getElementById(id).onchange=draw);
+sg.onchange=()=>{fillCls();draw()};
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
 Promise.all(['data/processual.json','data/manual.json'].map(u=>fetch(u+'?v='+Date.now()).then(r=>r.json()))).then(([P,M])=>{
  U=M.U;IND=M.IND;LIT=M.LIT;TRIB=M.TRIB;YR=P.anos_ref;
  CL=Object.fromEntries(Object.entries(P.classes).map(([k,v])=>[k,[v.nome,v.total,v.anos]]));
- sc.innerHTML=Object.entries(CL).filter(([,d])=>d[2]).map(([k,d])=>`<option value="${k}">${d[0]}</option>`).join('');
- const fd=d=>d.split('-').reverse().join('/');
+ CLX=P.classes;const gs=[...new Set(Object.keys(CL).map(grp))].sort((a,b)=>a.localeCompare(b,'pt'));
+ sg.innerHTML='<option value="">Todos os grupos</option>'+gs.map(g=>`<option>${esc(g)}</option>`).join('');fillCls();
+ const fd=d=>d.split('-').reverse().join('/');META.ate=fd(P.atualizado_em).slice(0,5);
  document.querySelector('.ban .r').innerHTML=`Fonte: CNJ — DataJud (atualizado em ${fd(P.atualizado_em)}) e Grandes Litigantes (pendentes em ${fd(M.atualizado_em)})`;
  fillLit();go('1');
 }).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});

@@ -35,6 +35,12 @@ def main():
         reg('processual-classes', 'Processos por classe e ano – TJAM', 'Ações ajuizadas no TJAM por classe processual (mandado de segurança, ação civil pública, juizado da Fazenda etc.).',
             'CNJ – API Pública do DataJud', P['atualizado_em'], ['processual-classes.json', 'processual-classes.csv'],
             {'classe': 'código interno da classe', 'nome': 'nome da classe (TPU/CNJ)', 'ano': 'ano de ajuizamento', 'processos_ajuizados': 'quantidade'})
+        la = [[k, c['nome'], c.get('grupo', ''), a[0], a[1], a[2]] for k, c in P['classes'].items() for a in c.get('assuntos') or []]
+        if la:
+            csv_out('processual-assuntos.csv', ['classe', 'nome', 'grupo', 'assunto_codigo', 'assunto', 'processos'], la)
+            reg('processual-assuntos', 'Assuntos mais frequentes por classe – TJAM', 'Os doze assuntos (causas) mais frequentes de cada classe processual acompanhada no TJAM. Um processo pode ter mais de um assunto.',
+                'CNJ – API Pública do DataJud', P['atualizado_em'], ['processual-assuntos.csv'],
+                {'classe': 'código interno da classe', 'nome': 'nome da classe', 'grupo': 'grupo de classes do painel', 'assunto_codigo': 'código do assunto (TPU/CNJ)', 'assunto': 'nome do assunto', 'processos': 'quantidade'})
     if M:
         shutil.copy(os.path.join(DADOS, 'manual.json'), os.path.join(API, 'estado-parte.json'))
         csv_out('estado-parte-orgaos.csv', ['orgao_julgador', 'grau', 'estado_reu', 'estado_autor'], M['U'])
