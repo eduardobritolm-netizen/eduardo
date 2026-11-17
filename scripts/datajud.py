@@ -94,9 +94,9 @@ def aggs_anos(anos):
         'gte': a * 10**10, 'lt': (a + 1) * 10**10}}} for a in anos}}}}
 
 
-def aggs_detalhe():
+def aggs_detalhe(anos):
     return {
-        'graus': {'filters': {'filters': {g: {'match': {'grau': g}} for g in GRAUS}}},
+        'graus': {'filters': {'filters': {g: {'match': {'grau': g}} for g in GRAUS}}, 'aggs': aggs_anos(anos)},
         'assuntos': {'terms': {'field': 'assuntos.codigo', 'size': 12},
                      'aggs': {'n': {'top_hits': {'size': 1, '_source': ['assuntos']}}}},
         'orgaos': {'terms': {'field': 'orgaoJulgador.codigo', 'size': 8},
@@ -131,10 +131,12 @@ def titulo(nome):
     return t
 
 
-def detalhar(ag):
+def detalhar(ag, anos):
     d = {}
     if 'graus' in ag:
         d['graus'] = {GRAUS[g]: b['doc_count'] for g, b in ag['graus']['buckets'].items() if b['doc_count']}
+        d['graus_anos'] = {GRAUS[g]: [b['anos']['buckets'][str(a)]['doc_count'] for a in anos]
+                           for g, b in ag['graus']['buckets'].items() if b['doc_count'] and 'anos' in b}
     if 'assuntos' in ag:
         d['assuntos'] = [[int(b['key']), nome_assunto(b) or f'Assunto {b["key"]}', b['doc_count']]
                          for b in ag['assuntos']['buckets']]
@@ -179,7 +181,8 @@ def main():
 
     # 2) detalhe de cada classe — primeiro as nunca coletadas, depois as mais antigas (rodízio)
     ordem = {a[0]: i for i, a in enumerate(alvo)}
-    fila = sorted(alvo, key=lambda a: (velho.get(a[0], {}).get('coletado_em', ''), ordem[a[0]]))
+    completa = lambda c: c.get('coletado_em', '') if c.get('graus_anos') else ''  # sem série por grau = refazer
+    fila = sorted(alvo, key=lambda a: (completa(velho.get(a[0], {})), ordem[a[0]]))
     feitas, falhas_det, inicio = {}, 0, time.time()
     for chave, nome, codigo, nome_tpu in fila:
         if time.time() - inicio > ORCAMENTO:
@@ -190,7 +193,7 @@ def main():
         j = None
         if falhas_det < 3:
             try:
-                j = consultar({**q, 'aggs': {**aggs_anos(anos), **aggs_detalhe()}})
+                j = consultar({**q, 'aggs': {**aggs_anos(anos), **aggs_detalhe(anos)}})
                 falhas_det = 0
             except Exception as e:
                 falhas_det += 1
@@ -207,8 +210,8 @@ def main():
              'total': j['hits']['total']['value'], 'anos': [b[str(a)]['doc_count'] for a in anos]}
         if nome_tpu:
             c['nome_tpu'] = nome_tpu
-        det = detalhar(ag)
-        for k in ('graus', 'assuntos', 'orgaos'):  # se o detalhe não veio hoje, guarda o último
+        det = detalhar(ag, anos)
+        for k in ('graus', 'graus_anos', 'assuntos', 'orgaos'):  # se o detalhe não veio hoje, guarda o último
             if det.get(k):
                 c[k] = det[k]
             elif velho.get(chave, {}).get(k):
