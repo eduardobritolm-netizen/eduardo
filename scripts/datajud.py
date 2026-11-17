@@ -24,8 +24,9 @@ CLASSES = {
 }
 ANO_INICIAL = 2015
 DESCOBRIR = 80      # quantas classes (por volume) pedir à API antes de filtrar
-MAX_CLASSES = 45    # teto de classes detalhadas por execução
-PAUSA = 3           # segundos entre consultas (a API pública limita requisições)
+MAX_CLASSES = 36    # teto de classes acompanhadas
+PAUSA = 5           # segundos entre consultas (a API pública limita requisições)
+ORCAMENTO = 14 * 60  # segundos por execução; o que não couber fica para a próxima (rodízio)
 GRAUS = {'G1': '1º Grau', 'JE': 'Juizado Especial', 'G2': '2º Grau', 'TR': 'Turma Recursal'}
 
 # Classes sem relação com a atuação da Fazenda Pública (criminal, família, infância etc.)
@@ -34,7 +35,9 @@ FORA = ('penal', 'crimin', 'crime', 'inquerito', 'flagrante', 'habeas corpus', '
         'execucao da pena', 'alimentos', 'divorcio', 'guarda', 'inventario', 'arrolamento',
         'interdicao', 'curatela', 'adocao', 'familia', 'paternidade', 'uniao estavel',
         'carta precatoria', 'carta de ordem', 'alienacao fiduciaria', 'despejo', 'alvara',
-        'retificacao', 'registro civil', 'falencia', 'recuperacao judicial', 'insolvencia')
+        'retificacao', 'registro civil', 'falencia', 'recuperacao judicial', 'insolvencia',
+        'prisao', 'apreendid', 'busca e apreensao', 'medidas alternativas', 'infancia', 'juventude',
+        'transacao extrajudicial', 'pre-processual', 'habilitacao de credito', 'pedido de providencias')
 # (grupo, termos) — a primeira regra que casar define o grupo; a ordem importa.
 GRUPOS = [
     ('Mandamentais e constitucionais', ('mandado de seguranca', 'habeas data', 'mandado de injuncao', 'acao popular')),
@@ -174,25 +177,29 @@ def main():
             if ch not in CLASSES and c.get('codigo'):
                 alvo.append((ch, c['nome'], c['codigo'], c.get('nome_tpu')))
 
-    # 2) detalhe de cada classe
-    classes, com_detalhe = {}, True
-    for chave, nome, codigo, nome_tpu in alvo:
+    # 2) detalhe de cada classe — primeiro as nunca coletadas, depois as mais antigas (rodízio)
+    ordem = {a[0]: i for i, a in enumerate(alvo)}
+    fila = sorted(alvo, key=lambda a: (velho.get(a[0], {}).get('coletado_em', ''), ordem[a[0]]))
+    feitas, falhas_det, inicio = {}, 0, time.time()
+    for chave, nome, codigo, nome_tpu in fila:
+        if time.time() - inicio > ORCAMENTO:
+            print('DataJud: tempo da execução esgotado — as demais classes ficam para a próxima')
+            break
         print('DataJud:', nome)
         q = {'size': 0, 'track_total_hits': True, 'query': {'match': {'classe.codigo': codigo}}}
         j = None
-        if com_detalhe:
+        if falhas_det < 3:
             try:
                 j = consultar({**q, 'aggs': {**aggs_anos(anos), **aggs_detalhe()}})
+                falhas_det = 0
             except Exception as e:
-                print('  consulta detalhada falhou — seguindo só com a série anual:', e)
-                com_detalhe = False
+                falhas_det += 1
+                print('  consulta detalhada falhou — nesta classe, só a série anual:', e)
         if j is None:
             try:
                 j = consultar({**q, 'aggs': aggs_anos(anos)})
             except Exception as e:
                 print('  falhou; mantendo o dado anterior:', e)
-                if chave in velho:
-                    classes[chave] = velho[chave]
                 continue
         ag = j['aggregations']
         b = ag['anos']['buckets']
@@ -206,8 +213,19 @@ def main():
                 c[k] = det[k]
             elif velho.get(chave, {}).get(k):
                 c[k] = velho[chave][k]
-        classes[chave] = c
+        if det.get('assuntos'):  # só conta como coletada quando o detalhe veio; senão volta à frente da fila
+            c['coletado_em'] = hoje()
+        feitas[chave] = c
         time.sleep(PAUSA)
+
+    # mantém a ordem da lista; o que não foi consultado hoje fica com o dado anterior
+    classes = {}
+    for chave, nome, codigo, nome_tpu in alvo:
+        c = feitas.get(chave) or velho.get(chave)
+        if c:
+            c.setdefault('codigo', codigo)
+            c['grupo'] = grupo_de(nome_tpu or nome) or OUTRAS
+            classes[chave] = c
 
     if not classes:
         raise RuntimeError('DataJud: nenhuma classe coletada')

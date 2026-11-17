@@ -8,7 +8,7 @@ permissions:
 jobs:
   atualizar:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,8 +23,10 @@ jobs:
           FALABR_USUARIO: ${{ secrets.FALABR_USUARIO }}
           FALABR_SENHA: ${{ secrets.FALABR_SENHA }}
           OUVIDORIA_URLS: ${{ vars.OUVIDORIA_URLS }}
+        timeout-minutes: 50
         run: cd scripts && python -u atualizar.py
       - name: Publicar se houver mudança
+        if: always()   # publica o que foi coletado mesmo se a coleta for interrompida
         run: |
           git config user.name  "robo-painel"
           git config user.email "robo-painel@users.noreply.github.com"
