@@ -50,14 +50,105 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 .leg i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 .exbar{height:10px;background:#EDEBE9;border-radius:5px;overflow:hidden;margin-top:6px}
 .exbar>i{display:block;height:100%;background:#118DFF}
+
+/* ===== Abas (padrão de precos.html) ===== */
+.abas{grid-column:1/-1;display:flex;gap:6px;border-bottom:1px solid #C8C6C4;margin-top:4px;flex-wrap:wrap}
+.abas button{all:unset;cursor:pointer;padding:9px 18px;font-size:13px;color:var(--mut);border:1px solid transparent;border-bottom:3px solid transparent;border-radius:4px 4px 0 0}
+.abas button[aria-selected=true]{color:var(--ink);font-weight:600;border-bottom-color:#F2C811;background:#fff}
+.abas button:hover{color:var(--ink)}
+.abas button:focus-visible{outline:3px solid #F2C811;outline-offset:-3px}
+.sub{display:contents}
+
+/* ===== Painel executivo ===== */
+.exbtns{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:2px 0}
+.exbtns .lab{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--mut);margin-right:4px}
+.exbtns button{all:unset;cursor:pointer;font-size:12px;font-weight:600;color:var(--mut);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;line-height:1.2}
+.exbtns button[aria-pressed=true]{color:#fff;background:#14273F;border-color:#14273F}
+.exbtns button:focus-visible{outline:3px solid #F2C811;outline-offset:2px}
+.kpirow{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.kcard{border:1px solid var(--line);background:#fff;border-top:3px solid #2563eb;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;min-height:98px}
+.kcard:nth-of-type(5n+1){border-top-color:#2563eb}
+.kcard:nth-of-type(5n+2){border-top-color:#12239E}
+.kcard:nth-of-type(5n+3){border-top-color:#0f766e}
+.kcard:nth-of-type(5n+4){border-top-color:#118DFF}
+.kcard:nth-of-type(5n+5){border-top-color:#d6ad52}
+.kcard .t{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--mut);margin-bottom:6px;line-height:1.3}
+.kcard .n{font-size:26px;font-weight:700;letter-spacing:-.02em;color:#10243b;font-variant-numeric:tabular-nums;line-height:1.1}
+.kcard .u{font-size:11px;color:var(--mut);margin-top:5px;line-height:1.35}
+.kcard .u b{color:#0f766e;font-weight:700}
+.kcard .u b.alt{color:#C4314B}
+.exnote{font-size:10.5px;color:var(--mut);margin-top:6px;font-style:italic}
+.gwrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dleg{margin-top:6px;font-size:11.5px}
+.dleg .row{display:flex;align-items:center;gap:7px;padding:3px 0;border-bottom:1px solid #F3F2F1}
+.dleg .row:last-child{border-bottom:0}
+.dleg i{width:10px;height:10px;border-radius:2px;flex:0 0 auto}
+.dleg .k{flex:1;color:var(--ink)}
+.dleg .val{font-variant-numeric:tabular-nums;color:var(--mut);font-weight:600}
 </style><link rel="stylesheet" href="assets/redesign.css"></head><body>
 <a class="skip" href="#conteudo">Ir para o conteúdo</a><div class="a11y" role="toolbar" aria-label="Ferramentas de acessibilidade"><span>Acessibilidade</span><button type="button" data-a="menos" aria-label="Diminuir o tamanho da fonte">A-</button><button type="button" data-a="normal" aria-label="Tamanho normal da fonte">A</button><button type="button" data-a="mais" aria-label="Aumentar o tamanho da fonte">A+</button><button type="button" data-a="contraste" aria-pressed="false">Alto contraste</button></div><header class="topnav"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="PGE-AM" class="logo"><span>Painel de Dados</span></a><nav>
 <a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precos.html" data-n="precos">Pesquisa de preços</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
-<style>.skip{position:absolute;left:-999px;top:0;background:#14273F;color:#fff;padding:8px 14px;z-index:100}.skip:focus{left:8px}.a11y{background:#0E1B2E;display:flex;gap:6px;align-items:center;justify-content:flex-end;padding:3px 14px;font-family:'Segoe UI',system-ui,sans-serif}.a11y span{color:#9FB2C8;font-size:11px;margin-right:auto}.a11y button{background:#20344F;color:#fff;border:1px solid #33496A;border-radius:3px;font:inherit;font-size:12px;padding:3px 9px;cursor:pointer;line-height:1.3}.a11y button:hover{background:#2C456A}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #F2C811;outline-offset:2px}body.contraste{background:#000}body.contraste .canvas,body.contraste .page{background:#000}body.contraste .v,body.contraste .tile,body.contraste .ban{background:#000!important;border:1px solid #fff!important;color:#fff!important}body.contraste .t,body.contraste .u,body.contraste .s,body.contraste .n,body.contraste h1,body.contraste h3,body.contraste p,body.contraste td,body.contraste th,body.contraste .foot-note,body.contraste .desc,body.contraste label,body.contraste .meta{color:#fff!important}body.contraste table,body.contraste th,body.contraste td{border-color:#fff!important}body.contraste th{background:#000!important}body.contraste a{color:#FFE24B!important}body.contraste .proto{background:#000!important;border-color:#FFE24B!important;color:#fff!important}body.contraste .sel,body.contraste .inp,body.contraste select,body.contraste input{background:#000!important;color:#fff!important;border-color:#fff!important}body.contraste .badge{background:#000!important;color:#fff!important;border:1px solid #fff}.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}.topnav .brand{display:flex;align-items:center;gap:10px}.topnav .brand .logo{height:30px;background:#fff;padding:5px 8px;border-radius:5px;display:block}.topnav .brand span{color:#fff;font-weight:600;font-size:14px}</style>
+<style>.skip{position:absolute;left:-999px;top:0;background:#14273F;color:#fff;padding:8px 14px;z-index:100}.skip:focus{left:8px}.a11y{background:#0E1B2E;display:flex;gap:6px;align-items:center;justify-content:flex-end;padding:3px 14px;font-family:'Segoe UI',system-ui,sans-serif}.a11y span{color:#9FB2C8;font-size:11px;margin-right:auto}.a11y button{background:#20344F;color:#fff;border:1px solid #33496A;border-radius:3px;font:inherit;font-size:12px;padding:3px 9px;cursor:pointer;line-height:1.3}.a11y button:hover{background:#2C456A}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #F2C811;outline-offset:2px}body.contraste{background:#000}body.contraste .canvas,body.contraste .page{background:#000}body.contraste .v,body.contraste .tile,body.contraste .ban,body.contraste .kcard{background:#000!important;border:1px solid #fff!important;color:#fff!important}body.contraste .t,body.contraste .u,body.contraste .s,body.contraste .n,body.contraste h1,body.contraste h3,body.contraste p,body.contraste td,body.contraste th,body.contraste .foot-note,body.contraste .desc,body.contraste label,body.contraste .meta,body.contraste .kcard .n,body.contraste .kcard .t,body.contraste .kcard .u,body.contraste .dleg .k,body.contraste .dleg .val{color:#fff!important}body.contraste .kcard .u b{color:#7CFFB2!important}body.contraste table,body.contraste th,body.contraste td{border-color:#fff!important}body.contraste th{background:#000!important}body.contraste a{color:#FFE24B!important}body.contraste .proto{background:#000!important;border-color:#FFE24B!important;color:#fff!important}body.contraste .sel,body.contraste .inp,body.contraste select,body.contraste input{background:#000!important;color:#fff!important;border-color:#fff!important}body.contraste .badge{background:#000!important;color:#fff!important;border:1px solid #fff}body.contraste .abas button[aria-selected=true]{background:#000!important;color:#fff!important}body.contraste .exbtns button[aria-pressed=true]{background:#fff!important;color:#000!important;border-color:#fff!important}.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}.topnav .brand{display:flex;align-items:center;gap:10px}.topnav .brand .logo{height:30px;background:#fff;padding:5px 8px;border-radius:5px;display:block}.topnav .brand span{color:#fff;font-weight:600;font-size:14px}</style>
 <script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
 <div id="tip" class="tip"></div>
 <div id="conteudo" role="main" class="canvas"><div class="page">
  <div class="ban"><div><h1>Despesas da PGE e do FUNDPGE</h1><div class="s">Execução orçamentária — empenhado, liquidado e pago</div></div><div class="r" id="gen"></div></div>
+
+ <div class="abas" role="tablist" aria-label="Seções do painel de despesas">
+  <button role="tab" id="tab-exec" aria-controls="aba-exec" aria-selected="true">Visão executiva</button>
+  <button role="tab" id="tab-detalhe" aria-controls="aba-detalhe" aria-selected="false">Despesas detalhadas</button>
+ </div>
+
+ <!-- ================= ABA: VISÃO EXECUTIVA ================= -->
+ <div id="aba-exec" class="sub" role="tabpanel" aria-labelledby="tab-exec">
+
+  <div class="exbtns" role="group" aria-label="Unidade orçamentária">
+   <span class="lab">Unidade</span>
+   <button type="button" data-ug="CONS" aria-pressed="true">Consolidado</button>
+   <button type="button" data-ug="PGE" aria-pressed="false">PGE · 011103</button>
+   <button type="button" data-ug="FUNDPGE" aria-pressed="false">FUNDPGE · 011706</button>
+  </div>
+
+  <div class="kpirow" aria-label="Indicadores de execução">
+   <div class="kcard"><div class="t">Dotação autorizada</div><div class="n" id="eAut">—</div><div class="u" id="eAutU"></div></div>
+   <div class="kcard"><div class="t">Empenhado</div><div class="n" id="eEmp">—</div><div class="u" id="eEmpU"></div></div>
+   <div class="kcard"><div class="t">Liquidado</div><div class="n" id="eLiq">—</div><div class="u" id="eLiqU"></div></div>
+   <div class="kcard"><div class="t">Pago</div><div class="n" id="ePag">—</div><div class="u" id="ePagU"></div></div>
+   <div class="kcard"><div class="t">Saldo a empenhar</div><div class="n" id="eSal">—</div><div class="u" id="eSalU"></div></div>
+  </div>
+
+  <div class="v k5"><div class="t">Execução financeira (pago / dotação autorizada)</div>
+   <div class="gwrap" id="eGauge"></div>
+   <div class="exnote" id="eGaugeNota"></div></div>
+
+  <div class="v k7"><div class="t">Execução mês a mês <span id="eSerieUG" style="font-weight:400;color:var(--mut)"></span></div>
+   <div class="leg"><span><i style="background:#12239E"></i>Empenhado</span><span><i style="background:#118DFF"></i>Pago</span></div>
+   <div id="eSerie"></div>
+   <div class="exnote">Valores consolidados PGE + FUNDPGE — a fonte não detalha a série mensal por unidade.</div></div>
+
+  <div class="v k7"><div class="t">Top elementos de despesa (pago)</div>
+   <div id="eElem"></div>
+   <div class="exnote">Maiores rubricas por elemento de despesa — valores consolidados.</div></div>
+
+  <div class="v k5"><div class="t">Composição macro das despesas (pago)</div>
+   <div id="eGrupo"></div>
+   <div class="dleg" id="eGrupoLeg"></div></div>
+
+  <div class="v k7"><div class="t">Por programa de governo (pago)</div><div id="eProg"></div></div>
+  <div class="v k5"><div class="t">Por função (pago)</div><div id="eFunc"></div>
+   <div class="exnote" id="eFuncNota"></div></div>
+
+  <div class="v k12"><div class="t">Execução por unidade gestora</div>
+   <div class="tbl" style="max-height:none"><table><thead><tr>
+     <th>Unidade gestora</th><th class="r">Dotação inicial</th><th class="r">Autorizado</th>
+     <th class="r">Empenhado</th><th class="r">Liquidado</th><th class="r">Pago</th><th class="r">% pago/aut.</th>
+   </tr></thead><tbody id="eTab"></tbody><tfoot id="eTabFoot"></tfoot></table></div></div>
+
+  <div class="foot-note">Painel executivo montado exclusivamente a partir de <b>data/despesas.json</b> (Dados Abertos de Execução Orçamentária da SEFAZ-AM). Distingue sempre empenhado, liquidado e pago. UGs: PGE (011103) e FUNDPGE (011706). Licença CC BY-NC 4.0.</div>
+ </div>
+
+ <!-- ================= ABA: DESPESAS DETALHADAS ================= -->
+ <div id="aba-detalhe" class="sub" role="tabpanel" aria-labelledby="tab-detalhe" hidden>
 
  <div class="v k2"><div class="t">Dotação autorizada</div><div class="n" id="kAut">—</div><div class="u" id="uAut"></div></div>
  <div class="v k2"><div class="t">Empenhado</div><div class="n" id="kEmp">—</div><div class="u" id="uEmp"></div></div>
@@ -76,6 +167,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
  <div class="v k12"><div class="t">Por programa de governo (pago)</div><div id="cProg"></div></div>
 
  <div class="foot-note">Fonte: <b>Portal da Transparência Fiscal do Amazonas (SEFAZ)</b> — arquivo de Execução Orçamentária. Licença CC BY-NC 4.0. Valores de pagamentos incluem restos a pagar quando informados pela fonte.</div>
+ </div>
 </div></div>
 <script>
 
@@ -90,6 +182,8 @@ const brl=v=>v>=1e6?'R$ '+(v/1e6).toFixed(2).replace('.',',')+' mi':v>=1e3?'R$ '
 const brlf=v=>'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fd=d=>d?d.split('-').reverse().join('/'):'—';
+const pctv=(a,b)=>b?(a/b*100):0;
+const pf=v=>v.toFixed(1).replace('.',',')+'%';
 function hbar(box,rows,color){
  box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(260,W*.5),rh=26,H=rows.length*rh+22;
  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-80;
@@ -110,22 +204,109 @@ function barras(box,serie){
   const tx=el('text',{x:x+gw*.5,y:H-20,'text-anchor':'middle'},s);tx.textContent=r[1];
   const tx2=el('text',{x:x+gw*.5,y:H-8,'text-anchor':'middle','font-size':9,fill:'#A19F9D'},s);tx2.textContent=r[0].slice(5)});
 }
+/* rosca / doughnut */
+function donut(box,rows){
+ box.innerHTML='';const W=box.clientWidth||360,H=210,R=78,cx=W/2,cy=H/2+4;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const T=rows.reduce((a,r)=>a+r.v,0)||1;let a0=-Math.PI/2;
+ rows.forEach((r,i)=>{const a1=a0+2*Math.PI*r.v/T;const L=a1-a0>Math.PI?1:0;
+  const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];const[x0,y0]=p(a0,R),[x1,y1]=p(a1,R),[x2,y2]=p(a1,R*.58),[x3,y3]=p(a0,R*.58);
+  const pa=el('path',{d:`M${x0} ${y0}A${R} ${R} 0 ${L} 1 ${x1} ${y1}L${x2} ${y2}A${R*.58} ${R*.58} 0 ${L} 0 ${x3} ${y3}Z`,fill:r.c||C[i],stroke:'#fff','stroke-width':1.5},s);
+  pa.addEventListener('mousemove',e=>tt(e,`<b>${esc(r.k)}</b>${brlf(r.v)} · ${pf(r.v/T*100)}`));pa.addEventListener('mouseleave',th);a0=a1});
+ const tc=el('text',{x:cx,y:cy-2,'text-anchor':'middle',class:'lbl','font-size':16,'font-weight':700},s);tc.textContent=brl(T);
+ const tc2=el('text',{x:cx,y:cy+14,'text-anchor':'middle','font-size':10},s);tc2.textContent='total pago';
+}
+/* medidor semicircular */
+function gauge(box,pct){
+ box.innerHTML='';const W=Math.min(box.clientWidth||300,320),H=176,cx=W/2,cy=H-18,R=W*.4;
+ const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`Execução ${pf(pct)}`},box);
+ const p=(a,rr)=>[cx+rr*Math.cos(a),cy-rr*Math.sin(a)];
+ const arc=(a0,a1,col,w)=>{const[x0,y0]=p(a0,R),[x1,y1]=p(a1,R);el('path',{d:`M${x0} ${y0}A${R} ${R} 0 0 1 ${x1} ${y1}`,fill:'none',stroke:col,'stroke-width':w,'stroke-linecap':'round'},s)};
+ arc(Math.PI,0,'#EDEBE9',16);
+ const frac=Math.max(0,Math.min(1,pct/100));const ang=Math.PI-Math.PI*frac;
+ const col=pct>=90?'#107C41':pct>=70?'#118DFF':'#E66C37';
+ arc(Math.PI,ang,col,16);
+ const tc=el('text',{x:cx,y:cy-8,'text-anchor':'middle','font-size':30,'font-weight':700,fill:'#10243b'},s);tc.textContent=pf(pct);
+ const l0=el('text',{x:cx-R,y:cy+16,'text-anchor':'middle','font-size':10},s);l0.textContent='0%';
+ const l1=el('text',{x:cx+R,y:cy+16,'text-anchor':'middle','font-size':10},s);l1.textContent='100%';
+}
 
-fetch('data/despesas.json?v='+Date.now()).then(r=>r.json()).then(D=>{
- document.getElementById('gen').innerHTML='Referência: '+D.referencia+'<br>Atualizado em '+fd(D.atualizado_em);
- const T=D.totais;
+let D=null,UG='CONS';
+const UGNOME={CONS:'PGE + FUNDPGE (consolidado)',PGE:'PGE · 011103',FUNDPGE:'FUNDPGE · 011706'};
+function dados(ug){return ug==='CONS'?D.totais:D.por_ug[ug]}
+
+function buildExec(){
+ if(!D)return;const T=dados(UG);
+ const saldo=T.vaautorizado-T.vaempenhado;
+ document.getElementById('eAut').textContent=brl(T.vaautorizado);
+ document.getElementById('eAutU').textContent='Dotação inicial: '+brl(T.vadotacaoinicial);
+ document.getElementById('eEmp').textContent=brl(T.vaempenhado);
+ document.getElementById('eEmpU').innerHTML='<b>'+pf(pctv(T.vaempenhado,T.vaautorizado))+'</b> da dotação autorizada';
+ document.getElementById('eLiq').textContent=brl(T.valiquidado);
+ document.getElementById('eLiqU').innerHTML='<b>'+pf(pctv(T.valiquidado,T.vaempenhado))+'</b> do empenhado';
+ document.getElementById('ePag').textContent=brl(T.vapago);
+ document.getElementById('ePagU').innerHTML='<b>'+pf(pctv(T.vapago,T.vaempenhado))+'</b> do empenhado';
+ document.getElementById('eSal').textContent=brl(saldo);
+ document.getElementById('eSalU').innerHTML='Autorizado − empenhado · <b class="'+(saldo<0?'alt':'')+'">'+pf(pctv(saldo,T.vaautorizado))+'</b> da dotação';
+ const pExec=pctv(T.vapago,T.vaautorizado);
+ gauge(document.getElementById('eGauge'),pExec);
+ document.getElementById('eGaugeNota').textContent=UGNOME[UG]+' — pago '+brl(T.vapago)+' de '+brl(T.vaautorizado)+' autorizados.';
+ // série mensal (consolidado)
+ barras(document.getElementById('eSerie'),D.serie_mensal);
+ // top elementos (consolidado)
+ hbar(document.getElementById('eElem'),D.por_elemento.map(r=>({k:r[0],v:r[1]})),'#118DFF');
+ // composição macro por grupo (consolidado)
+ const grp=D.por_grupo.map((r,i)=>({k:r[0],v:r[1],c:C[i]}));
+ donut(document.getElementById('eGrupo'),grp);
+ const Tg=grp.reduce((a,r)=>a+r.v,0)||1;
+ document.getElementById('eGrupoLeg').innerHTML=grp.map(r=>`<div class="row"><i style="background:${r.c}"></i><span class="k">${esc(r.k)}</span><span class="val">${brl(r.v)} · ${pf(r.v/Tg*100)}</span></div>`).join('');
+ // programa e função (consolidado)
+ hbar(document.getElementById('eProg'),D.por_programa.map(r=>({k:r[0],v:r[1]})),'#E66C37');
+ hbar(document.getElementById('eFunc'),D.por_funcao.map(r=>({k:r[0],v:r[1]})),'#6B007B');
+ document.getElementById('eFuncNota').textContent=D.por_funcao.length<2?'A despesa paga concentra-se em uma única função de governo.':'';
+ // tabela por unidade (sempre consolidado + unidades)
+ const UGS=[['PGE','PGE · 011103'],['FUNDPGE','FUNDPGE · 011706']];
+ let som={vadotacaoinicial:0,vaautorizado:0,vaempenhado:0,valiquidado:0,vapago:0};
+ const rowHtml=(nome,o)=>`<tr><td>${esc(nome)}</td><td class="r">${brlf(o.vadotacaoinicial)}</td><td class="r">${brlf(o.vaautorizado)}</td><td class="r">${brlf(o.vaempenhado)}</td><td class="r">${brlf(o.valiquidado)}</td><td class="r">${brlf(o.vapago)}</td><td class="r">${pf(pctv(o.vapago,o.vaautorizado))}</td></tr>`;
+ document.getElementById('eTab').innerHTML=UGS.map(([k,nome])=>{const o=D.por_ug[k];if(o)for(const f in som)som[f]+=o[f]||0;return o?rowHtml(nome,o):''}).join('');
+ document.getElementById('eTabFoot').innerHTML=rowHtml('Consolidado',D.totais);
+}
+
+function buildDetalhe(){
+ if(!D)return;const T=D.totais;
  document.getElementById('kAut').textContent=brl(T.vaautorizado);
  document.getElementById('uAut').textContent='Dotação inicial: '+brl(T.vadotacaoinicial);
  document.getElementById('kEmp').textContent=brl(T.vaempenhado);
- document.getElementById('uEmp').textContent=(T.vaempenhado/T.vaautorizado*100).toFixed(1).replace('.',',')+'% da dotação';
+ document.getElementById('uEmp').textContent=pf(pctv(T.vaempenhado,T.vaautorizado))+' da dotação';
  document.getElementById('kLiq').textContent=brl(T.valiquidado);
  document.getElementById('kPag').textContent=brl(T.vapago);
- document.getElementById('uPag').textContent=(T.vapago/T.vaempenhado*100).toFixed(1).replace('.',',')+'% do empenhado';
+ document.getElementById('uPag').textContent=pf(pctv(T.vapago,T.vaempenhado))+' do empenhado';
  barras(document.getElementById('cSerie'),D.serie_mensal);
  const ug=Object.entries(D.por_ug).map((e,i)=>({k:e[0],v:e[1].vapago,c:C[i]}));
  hbar(document.getElementById('cUG'),ug);
  hbar(document.getElementById('cElem'),D.por_elemento.map(r=>({k:r[0],v:r[1]})),'#118DFF');
  hbar(document.getElementById('cFonte'),D.por_fonte.map(r=>({k:r[0],v:r[1]})),'#12239E');
  hbar(document.getElementById('cProg'),D.por_programa.map(r=>({k:r[0],v:r[1]})),'#E66C37');
+}
+
+/* ===== Abas ===== */
+const abas=[['tab-exec','aba-exec'],['tab-detalhe','aba-detalhe']];
+function mostrarAba(tabId){
+ abas.forEach(([t,a])=>{const sel=t===tabId;document.getElementById(t).setAttribute('aria-selected',sel?'true':'false');document.getElementById(a).hidden=!sel});
+ // redesenhar com a largura correta ao exibir
+ if(tabId==='tab-exec')buildExec();else buildDetalhe();
+}
+abas.forEach(([t])=>document.getElementById(t).onclick=()=>mostrarAba(t));
+/* seletor de unidade */
+document.querySelectorAll('.exbtns button').forEach(b=>b.onclick=()=>{
+ UG=b.dataset.ug;document.querySelectorAll('.exbtns button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));buildExec();
+});
+/* redesenhar ao redimensionar */
+let rsz;addEventListener('resize',()=>{clearTimeout(rsz);rsz=setTimeout(()=>{if(!document.getElementById('aba-exec').hidden)buildExec();else buildDetalhe()},180)});
+
+fetch('data/despesas.json?v='+Date.now()).then(r=>r.json()).then(j=>{
+ D=j;
+ document.getElementById('gen').innerHTML='Referência: '+D.referencia+'<br>Atualizado em '+fd(D.atualizado_em);
+ buildExec();
+ buildDetalhe();
 });
 </script><script>(function(){var d=document,r=d.documentElement;function esc(z){try{localStorage.setItem('pge_zoom',z)}catch(e){}}function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;esc(z)}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script></body></html>

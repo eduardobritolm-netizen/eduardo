@@ -98,9 +98,9 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
     <table><tbody>
       <tr><td>Fonte</td><td>API pública de consulta do PNCP (Lei 14.133/2021). O Decreto estadual 47.133/2023 integra o Portal e-Compras.AM ao PNCP. Unidades: PGE-AM (CNPJ 19.477.848/0001-34) e Fundo Especial da PGE — FUNDPGE (CNPJ 14.877.478/0001-09).</td></tr>
       <tr><td>Contratos</td><td>Contratos, termos e arrendamentos publicados no PNCP. Empenhos que substituem contrato são contados à parte. Fornecedores pessoa física aparecem só como "Pessoa física".</td></tr>
-      <tr><td>Limitação</td><td>Contratações anteriores à Lei 14.133 ou não publicadas no PNCP não aparecem. Pagamentos (execução financeira) ficam no sistema da SEFAZ, que não oferece API aberta.</td></tr>
+      <tr><td>Limitação</td><td>Contratações anteriores à Lei 14.133 ou não publicadas no PNCP não aparecem. A execução financeira (empenhado, liquidado e pago) não vem daqui: ela é mostrada na página <b>Despesas</b>, a partir dos Dados Abertos de Execução Orçamentária da SEFAZ-AM (UGs 011103 e 011706).</td></tr>
       <tr><td>Convênios e acordos</td><td>Convênios, acordos de cooperação e termos em que a PGE/FUNDPGE é parte, extraídos do mesmo registro do Portal SGC que alimenta os contratos (coleta automática diária). As transferências voluntárias de saída com repasse vêm do sistema sisconv (Transferências Voluntárias de Saída), coletadas por órgão e ano.</td></tr>
-      <tr><td>Atualização</td><td>Coleta automática diária.</td></tr>
+      <tr><td>Atualização</td><td>Coleta automática diária (GitHub Actions). Se uma fonte estiver indisponível, o último dado coletado é preservado.</td></tr>
     </tbody></table>
   </div>
   <div class="foot-note">Dados abertos do Portal Nacional de Contratações Públicas. Agregação: Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
