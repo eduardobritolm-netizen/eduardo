@@ -51,6 +51,12 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 @media (max-width:520px){.k3{grid-column:span 12}.canvas{padding:6px}}
 
 .kpi-sub{font-size:11px;margin-top:3px}
+.ban-dia{margin:0 0 14px;padding:10px 14px;border:1px solid #d7e3f4;background:#f3f8ff;border-radius:10px}
+.ban-dia .tag{display:inline-block;font-size:11px;font-weight:600;color:#0b5cab;background:#e1edfd;padding:2px 8px;border-radius:999px;margin-bottom:8px}
+.ban-dia .dia-cards{display:flex;flex-wrap:wrap;gap:18px}
+.ban-dia .dc{min-width:120px}
+.ban-dia .dc b{display:block;font-size:22px;line-height:1.1;color:#0b2540}
+.ban-dia .dc span{font-size:11px;color:#55657a}
 .up{color:#107C10}.dn{color:#D13438}
 </style>
 <link rel="stylesheet" href="assets/redesign.css"></head>
@@ -64,6 +70,16 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="ban">
     <div><h1>Ouvidoria e Acesso à Informação — PGE-AM</h1><div class="s">Procuradoria Geral do Estado do Amazonas · Coordenadoria de Transparência e Ouvidoria</div></div>
     <div class="r">Fonte: CGU — Painel Resolveu? / Fala.BR (manifestações de ouvidoria)<br>Registros de 12/05/2018 a 29/09/2026</div>
+  </div>
+
+  <div class="ban-dia" id="ban-dia" data-pg="1" hidden style="display:none">
+    <span class="tag" id="d-tag">Atualizado diariamente · API Fala.BR</span>
+    <div class="dia-cards">
+      <div class="dc"><b id="d-total">—</b><span id="d-total-l">Manifestações no período</span></div>
+      <div class="dc"><b id="d-resp">—</b><span>Respondidas / concluídas</span></div>
+      <div class="dc"><b id="d-tm">—</b><span>Tempo médio de resposta</span></div>
+      <div class="dc"><b id="d-ult">—</b><span>Última manifestação registrada</span></div>
+    </div>
   </div>
 
   <!-- PÁGINA 1 -->
@@ -242,6 +258,17 @@ fetch('data/ouvidoria.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;anos=D
  const fd=d=>d.split('-').reverse().join('/');
  document.querySelector('.ban .r').innerHTML=`Fonte: CGU — Painel Resolveu? / Fala.BR<br>Registros de ${fd(D.primeira)} a ${fd(D.ultima)}`;
  go('1');}).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
+fetch('data/ouvidoria_diario.json?v='+Date.now()).then(r=>r.ok?r.json():Promise.reject()).then(x=>{
+ if(!x||!x.total)return;const fd=d=>d.split('-').reverse().join('/');const bd=document.getElementById('ban-dia');
+ document.getElementById('d-total').textContent=pt(x.total);
+ const pct=x.total?Math.round(x.respondidas/x.total*100):0;
+ document.getElementById('d-resp').textContent=pt(x.respondidas)+' ('+pct+'%)';
+ document.getElementById('d-tm').textContent=x.tempo_medio!=null?String(x.tempo_medio).replace('.',',')+' dias':'—';
+ document.getElementById('d-ult').textContent=fd(x.ultima);
+ document.getElementById('d-total-l').textContent='Manifestações (últimos '+x.janela_dias+' dias)';
+ document.getElementById('d-tag').textContent='Atualizado em '+fd(x.atualizado)+' · API Fala.BR (D-1)';
+ bd.style.display='';bd.hidden=(cur!=='1');
+}).catch(()=>{});
 </script>
 <script>(function(){var d=document,r=d.documentElement;function esc(z){try{localStorage.setItem('pge_zoom',z)}catch(e){}}function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;esc(z)}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script></body>
 </html>
