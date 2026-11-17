@@ -1,0 +1,217 @@
+﻿classe;nome;grupo;assunto_codigo;assunto;processos
+MS;Mandado de Segurança;Mandamentais e constitucionais;9196;Liminar ;3271
+MS;Mandado de Segurança;Mandamentais e constitucionais;10334;Promoção;2855
+MS;Mandado de Segurança;Mandamentais e constitucionais;7780;Indenização por Dano Material;2840
+MS;Mandado de Segurança;Mandamentais e constitucionais;4703;Defeito, nulidade ou anulação;1165
+MS;Mandado de Segurança;Mandamentais e constitucionais;10236;Promoção / Ascensão;952
+MS;Mandado de Segurança;Mandamentais e constitucionais;10381;Classificação e/ou Preterição;914
+MS;Mandado de Segurança;Mandamentais e constitucionais;10556;Exclusão - ICMS;853
+MS;Mandado de Segurança;Mandamentais e constitucionais;10387;Habilitação / Registro Cadastral / Julgamento / Homologação;708
+MS;Mandado de Segurança;Mandamentais e constitucionais;10379;Anulação e Correção de Provas / Questões;645
+MS;Mandado de Segurança;Mandamentais e constitucionais;9047;Efeitos;585
+MS;Mandado de Segurança;Mandamentais e constitucionais;10671;Obrigação de Fazer / Não Fazer;530
+MS;Mandado de Segurança;Mandamentais e constitucionais;10199;Promoção;431
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10223;Enquadramento;4643
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10334;Promoção;3814
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10671;Obrigação de Fazer / Não Fazer;2490
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;7698;Perdas e Danos;2285
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10300;Data Base;2115
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10299;Plano de Classificação de Cargos;1335
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10305;Gratificações de Atividade;1301
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;4842;Reajuste de Prestações;1108
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10410;Contrato Temporário de Mão de Obra L 8.745/1993;1083
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;4840;Equivalência salarial;1075
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10312;Piso Salarial;928
+JEFazPub;Juizado Especial da Fazenda Pública;Conhecimento — procedimento comum e juizados;10662;Abono de Permanência;736
+ACP;Ação Civil Pública;Coletivas e improbidade;10671;Obrigação de Fazer / Não Fazer;721
+ACP;Ação Civil Pública;Coletivas e improbidade;10438;Dano Ambiental;608
+ACP;Ação Civil Pública;Coletivas e improbidade;9196;Liminar ;313
+ACP;Ação Civil Pública;Coletivas e improbidade;7780;Indenização por Dano Material;311
+ACP;Ação Civil Pública;Coletivas e improbidade;10396;Ambiental;300
+ACP;Ação Civil Pública;Coletivas e improbidade;10012;Dano ao Erário;196
+ACP;Ação Civil Pública;Coletivas e improbidade;9994;Indenização por Dano Ambiental;139
+ACP;Ação Civil Pública;Coletivas e improbidade;10113;Flora;135
+ACP;Ação Civil Pública;Coletivas e improbidade;11864;Irregularidade no atendimento;115
+ACP;Ação Civil Pública;Coletivas e improbidade;11811;Práticas Abusivas;105
+ACP;Ação Civil Pública;Coletivas e improbidade;7698;Perdas e Danos;98
+ACP;Ação Civil Pública;Coletivas e improbidade;10109;Ordenação da Cidade / Plano Diretor;98
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10012;Dano ao Erário;521
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10014;Violação dos Princípios Administrativos;267
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10464;Administração;158
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10013;Enriquecimento ilícito;136
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;7780;Indenização por Dano Material;87
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;9196;Liminar ;87
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;7698;Perdas e Danos;86
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10671;Obrigação de Fazer / Não Fazer;67
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10939;Intimação / Notificação;38
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;8875;Ministério Público;35
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;7715;Enriquecimento sem Causa;31
+Improbidade;Improbidade Administrativa;Coletivas e improbidade;10011;Improbidade Administrativa;29
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;7780;Indenização por Dano Material;65
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10014;Violação dos Princípios Administrativos;37
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;4703;Defeito, nulidade ou anulação;33
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;9196;Liminar ;27
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10009;Inquérito / Processo / Recurso Administrativo;26
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10671;Obrigação de Fazer / Não Fazer;23
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;11811;Práticas Abusivas;16
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10012;Dano ao Erário;15
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10010;Ato Lesivo ao Patrimônio Artístico, Estético, Histórico ou Turístico;14
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;12416;Tutela de Urgência;8
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;7698;Perdas e Danos;6
+AcaoPopular;Ação Popular;Mandamentais e constitucionais;10894;Abuso de Poder;6
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;9196;Liminar ;51
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10334;Promoção;17
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10556;Exclusão - ICMS;16
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;7780;Indenização por Dano Material;13
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;4703;Defeito, nulidade ou anulação;12
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10894;Abuso de Poder;11
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;9047;Efeitos;6
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10379;Anulação e Correção de Provas / Questões;6
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10014;Violação dos Princípios Administrativos;5
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10299;Plano de Classificação de Cargos;5
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10388;Edital;5
+MSColetivo;Mandado de Segurança Coletivo;Mandamentais e constitucionais;10671;Obrigação de Fazer / Não Fazer;5
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;6226;Inclusão Indevida em Cadastro de Inadimplentes;19
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;7780;Indenização por Dano Material;8
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;10671;Obrigação de Fazer / Não Fazer;6
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;14169;Inscrição em Cadastro Restritivo de Crédito;5
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;7775;Serviços Hospitalares;4
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;9196;Liminar ;4
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;11811;Práticas Abusivas;4
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;7760;Fornecimento de Energia Elétrica;3
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;10438;Dano Ambiental;3
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;12612;COVID-19;3
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;7698;Perdas e Danos;2
+ACColetiva;Ação Civil Coletiva;Coletivas e improbidade;7779;Indenização por Dano Moral;2
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;7698;Perdas e Danos;150175
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;6226;Inclusão Indevida em Cadastro de Inadimplentes;118255
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;7780;Indenização por Dano Material;116585
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;11811;Práticas Abusivas;85836
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;11974;Cláusulas Abusivas;67794
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;11807;Tarifas;67282
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;10671;Obrigação de Fazer / Não Fazer;45514
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;7768;Rescisão do contrato e devolução do dinheiro;28990
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;7760;Fornecimento de Energia Elétrica;25691
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;7779;Indenização por Dano Moral;24611
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;14925;Repetição do Indébito;22432
+c436;Procedimento do Juizado Especial Cível;Conhecimento — procedimento comum e juizados;4703;Defeito, nulidade ou anulação;21981
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;7780;Indenização por Dano Material;64052
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;7698;Perdas e Danos;38005
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;11811;Práticas Abusivas;34222
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;4703;Defeito, nulidade ou anulação;29871
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;10671;Obrigação de Fazer / Não Fazer;23659
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;9607;Contratos Bancários;22360
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;7768;Rescisão do contrato e devolução do dinheiro;20542
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;6177;Concessão;19310
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;11974;Cláusulas Abusivas;18158
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;7772;Cartão de Crédito;18042
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;7703;Pagamento;15619
+c7;Procedimento Comum Cível;Conhecimento — procedimento comum e juizados;6007;Repetição de indébito;12415
+c460;Recurso Inominado Cível;Recursos;7780;Indenização por Dano Material;281965
+c460;Recurso Inominado Cível;Recursos;11811;Práticas Abusivas;47916
+c460;Recurso Inominado Cível;Recursos;7698;Perdas e Danos;45924
+c460;Recurso Inominado Cível;Recursos;6226;Inclusão Indevida em Cadastro de Inadimplentes;26718
+c460;Recurso Inominado Cível;Recursos;11974;Cláusulas Abusivas;24996
+c460;Recurso Inominado Cível;Recursos;11807;Tarifas;23503
+c460;Recurso Inominado Cível;Recursos;11865;Vendas casadas;11180
+c460;Recurso Inominado Cível;Recursos;14925;Repetição do Indébito;10677
+c460;Recurso Inominado Cível;Recursos;6007;Repetição de indébito;9963
+c460;Recurso Inominado Cível;Recursos;7621;Seguro;9888
+c460;Recurso Inominado Cível;Recursos;7779;Indenização por Dano Moral;9585
+c460;Recurso Inominado Cível;Recursos;10671;Obrigação de Fazer / Não Fazer;9169
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;6017;Dívida Ativa (Execução Fiscal);371387
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;9414;Extinção da Execução;66939
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10540;Competência Tributária;2673
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10559;"Cálculo de ICMS &quot;por dentro&quot;";2158
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;5952;IPTU/ Imposto Predial e Territorial Urbano;2129
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10023;Multas e demais Sanções;1179
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;7703;Pagamento;1125
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;7698;Perdas e Danos;936
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;14070;Fazenda Pública;280
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10938;Citação;271
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10671;Obrigação de Fazer / Não Fazer;173
+c1116;Execução Fiscal;Execução fiscal e dívida ativa;10395;Multas e demais Sanções;159
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;7698;Perdas e Danos;56522
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;7780;Indenização por Dano Material;46082
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;11811;Práticas Abusivas;27650
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;11807;Tarifas;23294
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;10671;Obrigação de Fazer / Não Fazer;18407
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;7768;Rescisão do contrato e devolução do dinheiro;17311
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;7703;Pagamento;16489
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;11974;Cláusulas Abusivas;15688
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;6226;Inclusão Indevida em Cadastro de Inadimplentes;15467
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;4703;Defeito, nulidade ou anulação;13023
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;7760;Fornecimento de Energia Elétrica;12425
+c156;Cumprimento de sentença;Cumprimento, precatórios e execução;4830;Cancelamento de vôo;9814
+c198;Apelação Cível;Recursos;7780;Indenização por Dano Material;22216
+c198;Apelação Cível;Recursos;7698;Perdas e Danos;17433
+c198;Apelação Cível;Recursos;4703;Defeito, nulidade ou anulação;14728
+c198;Apelação Cível;Recursos;9607;Contratos Bancários;11730
+c198;Apelação Cível;Recursos;7772;Cartão de Crédito;11336
+c198;Apelação Cível;Recursos;11811;Práticas Abusivas;10160
+c198;Apelação Cível;Recursos;6007;Repetição de indébito;10153
+c198;Apelação Cível;Recursos;10671;Obrigação de Fazer / Não Fazer;9839
+c198;Apelação Cível;Recursos;7768;Rescisão do contrato e devolução do dinheiro;8326
+c198;Apelação Cível;Recursos;9047;Efeitos;7597
+c198;Apelação Cível;Recursos;9582;Alienação Fiduciária;6648
+c198;Apelação Cível;Recursos;10666;Regularidade Formal;6164
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;9414;Extinção da Execução;29898
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;4960;Cédula de Crédito Bancário;13758
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;4980;Nota Promissória;12005
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;4972;Duplicata;8753
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;9607;Contratos Bancários;7260
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;10467;Despesas Condominiais;6090
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;10671;Obrigação de Fazer / Não Fazer;4538
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;9596;Prestação de Serviços;4482
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;7703;Pagamento;3683
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;7698;Perdas e Danos;2944
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;9582;Alienação Fiduciária;2695
+c12154;Execução de Título Extrajudicial;Cumprimento, precatórios e execução;9587;Compra e Venda;2504
+c1689;Embargos de Declaração Cível;Recursos;7780;Indenização por Dano Material;22303
+c1689;Embargos de Declaração Cível;Recursos;9047;Efeitos;10816
+c1689;Embargos de Declaração Cível;Recursos;4703;Defeito, nulidade ou anulação;2586
+c1689;Embargos de Declaração Cível;Recursos;7698;Perdas e Danos;2503
+c1689;Embargos de Declaração Cível;Recursos;10671;Obrigação de Fazer / Não Fazer;2356
+c1689;Embargos de Declaração Cível;Recursos;9607;Contratos Bancários;1556
+c1689;Embargos de Declaração Cível;Recursos;7768;Rescisão do contrato e devolução do dinheiro;1457
+c1689;Embargos de Declaração Cível;Recursos;7772;Cartão de Crédito;1375
+c1689;Embargos de Declaração Cível;Recursos;6007;Repetição de indébito;1221
+c1689;Embargos de Declaração Cível;Recursos;11811;Práticas Abusivas;1195
+c1689;Embargos de Declaração Cível;Recursos;10666;Regularidade Formal;1175
+c1689;Embargos de Declaração Cível;Recursos;9196;Liminar ;1130
+c202;Agravo de Instrumento;Recursos;4703;Defeito, nulidade ou anulação;3907
+c202;Agravo de Instrumento;Recursos;8843;Assistência Judiciária Gratuita;3575
+c202;Agravo de Instrumento;Recursos;9607;Contratos Bancários;3472
+c202;Agravo de Instrumento;Recursos;9047;Efeitos;3199
+c202;Agravo de Instrumento;Recursos;9196;Liminar ;2883
+c202;Agravo de Instrumento;Recursos;10671;Obrigação de Fazer / Não Fazer;2382
+c202;Agravo de Instrumento;Recursos;9518;Efeito Suspensivo / Impugnação / Embargos à Execução;2188
+c202;Agravo de Instrumento;Recursos;7780;Indenização por Dano Material;2100
+c202;Agravo de Instrumento;Recursos;12416;Tutela de Urgência;1644
+c202;Agravo de Instrumento;Recursos;7698;Perdas e Danos;1639
+c202;Agravo de Instrumento;Recursos;11974;Cláusulas Abusivas;1542
+c202;Agravo de Instrumento;Recursos;11811;Práticas Abusivas;1229
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10300;Data Base;3617
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10671;Obrigação de Fazer / Não Fazer;3300
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;7698;Perdas e Danos;2629
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10497;Subsídios;2544
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;7703;Pagamento;2001
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;4840;Equivalência salarial;1739
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;4842;Reajuste de Prestações;1371
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10223;Enquadramento;1322
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10312;Piso Salarial;1151
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10334;Promoção;1117
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;6103;Salário-Maternidade (Art. 71/73);1101
+c12078;Cumprimento de Sentença contra a Fazenda Pública;Cumprimento, precatórios e execução;10305;Gratificações de Atividade;980
+c1208;Agravo Interno Cível;Recursos;9047;Efeitos;3357
+c1208;Agravo Interno Cível;Recursos;7780;Indenização por Dano Material;2835
+c1208;Agravo Interno Cível;Recursos;7772;Cartão de Crédito;2762
+c1208;Agravo Interno Cível;Recursos;4703;Defeito, nulidade ou anulação;2197
+c1208;Agravo Interno Cível;Recursos;9607;Contratos Bancários;1658
+c1208;Agravo Interno Cível;Recursos;7698;Perdas e Danos;1179
+c1208;Agravo Interno Cível;Recursos;11811;Práticas Abusivas;1064
+c1208;Agravo Interno Cível;Recursos;10671;Obrigação de Fazer / Não Fazer;1061
+c1208;Agravo Interno Cível;Recursos;7768;Rescisão do contrato e devolução do dinheiro;999
+c1208;Agravo Interno Cível;Recursos;6007;Repetição de indébito;852
+c1208;Agravo Interno Cível;Recursos;9196;Liminar ;827
+c1208;Agravo Interno Cível;Recursos;11974;Cláusulas Abusivas;606

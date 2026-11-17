@@ -1,6 +1,6 @@
 {
  "titulo": "API de Dados Abertos da Procuradoria Geral do Estado do Amazonas",
- "gerado_em": "2026-11-16",
+ "gerado_em": "2026-11-17",
  "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
  "conjuntos": [
   {
@@ -8,7 +8,7 @@
    "titulo": "Processos por classe e ano – TJAM",
    "descricao": "Ações ajuizadas no TJAM por classe processual (mandado de segurança, ação civil pública, juizado da Fazenda etc.).",
    "fonte": "CNJ – API Pública do DataJud",
-   "atualizado_em": "2026-11-13",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "diária (quando a fonte publica)",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -27,6 +27,30 @@
     "nome": "nome da classe (TPU/CNJ)",
     "ano": "ano de ajuizamento",
     "processos_ajuizados": "quantidade"
+   }
+  },
+  {
+   "identificador": "processual-assuntos",
+   "titulo": "Assuntos mais frequentes por classe – TJAM",
+   "descricao": "Os doze assuntos (causas) mais frequentes de cada classe processual acompanhada no TJAM. Um processo pode ter mais de um assunto.",
+   "fonte": "CNJ – API Pública do DataJud",
+   "atualizado_em": "2026-11-17",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/processual-assuntos.csv"
+    }
+   ],
+   "campos": {
+    "classe": "código interno da classe",
+    "nome": "nome da classe",
+    "grupo": "grupo de classes do painel",
+    "assunto_codigo": "código do assunto (TPU/CNJ)",
+    "assunto": "nome do assunto",
+    "processos": "quantidade"
    }
   },
   {
@@ -116,7 +140,7 @@
    "titulo": "Contratos e licitações da PGE-AM e do FUNDPGE",
    "descricao": "Contratos, processos de contratação e empenhos publicados no PNCP (Lei 14.133/2021).",
    "fonte": "PNCP – Portal Nacional de Contratações Públicas",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "diária (quando a fonte publica)",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -146,7 +170,7 @@
    "titulo": "Precedentes em recursos da Lei de Acesso à Informação",
    "descricao": "Decisões recursais da PGE-AM e, como referência, decisões da CGU (3ª instância) e da CMRI (4ª instância) do Executivo federal.",
    "fonte": "PGE-AM e CGU – Busca de Precedentes (dados abertos)",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "diária (quando a fonte publica)",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -204,7 +228,7 @@
    "titulo": "Pesquisa de preços de mercado (itens da Gerência de Material)",
    "descricao": "Preços praticados em compras públicas para os itens acompanhados pela PGE, com estatística da IN 65/2021 (menor, mediana saneada e preço de referência).",
    "fonte": "Compras.gov.br — Preços Praticados (dados abertos, SEGES/MGI)",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "diária",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -230,7 +254,7 @@
    "titulo": "Contratos e convênios — PGE e FUNDPGE (Portal SGC)",
    "descricao": "Contratos, convênios, acordos e demais termos da PGE-AM e do FUNDPGE, com fornecedor, vigência, valor e situação (vigente/encerrado).",
    "fonte": "Portal SGC — Sistema de Gestão de Contratos (SEFAZ-AM)",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "mensal",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -254,7 +278,7 @@
    "titulo": "Transferências voluntárias de saída (convênios) — PGE e FUNDPGE",
    "descricao": "Convênios e contratos de gestão em que a PGE-AM/FUNDPGE é concedente, com convenente, objeto, vigência e valor de repasse.",
    "fonte": "sisconv — Transferências Voluntárias de Saída (SEFAZ-AM)",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "diária",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
@@ -279,7 +303,7 @@
    "titulo": "Plano de Contratações Anual (PCA) — PGE e FUNDPGE",
    "descricao": "Itens planejados no PCA da PGE-AM e do Fundo Especial (FUNDPGE), com código CATMAT/CATSER, unidade, quantidade e valor unitário estimado.",
    "fonte": "PNCP — Portal Nacional de Contratações Públicas (Lei 14.133/2021)",
-   "atualizado_em": "2026-11-16",
+   "atualizado_em": "2026-11-17",
    "periodicidade": "anual",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",

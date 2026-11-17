@@ -30,6 +30,14 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /processual-assuntos.csv:
+    get:
+      summary: "Assuntos mais frequentes por classe – TJAM (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
   /estado-parte.json:
     get:
       summary: "Estado do Amazonas como parte – por órgão julgador e tribunal (JSON)"
