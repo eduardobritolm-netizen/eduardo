@@ -48,6 +48,13 @@ def main():
         reg('ouvidoria', 'Manifestações de ouvidoria da PGE-AM', 'Manifestações recebidas pela PGE no Fala.BR, agregadas por ano, tipo, assunto e prazo de resposta. Sem dados pessoais.',
             'CGU – Painel Resolveu? / Fala.BR', O.get('ultima', ''), ['ouvidoria.json', 'ouvidoria-anos.csv'],
             {'ano': 'ano de registro', 'manifestacoes': 'quantidade', 'mediana_dias_resposta': 'mediana de dias até a resposta', 'pct_no_prazo': '% respondidas até a data-limite'})
+    OD = ler('ouvidoria_diario.json')
+    if OD:
+        shutil.copy(os.path.join(DADOS, 'ouvidoria_diario.json'), os.path.join(API, 'ouvidoria_diario.json'))
+        csv_out('ouvidoria-diario-mes.csv', ['mes', 'manifestacoes'], OD.get('por_mes', []))
+        reg('ouvidoria-diario', 'Ouvidoria da PGE-AM — indicadores diários', 'Total, respondidas/concluídas e tempo médio de resposta da ouvidoria da PGE, atualizados diariamente (D-1) pela API autenticada do Fala.BR. Só PGE. Sem dados pessoais.',
+            'CGU – API Fala.BR (autenticada)', OD.get('atualizado', ''), ['ouvidoria_diario.json', 'ouvidoria-diario-mes.csv'],
+            {'mes': 'mês de registro (AAAA-MM)', 'manifestacoes': 'quantidade no mês'})
     T = ler('transparencia.json')
     if T:
         shutil.copy(os.path.join(DADOS, 'transparencia.json'), os.path.join(API, 'pessoal.json'))
