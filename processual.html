@@ -148,7 +148,7 @@ function vazio(box,msg){box.innerHTML='<p style="color:#605E5C;font-size:12px;ma
 function hbar(box,rows,color,fmtTip){
  box.innerHTML='';const W=box.clientWidth||500,lw=Math.min(240,W*.45),rh=24,H=rows.length*rh+20;
  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);const m=Math.max(...rows.map(r=>r.v))||1;const bw=W-lw-60;
- const mc=Math.max(8,Math.floor(lw/6.3));
+ const mc=Math.max(8,Math.floor(lw/7));
  (bw<260?[0,.5,1]:[0,.25,.5,.75,1]).forEach(f=>{const x=lw+bw*f;el('line',{x1:x,x2:x,y1:0,y2:H-18,stroke:'#EDEBE9'},s);const t=el('text',{x,y:H-4,'text-anchor':'middle'},s);t.textContent=pt(Math.round(m*f))});
  rows.forEach((r,i)=>{const y=i*rh;const t=el('text',{x:lw-6,y:y+15,'text-anchor':'end',class:'lbl'},s);t.textContent=r.k.length>mc?r.k.slice(0,mc-1)+'…':r.k;
   const b=el('rect',{x:lw,y:y+4,height:rh-8,width:Math.max(1,bw*r.v/m),fill:r.c||color},s);
