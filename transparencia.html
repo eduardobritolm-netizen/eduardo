@@ -89,12 +89,28 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="v k4" data-pg="2" hidden><h3>Meio de transporte</h3><div id="g-meio"></div></div>
   <div class="v k12" data-pg="2" hidden><h3>Destinos mais frequentes (desde 2023)</h3><div id="g-dest"></div></div>
 
-  <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
+  <div class="slicers" data-pg="3" hidden>
+    <div class="sl"><label>Órgão</label><div class="fixed">PGE</div></div>
+    <div class="sl"><label>Mês de referência</label><div class="fixed" id="e-ref">—</div></div>
+  </div>
+  <div class="v card acc k3" data-pg="3" hidden><div class="n" id="k-est">—</div><div class="l" id="k-est-l">Estagiários</div></div>
+  <div class="v card k3" data-pg="3" hidden><div class="n" id="k-res">—</div><div class="l" id="k-res-l">Residentes jurídicos</div></div>
+  <div class="v card k3" data-pg="3" hidden><div class="n" id="k-bol">—</div><div class="l">Total de bolsistas no mês</div></div>
+  <div class="v card k3" data-pg="3" hidden><div class="n" id="k-vp">—</div><div class="l" id="k-vp-l">Pago em bolsas no mês</div></div>
+  <div class="v k12" data-pg="3" hidden><h3>Bolsas pagas por mês (R$)</h3><div class="legend"><span><i style="background:#118DFF"></i>Estagiários</span><span><i style="background:#E66C37"></i>Residentes jurídicos</span></div><div id="g-bolsa"></div>
+    <div class="foot-note" style="margin-top:4px">Valor efetivamente pago em cada mês (data da ordem bancária). Um mês pode aparecer baixo ou zerado quando a competência foi paga em outro mês — ver Notas.</div></div>
+  <div class="v k6" data-pg="3" hidden><h3 id="h-est">Estagiários</h3><div class="tbl" style="max-height:440px"><table><thead><tr><th style="width:56px">Ordem</th><th>Nome</th></tr></thead><tbody id="t-est"></tbody></table></div></div>
+  <div class="v k6" data-pg="3" hidden><h3 id="h-res">Residentes jurídicos</h3><div class="tbl" style="max-height:440px"><table><thead><tr><th style="width:56px">Ordem</th><th>Nome</th></tr></thead><tbody id="t-res"></tbody></table></div></div>
+  <div class="foot-note" data-pg="3" hidden>Lista nominal já publicada mensalmente pela PGE em Acesso à Informação. Aqui ela é derivada dos pagamentos de bolsa (natureza de despesa), o que pode divergir levemente da lista por vínculo do Centro de Estudos Jurídicos.</div>
+
+  <div class="v k12" data-pg="4" hidden><h3>Notas metodológicas</h3>
     <table><tbody>
       <tr><td>Folha de pagamento</td><td>API "Remuneração de Servidores" do Portal da Transparência do Amazonas, arquivos CSV mensais do órgão PGE. Contagem de linhas da folha do mês; valores de remuneração legal total (bruta) e líquido disponível. O painel mostra só totais — nenhum servidor é identificado.</td></tr>
       <tr><td>Diárias e passagens</td><td>API do Sistema de Concessão de Diárias e Passagens (SCDP), órgão PGE. Valores conforme registrados no sistema; passagens sem valor informado entram com zero.</td></tr>
-      <tr><td>Atualização</td><td>Coleta automática diária. Os meses mais recentes podem mudar enquanto o órgão lança os dados.</td></tr>
-      <tr><td>Fora do painel</td><td>Despesas, contratos e licitações estão no portal, mas sem API pública de consulta por órgão; podem ser incluídos quando a Prodam/SEFAZ disponibilizar.</td></tr>
+      <tr><td>Estagiários e residentes</td><td>Relação de pagamentos do Portal da Transparência (Despesas &gt; Pagamentos), UG 011103 (PGE). As categorias são separadas pela natureza de despesa: <b>33903607</b> (Estagiários) e <b>33903648</b> (Bolsas Auxílio para Residentes Jurídicos). Cada pessoa aparece uma vez por mês (dedup por favorecido); CPF não é armazenado. Os nomes já são públicos nas listas mensais de Acesso à Informação da PGE.</td></tr>
+      <tr><td>Bolsa × vínculo</td><td>A data do pagamento é a da ordem bancária, não a competência da bolsa. Por isso a lista de um mês = quem foi <b>pago</b> naquele mês, quase igual — mas não idêntica — à lista por vínculo (um pagamento proporcional, retroativo ou atrasado pode cair em outro mês). Os valores mensais pagos são reais.</td></tr>
+      <tr><td>Atualização</td><td>Folha e diárias: coleta automática diária. Estagiários e residentes: a partir da exportação da relação de pagamentos do portal (processada por <code>scripts/estagiarios.py</code>); se não houver exportação nova, o último dado é preservado. Os meses mais recentes podem mudar enquanto o órgão lança os dados.</td></tr>
+      <tr><td>Fora do painel</td><td>Contratos e licitações estão em Contratações; a execução orçamentária (empenhado, liquidado, pago) está em Despesas. Terceirizados não entram por aqui: o favorecido do pagamento é a empresa, não o trabalhador.</td></tr>
     </tbody></table>
   </div>
   <div class="foot-note">Dados abertos do Governo do Estado do Amazonas (licença Creative Commons). Agregação: Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
@@ -103,8 +119,9 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 <nav class="pages" role="tablist" aria-label="Páginas do relatório">
   <button role="tab" data-p="1" aria-selected="true">Pessoal</button>
   <button role="tab" data-p="2" aria-selected="false">Diárias e passagens</button>
-  <button role="tab" data-p="3" aria-selected="false">Notas</button>
-  <span class="info" id="pginfo">Página 1 de 3</span>
+  <button role="tab" data-p="3" aria-selected="false">Estagiários e residentes</button>
+  <button role="tab" data-p="4" aria-selected="false">Notas</button>
+  <span class="info" id="pginfo">Página 1 de 4</span>
 </nav>
 <div class="tip" id="tip"></div>
 <script>
@@ -202,11 +219,30 @@ function p2(){
  donut(document.getElementById('g-meio'),T.meio.map(([k,v])=>({k,v})));
  hbar(document.getElementById('g-dest'),T.destinos.map(([k,v])=>({k,v})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} registros`);
 }
+let E;const escH=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function p3(){
+ if(!E){document.getElementById('h-est')&&(document.getElementById('h-est').textContent='Estagiários');return}
+ const sref=E.serie_mensal.find(r=>r[0]===E.referencia)||E.serie_mensal[E.serie_mensal.length-1];
+ document.getElementById('e-ref').textContent=E.referencia_rotulo;
+ document.getElementById('k-est').textContent=pt(E.estagiarios.length);
+ document.getElementById('k-est-l').textContent='Estagiários em '+E.referencia_rotulo;
+ document.getElementById('k-res').textContent=pt(E.residentes.length);
+ document.getElementById('k-res-l').textContent='Residentes em '+E.referencia_rotulo;
+ document.getElementById('k-bol').textContent=pt(E.estagiarios.length+E.residentes.length);
+ document.getElementById('k-vp').textContent=brl((sref[4]||0)+(sref[5]||0));
+ document.getElementById('k-vp-l').textContent='Pago em bolsas em '+E.referencia_rotulo;
+ lineN(document.getElementById('g-bolsa'),E.serie_mensal.map(r=>r[0]),
+   [{c:'#118DFF',k:'Estagiários',v:E.serie_mensal.map(r=>r[4])},{c:'#E66C37',k:'Residentes',v:E.serie_mensal.map(r=>r[5])}],v=>brl(v));
+ const fill=(id,arr)=>document.getElementById(id).innerHTML=arr.map((n,i)=>`<tr><td class="r" style="color:#64748b">${i+1}</td><td>${escH(n)}</td></tr>`).join('');
+ fill('t-est',E.estagiarios);fill('t-res',E.residentes);
+ document.getElementById('h-est').textContent=`Estagiários — ${E.referencia_rotulo} (${E.estagiarios.length})`;
+ document.getElementById('h-res').textContent=`Residentes jurídicos — ${E.referencia_rotulo} (${E.residentes.length})`;
+}
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
  document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
- document.getElementById('pginfo').textContent=`Página ${p} de 3`;draw()}
-function draw(){if(cur==='1')p1();if(cur==='2')p2()}
+ document.getElementById('pginfo').textContent=`Página ${p} de 4`;draw()}
+function draw(){if(cur==='1')p1();if(cur==='2')p2();if(cur==='3')p3()}
 document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
 fetch('data/transparencia.json?v='+Date.now()).then(r=>r.json()).then(j=>{T=j;
@@ -214,6 +250,7 @@ fetch('data/transparencia.json?v='+Date.now()).then(r=>r.json()).then(j=>{T=j;
  const s1=document.getElementById('s-ano'),s2=document.getElementById('s-ano2');s1.innerHTML=opt(T.folha);s2.innerHTML=opt(T.diarias);s1.onchange=draw;s2.onchange=draw;
  const fd=d=>d.split('-').reverse().join('/');document.getElementById('ban-r').innerHTML=`Fonte: Portal da Transparência do Governo do Estado do Amazonas<br>Coletado em ${fd(T.atualizado_em)}`;
  go('1');}).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
+fetch('data/estagiarios.json?v='+Date.now()).then(r=>r.json()).then(j=>{E=j;if(cur==='3')p3()}).catch(()=>{});
 </script>
 <script>(function(){var d=document,r=d.documentElement;function esc(z){try{localStorage.setItem('pge_zoom',z)}catch(e){}}function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;esc(z)}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script></body>
 </html>

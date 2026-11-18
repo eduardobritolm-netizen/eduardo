@@ -4,4 +4,6 @@ fontes/ouvidoria/*.csv
 fontes/ouvidoria/*.zip
 fontes/ouvidoria/api/
 fontes/sefaz/
+fontes/pagamentos/*.csv
+fontes/pagamentos/*.CSV
 fontes/precos_cache/
