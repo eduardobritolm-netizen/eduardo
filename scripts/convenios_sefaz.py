@@ -9,13 +9,18 @@ O filtro exige o ano; por isso varre-se ano a ano. Página em UTF-8.
 
 Como o host da SEFAZ não é alcançável do ambiente de desenvolvimento, este
 módulo roda de fato no GitHub Actions. Em caso de falha, mantém o JSON anterior."""
-import html as htmlmod, re, urllib.parse
+import html as htmlmod, json, os, re, urllib.parse
 from datetime import date
 import comum
 
 URL = 'https://sistemas.sefaz.am.gov.br/sisconv/ConvenioTransparencia.do'
 UGS = {'011103': 'PGE', '011706': 'FUNDPGE'}
 ANO_INICIAL = 2019
+# Complemento manual: transferências que o sisconv não entrega pela coleta
+# automática (a página usa DataTables/JS, então o HTML cru vem sem as linhas).
+# Editável à mão em fontes/convenios_manual.json; mesclado por (org, plano, termo).
+MANUAL = os.path.join(comum.RAIZ, 'fontes', 'convenios_manual.json')
+ANTERIOR = os.path.join(comum.DADOS, 'convenios.json')
 
 def _texto(td):
     return re.sub(r'\s+', ' ', htmlmod.unescape(re.sub(r'<[^>]+>', ' ', td))).strip()
@@ -74,6 +79,28 @@ def baixar(ug, ano):
                      tentativas=3, timeout=120)
     return b.decode('utf-8', 'replace')
 
+def _ler_json(caminho):
+    try:
+        with open(caminho, encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+def complemento_manual():
+    """Itens cadastrados à mão (fontes/convenios_manual.json), com 'vigente'
+    recalculado e marcados como complemento manual."""
+    dados = _ler_json(MANUAL) or []
+    saida = []
+    for it in dados:
+        o = dict(it)
+        fim = o.get('fim') or ''
+        o['vigente'] = (fim >= date.today().isoformat()) if fim else True
+        o.setdefault('cnpjConvenente', '')
+        o.setdefault('valor', 0.0)
+        o['fonte_item'] = 'complemento manual (sisconv)'
+        saida.append(o)
+    return saida
+
 def main():
     itens, vistos, ok = [], set(), 0
     hoje_ano = date.today().year
@@ -90,7 +117,21 @@ def main():
                 if chave in vistos: continue
                 vistos.add(chave); itens.append(it)
     if not ok:
-        print('convenios_sefaz: host inacessível; mantido data/convenios.json anterior'); return
+        # host inacessível: parte dos dados já publicados para não perder nada
+        prev = _ler_json(ANTERIOR) or {}
+        for it in prev.get('itens', []):
+            chave = (it.get('org'), it.get('plano'), it.get('termo'))
+            if chave in vistos: continue
+            vistos.add(chave); itens.append(it)
+        print('convenios_sefaz: host inacessível; usando dados anteriores + complemento manual')
+    # complemento manual (não some mesmo quando a coleta volta vazia)
+    manual_add = 0
+    for it in complemento_manual():
+        chave = (it.get('org'), it.get('plano'), it.get('termo'))
+        if chave in vistos: continue
+        vistos.add(chave); itens.append(it); manual_add += 1
+    if not itens:
+        print('convenios_sefaz: nada coletado e sem complemento manual; mantido o anterior'); return
     itens.sort(key=lambda x: (not x['vigente'], x['fim'] or ''), reverse=False)
     resumo = {}
     for it in itens:
@@ -102,7 +143,7 @@ def main():
         'fonte': 'sisconv — Transferências Voluntárias de Saída (SEFAZ-AM)',
         'orgaos': UGS, 'resumo': resumo, 'itens': itens,
     })
-    print(f'convenios_sefaz: {len(itens)} transferências → data/convenios.json')
+    print(f'convenios_sefaz: {len(itens)} transferências ({manual_add} do complemento manual) → data/convenios.json')
 
 if __name__ == '__main__':
     import sys
