@@ -86,6 +86,30 @@ paths:
           description: OK
           content:
             text/csv: {}
+  /estagiarios.json:
+    get:
+      summary: "Estagiários e residentes jurídicos da PGE-AM (JSON)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json: {}
+  /estagiarios-mensal.csv:
+    get:
+      summary: "Estagiários e residentes jurídicos da PGE-AM (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
+  /estagiarios-lista.csv:
+    get:
+      summary: "Estagiários e residentes jurídicos da PGE-AM (CSV)"
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv: {}
   /contratacoes.json:
     get:
       summary: "Contratos e licitações da PGE-AM e do FUNDPGE (JSON)"

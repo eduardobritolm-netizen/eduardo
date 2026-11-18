@@ -1,6 +1,6 @@
 {
  "titulo": "API de Dados Abertos da Procuradoria Geral do Estado do Amazonas",
- "gerado_em": "2026-11-16",
+ "gerado_em": "2026-11-18",
  "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
  "conjuntos": [
   {
@@ -109,6 +109,36 @@
     "servidores": "linhas na folha do mês",
     "remuneracao_bruta": "R$",
     "liquido": "R$"
+   }
+  },
+  {
+   "identificador": "estagiarios",
+   "titulo": "Estagiários e residentes jurídicos da PGE-AM",
+   "descricao": "Lista nominal mensal de estagiários (natureza 33903607) e residentes jurídicos (natureza 33903648) e o valor pago em bolsas por mês. Nomes já públicos nas listas de Acesso à Informação; sem CPF.",
+   "fonte": "Portal da Transparência do Governo do Estado do Amazonas (Despesas > Pagamentos, UG 011103)",
+   "atualizado_em": "2026-11-18",
+   "periodicidade": "diária (quando a fonte publica)",
+   "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
+   "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
+   "distribuicoes": [
+    {
+     "formato": "JSON",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/estagiarios.json"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/estagiarios-mensal.csv"
+    },
+    {
+     "formato": "CSV",
+     "url": "https://eduardobritolm-netizen.github.io/eduardo/api/estagiarios-lista.csv"
+    }
+   ],
+   "campos": {
+    "categoria": "estagiario | residente",
+    "mes_referencia": "AAAA-MM",
+    "ordem": "posição na lista",
+    "nome": "favorecido"
    }
   },
   {

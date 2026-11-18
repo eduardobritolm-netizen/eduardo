@@ -35,6 +35,12 @@ def main():
         reg('processual-classes', 'Processos por classe e ano – TJAM', 'Ações ajuizadas no TJAM por classe processual (mandado de segurança, ação civil pública, juizado da Fazenda etc.).',
             'CNJ – API Pública do DataJud', P['atualizado_em'], ['processual-classes.json', 'processual-classes.csv'],
             {'classe': 'código interno da classe', 'nome': 'nome da classe (TPU/CNJ)', 'ano': 'ano de ajuizamento', 'processos_ajuizados': 'quantidade'})
+        la = [[k, c['nome'], c.get('grupo', ''), a[0], a[1], a[2]] for k, c in P['classes'].items() for a in c.get('assuntos') or []]
+        if la:
+            csv_out('processual-assuntos.csv', ['classe', 'nome', 'grupo', 'assunto_codigo', 'assunto', 'processos'], la)
+            reg('processual-assuntos', 'Assuntos mais frequentes por classe – TJAM', 'Os doze assuntos (causas) mais frequentes de cada classe processual acompanhada no TJAM. Um processo pode ter mais de um assunto.',
+                'CNJ – API Pública do DataJud', P['atualizado_em'], ['processual-assuntos.csv'],
+                {'classe': 'código interno da classe', 'nome': 'nome da classe', 'grupo': 'grupo de classes do painel', 'assunto_codigo': 'código do assunto (TPU/CNJ)', 'assunto': 'nome do assunto', 'processos': 'quantidade'})
     if M:
         shutil.copy(os.path.join(DADOS, 'manual.json'), os.path.join(API, 'estado-parte.json'))
         csv_out('estado-parte-orgaos.csv', ['orgao_julgador', 'grau', 'estado_reu', 'estado_autor'], M['U'])
@@ -63,6 +69,16 @@ def main():
         reg('pessoal', 'Folha de pagamento, diárias e passagens da PGE-AM (agregados)', 'Totais mensais da folha (servidores, bruto, líquido) e de diárias e passagens. Sem identificação de servidores.',
             'Portal da Transparência do Governo do Estado do Amazonas (APIs de Remuneração e SCDP)', T['atualizado_em'], ['pessoal.json', 'pessoal-folha.csv', 'pessoal-diarias.csv'],
             {'mes': 'AAAA-MM', 'servidores': 'linhas na folha do mês', 'remuneracao_bruta': 'R$', 'liquido': 'R$'})
+    EB = ler('estagiarios.json')
+    if EB:
+        shutil.copy(os.path.join(DADOS, 'estagiarios.json'), os.path.join(API, 'estagiarios.json'))
+        csv_out('estagiarios-mensal.csv', ['mes', 'mes_nome', 'estagiarios', 'residentes', 'valor_pago_estagiarios', 'valor_pago_residentes'], EB['serie_mensal'])
+        csv_out('estagiarios-lista.csv', ['categoria', 'mes_referencia', 'ordem', 'nome'],
+                [['estagiario', EB['referencia'], i + 1, n] for i, n in enumerate(EB['estagiarios'])] +
+                [['residente', EB['referencia'], i + 1, n] for i, n in enumerate(EB['residentes'])])
+        reg('estagiarios', 'Estagiários e residentes jurídicos da PGE-AM', 'Lista nominal mensal de estagiários (natureza 33903607) e residentes jurídicos (natureza 33903648) e o valor pago em bolsas por mês. Nomes já públicos nas listas de Acesso à Informação; sem CPF.',
+            'Portal da Transparência do Governo do Estado do Amazonas (Despesas > Pagamentos, UG 011103)', EB['atualizado_em'], ['estagiarios.json', 'estagiarios-mensal.csv', 'estagiarios-lista.csv'],
+            {'categoria': 'estagiario | residente', 'mes_referencia': 'AAAA-MM', 'ordem': 'posição na lista', 'nome': 'favorecido'})
     K = ler('contratacoes.json')
     if K:
         shutil.copy(os.path.join(DADOS, 'contratacoes.json'), os.path.join(API, 'contratacoes.json'))
