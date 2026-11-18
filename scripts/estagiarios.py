@@ -55,8 +55,9 @@ def ler(caminho):
 
 def gerar(caminho):
     linhas = ler(caminho)
-    # por mês e categoria: {mes: {cat: {nome: valor_somado}}}
-    meses = defaultdict(lambda: {'estagiarios': defaultdict(float), 'residentes': defaultdict(float)})
+    # valores pagos por mês/categoria e meses de pagamento de cada pessoa
+    pago_mes = defaultdict(lambda: {'estagiarios': 0.0, 'residentes': 0.0})   # mes -> cat -> R$
+    meses_pessoa = {'estagiarios': defaultdict(set), 'residentes': defaultdict(set)}  # cat -> nome -> {meses}
     for r in linhas:
         if (r.get('Cód. Órgão') or '').strip() != UG_PGE:
             continue
@@ -70,26 +71,39 @@ def gerar(caminho):
         nome = ' '.join((r.get('Favorecido') or '').split()).strip()
         if not nome:
             continue
-        meses[mes][cat][nome] += num(r.get('pago'))
+        pago_mes[mes][cat] += num(r.get('pago'))
+        meses_pessoa[cat][nome].add(mes)
 
-    ordenados = sorted(meses)
+    ordenados = sorted(pago_mes)
     if not ordenados:
         raise RuntimeError('Nenhum pagamento de estágio/residência encontrado no CSV.')
 
-    # mês de referência para as listas nominais: o mês mais recente que não seja o
-    # mês-calendário corrente (que costuma estar incompleto na data da exportação).
+    # Roster de cada mês: pessoa ativa quando o mês está ENTRE o primeiro e o último
+    # pagamento observado (preenche lacunas de competência paga com atraso — ex.: a
+    # bolsa de agosto que cai numa OB de setembro). Só o período observado é usado.
+    def rosters(cat):
+        out = {m: [] for m in ordenados}
+        for nome, ms in meses_pessoa[cat].items():
+            lo, hi = min(ms), max(ms)
+            for m in ordenados:
+                if lo <= m <= hi:
+                    out[m].append(nome)
+        for m in out:
+            out[m] = sorted(out[m], key=lambda n: n.casefold())
+        return out
+
+    r_est, r_res = rosters('estagiarios'), rosters('residentes')
+
+    # mês de referência: o mês mais recente que não seja o mês-calendário corrente
+    # (que costuma estar incompleto na data da exportação).
     corrente = date.today().strftime('%Y-%m')
     candidatos = [m for m in ordenados if m != corrente] or ordenados
     ref = candidatos[-1]
 
-    serie = []
-    for m in ordenados:
-        est, res = meses[m]['estagiarios'], meses[m]['residentes']
-        serie.append([m, MES[m[5:7]][:3], len(est), len(res),
-                      round(sum(est.values()), 2), round(sum(res.values()), 2)])
-
-    def roster(cat):
-        return sorted(meses[ref][cat].keys(), key=lambda n: n.casefold())
+    serie = [[m, MES[m[5:7]][:3], len(r_est[m]), len(r_res[m]),
+              round(pago_mes[m]['estagiarios'], 2), round(pago_mes[m]['residentes'], 2)]
+             for m in ordenados]
+    listas = {m: {'estagiarios': r_est[m], 'residentes': r_res[m]} for m in ordenados}
 
     dados = {
         'atualizado_em': hoje(),
@@ -100,9 +114,11 @@ def gerar(caminho):
         'referencia': ref,
         'referencia_rotulo': MES[ref[5:7]] + '/' + ref[:4],
         'gerado_de': os.path.basename(caminho),
+        'meses': [[m, MES[m[5:7]] + '/' + m[:4]] for m in reversed(ordenados)],
         'serie_mensal': serie,
-        'estagiarios': roster('estagiarios'),
-        'residentes': roster('residentes'),
+        'listas': listas,
+        'estagiarios': r_est[ref],
+        'residentes': r_res[ref],
     }
     salvar('estagiarios.json', dados)
     print(f'estagiários/residentes: ref {dados["referencia_rotulo"]} — '

@@ -91,7 +91,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 
   <div class="slicers" data-pg="3" hidden>
     <div class="sl"><label>Órgão</label><div class="fixed">PGE</div></div>
-    <div class="sl"><label>Mês de referência</label><div class="fixed" id="e-ref">—</div></div>
+    <div class="sl"><label>Mês de referência</label><select id="e-mes"></select></div>
   </div>
   <div class="v card acc k3" data-pg="3" hidden><div class="n" id="k-est">—</div><div class="l" id="k-est-l">Estagiários</div></div>
   <div class="v card k3" data-pg="3" hidden><div class="n" id="k-res">—</div><div class="l" id="k-res-l">Residentes jurídicos</div></div>
@@ -108,7 +108,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
       <tr><td>Folha de pagamento</td><td>API "Remuneração de Servidores" do Portal da Transparência do Amazonas, arquivos CSV mensais do órgão PGE. Contagem de linhas da folha do mês; valores de remuneração legal total (bruta) e líquido disponível. O painel mostra só totais — nenhum servidor é identificado.</td></tr>
       <tr><td>Diárias e passagens</td><td>API do Sistema de Concessão de Diárias e Passagens (SCDP), órgão PGE. Valores conforme registrados no sistema; passagens sem valor informado entram com zero.</td></tr>
       <tr><td>Estagiários e residentes</td><td>Relação de pagamentos do Portal da Transparência (Despesas &gt; Pagamentos), UG 011103 (PGE). As categorias são separadas pela natureza de despesa: <b>33903607</b> (Estagiários) e <b>33903648</b> (Bolsas Auxílio para Residentes Jurídicos). Cada pessoa aparece uma vez por mês (dedup por favorecido); CPF não é armazenado. Os nomes já são públicos nas listas mensais de Acesso à Informação da PGE.</td></tr>
-      <tr><td>Bolsa × vínculo</td><td>A data do pagamento é a da ordem bancária, não a competência da bolsa. Por isso a lista de um mês = quem foi <b>pago</b> naquele mês, quase igual — mas não idêntica — à lista por vínculo (um pagamento proporcional, retroativo ou atrasado pode cair em outro mês). Os valores mensais pagos são reais.</td></tr>
+      <tr><td>Lista de cada mês</td><td>A data do pagamento é a da ordem bancária, não a competência da bolsa. Para a lista nominal, cada pessoa é contada como ativa nos meses <b>entre o seu primeiro e o seu último pagamento</b> observado — isso preenche a competência paga com atraso (ex.: a bolsa de agosto que caiu numa OB de setembro apareceria zerada se olhássemos só a data). Ainda assim pode divergir levemente da lista por vínculo do CEJ. Já o gráfico de <b>valores pagos por mês</b> usa a data real da OB, então um mês pode aparecer baixo quando a competência foi paga em outro.</td></tr>
       <tr><td>Atualização</td><td>Folha e diárias: coleta automática diária. Estagiários e residentes: a partir da exportação da relação de pagamentos do portal (processada por <code>scripts/estagiarios.py</code>); se não houver exportação nova, o último dado é preservado. Os meses mais recentes podem mudar enquanto o órgão lança os dados.</td></tr>
       <tr><td>Fora do painel</td><td>Contratos e licitações estão em Contratações; a execução orçamentária (empenhado, liquidado, pago) está em Despesas. Terceirizados não entram por aqui: o favorecido do pagamento é a empresa, não o trabalhador.</td></tr>
     </tbody></table>
@@ -219,24 +219,28 @@ function p2(){
  donut(document.getElementById('g-meio'),T.meio.map(([k,v])=>({k,v})));
  hbar(document.getElementById('g-dest'),T.destinos.map(([k,v])=>({k,v})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} registros`);
 }
-let E;const escH=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let E,eMes;const escH=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eRot=m=>{const x=(E.meses||[]).find(z=>z[0]===m);return x?x[1]:m};
 function p3(){
- if(!E){document.getElementById('h-est')&&(document.getElementById('h-est').textContent='Estagiários');return}
- const sref=E.serie_mensal.find(r=>r[0]===E.referencia)||E.serie_mensal[E.serie_mensal.length-1];
- document.getElementById('e-ref').textContent=E.referencia_rotulo;
- document.getElementById('k-est').textContent=pt(E.estagiarios.length);
- document.getElementById('k-est-l').textContent='Estagiários em '+E.referencia_rotulo;
- document.getElementById('k-res').textContent=pt(E.residentes.length);
- document.getElementById('k-res-l').textContent='Residentes em '+E.referencia_rotulo;
- document.getElementById('k-bol').textContent=pt(E.estagiarios.length+E.residentes.length);
+ const sel=document.getElementById('e-mes');
+ if(!E){return}
+ if(!sel.options.length){sel.innerHTML=(E.meses||[]).map(([m,r])=>`<option value="${m}">${r}</option>`).join('');sel.value=eMes=E.referencia;sel.onchange=()=>{eMes=sel.value;p3()}}
+ const mes=eMes||E.referencia;const rot=eRot(mes);
+ const L=(E.listas&&E.listas[mes])||{estagiarios:E.estagiarios,residentes:E.residentes};
+ const sref=E.serie_mensal.find(r=>r[0]===mes)||[,,,,0,0];
+ document.getElementById('k-est').textContent=pt(L.estagiarios.length);
+ document.getElementById('k-est-l').textContent='Estagiários em '+rot;
+ document.getElementById('k-res').textContent=pt(L.residentes.length);
+ document.getElementById('k-res-l').textContent='Residentes em '+rot;
+ document.getElementById('k-bol').textContent=pt(L.estagiarios.length+L.residentes.length);
  document.getElementById('k-vp').textContent=brl((sref[4]||0)+(sref[5]||0));
- document.getElementById('k-vp-l').textContent='Pago em bolsas em '+E.referencia_rotulo;
+ document.getElementById('k-vp-l').textContent='Pago em bolsas em '+rot;
  lineN(document.getElementById('g-bolsa'),E.serie_mensal.map(r=>r[0]),
    [{c:'#118DFF',k:'Estagiários',v:E.serie_mensal.map(r=>r[4])},{c:'#E66C37',k:'Residentes',v:E.serie_mensal.map(r=>r[5])}],v=>brl(v));
  const fill=(id,arr)=>document.getElementById(id).innerHTML=arr.map((n,i)=>`<tr><td class="r" style="color:#64748b">${i+1}</td><td>${escH(n)}</td></tr>`).join('');
- fill('t-est',E.estagiarios);fill('t-res',E.residentes);
- document.getElementById('h-est').textContent=`Estagiários — ${E.referencia_rotulo} (${E.estagiarios.length})`;
- document.getElementById('h-res').textContent=`Residentes jurídicos — ${E.referencia_rotulo} (${E.residentes.length})`;
+ fill('t-est',L.estagiarios);fill('t-res',L.residentes);
+ document.getElementById('h-est').textContent=`Estagiários — ${rot} (${L.estagiarios.length})`;
+ document.getElementById('h-res').textContent=`Residentes jurídicos — ${rot} (${L.residentes.length})`;
 }
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
