@@ -93,6 +93,9 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fd=d=>d&&d.length>=10?d.slice(0,10).split('-').reverse().join('/'):(d||'—');
 const nf=n=>n.toLocaleString('pt-BR');
+// A base da CGU guarda só o nome do PDF na coluna "Link do Arquivo"; monta a URL completa.
+const PBASE='https://dadosabertos-download.cgu.gov.br/BuscaPrecedentes/';
+const purl=s=>/^https?:/i.test(s)?s:PBASE+encodeURIComponent(s);
 const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const cls=s=>{const t=norm(s);return /desprov|negad|nao conhec|improced/.test(t)?'no':/parcial/.test(t)?'pa':/provid|deferid|proced|perda/.test(t)?'ok':''};
 fetch('data/precedentes.json?v='+Date.now()).then(r=>r.json()).then(D=>{
@@ -115,7 +118,7 @@ fetch('data/precedentes.json?v='+Date.now()).then(r=>r.json()).then(D=>{
  const rC=()=>{const q=norm($('q').value),i=$('fI').value,t=$('fT').value,a=$('fA').value;
   L=C.filter(r=>(!i||r[4]===i)&&(!t||r[3]===t)&&(!a||r[2].startsWith(a))&&(!q||norm(r[0]+' '+r[1]).includes(q)));pg=Math.min(pg,Math.max(0,Math.ceil(L.length/N)-1));draw()};
  const draw=()=>{const S=L.slice(pg*N,pg*N+N);
-  $('tC').innerHTML=S.length?S.map(r=>`<tr><td>${fd(r[2])}</td><td><span class="tag ${isM(r)?'cmri':''}">${esc(r[4])}</span></td><td>${esc(r[1])}</td><td>${esc(r[0])}</td><td class="${cls(r[3])}">${esc(r[3])}</td><td>${r[5]?`<a href="${esc(r[5])}" target="_blank" rel="noopener">abrir</a>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" style="color:#605E5C">${C.length?'Nenhuma decisão com esses filtros.':'A base da CGU será carregada na próxima execução do robô.'}</td></tr>`;
+  $('tC').innerHTML=S.length?S.map(r=>`<tr><td>${fd(r[2])}</td><td><span class="tag ${isM(r)?'cmri':''}">${esc(r[4])}</span></td><td>${esc(r[1])}</td><td>${esc(r[0])}</td><td class="${cls(r[3])}">${esc(r[3])}</td><td>${r[5]?`<a href="${esc(purl(r[5]))}" target="_blank" rel="noopener">abrir</a>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" style="color:#605E5C">${C.length?'Nenhuma decisão com esses filtros.':'A base da CGU será carregada na próxima execução do robô.'}</td></tr>`;
   $('cnt').textContent=L.length?`${nf(pg*N+1)}–${nf(Math.min(L.length,pg*N+N))} de ${nf(L.length)}`:'';
   $('ant').disabled=pg===0;$('prox').disabled=(pg+1)*N>=L.length};
  ['q'].forEach(x=>$(x).oninput=()=>{pg=0;rC()});['fI','fT','fA'].forEach(x=>$(x).onchange=()=>{pg=0;rC()});
