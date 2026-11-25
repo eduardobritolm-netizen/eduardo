@@ -7,3 +7,5 @@ fontes/sefaz/
 fontes/pagamentos/*.csv
 fontes/pagamentos/*.CSV
 fontes/precos_cache/
+
+fontes/ouvidoria/*.xlsx

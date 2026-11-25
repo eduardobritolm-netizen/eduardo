@@ -90,7 +90,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="v card acc k3" data-pg="1"><div class="n" id="k-n">—</div><div class="l" id="k-n-l">Manifestações recebidas</div></div>
   <div class="v card k3" data-pg="1"><div class="n" id="k-pz">—</div><div class="l">Respondidas dentro do prazo</div><div class="kpi-sub" id="k-pz-c"></div></div>
   <div class="v card k3" data-pg="1"><div class="n" id="k-md">—</div><div class="l">Mediana de dias para resposta</div><div class="kpi-sub" id="k-md-c"></div></div>
-  <div class="v card k3" data-pg="1"><div class="n" id="k-rk">—</div><div class="l" id="k-rk-l">Posição em volume entre órgãos estaduais</div></div>
+  <div class="v card k3" data-pg="1"><div class="n" id="k-rk">—</div><div class="l" id="k-rk-l">Resolutividade</div></div>
   <div class="v k7" data-pg="1"><h3>Manifestações por ano</h3><div id="g-ano"></div></div>
   <div class="v k5" data-pg="1"><h3 id="h-tipo">Tipo de manifestação</h3><div id="g-tipo"></div></div>
   <div class="v k7" data-pg="1"><h3 id="h-ass">Assuntos mais frequentes</h3><div id="g-ass"></div></div>
@@ -100,23 +100,23 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <div class="v card k4" data-pg="2" hidden><div class="n" id="k2-pz"></div><div class="l">No prazo · PGE (todo o período)</div><div class="kpi-sub" id="k2-pz-c"></div></div>
   <div class="v card k4" data-pg="2" hidden><div class="n" id="k2-md"></div><div class="l">Mediana de dias · PGE</div><div class="kpi-sub" id="k2-md-c"></div></div>
   <div class="v card acc k4" data-pg="2" hidden><div class="n" id="k2-60"></div><div class="l">Respostas com mais de 60 dias</div></div>
-  <div class="v k8" data-pg="2" hidden><h3>% respondidas no prazo — PGE x média dos órgãos estaduais</h3><div class="legend"><span><i style="background:#118DFF"></i>PGE-AM</span><span><i style="background:#C8C6C4"></i>Órgãos estaduais do AM</span></div><div id="g-pz"></div></div>
+  <div class="v k8" data-pg="2" hidden><h3>% respondidas no prazo, por ano</h3><div class="legend"><span><i style="background:#118DFF"></i>PGE-AM</span></div><div id="g-pz"></div></div>
   <div class="v k4" data-pg="2" hidden><h3>Tempo de resposta (dias)</h3><div id="g-fx"></div></div>
-  <div class="v k6" data-pg="2" hidden><h3>Mediana de dias para resposta por ano</h3><div class="legend"><span><i style="background:#E66C37"></i>PGE-AM</span><span><i style="background:#C8C6C4"></i>Órgãos estaduais do AM</span></div><div id="g-md"></div></div>
+  <div class="v k6" data-pg="2" hidden><h3>Mediana de dias para resposta por ano</h3><div class="legend"><span><i style="background:#E66C37"></i>PGE-AM</span></div><div id="g-md"></div></div>
   <div class="v k6" data-pg="2" hidden><h3>Tempo por tipo de manifestação</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Tipo</th><th class="r">Qtde</th><th class="r">Mediana (dias)</th><th class="r">Média (dias)</th></tr></thead><tbody id="t-td"></tbody></table></div></div>
 
   <!-- PÁGINA 3 -->
-  <div class="v k4" data-pg="3" hidden><h3>Canal (formulário)</h3><div id="g-form"></div></div>
-  <div class="v k4" data-pg="3" hidden><h3>Gênero do manifestante</h3><div id="g-gen"></div></div>
-  <div class="v k4" data-pg="3" hidden><h3>Raça/cor declarada</h3><div id="g-raca"></div></div>
-  <div class="v k6" data-pg="3" hidden><h3>Município do manifestante</h3><div id="g-mun"></div></div>
-  <div class="v k6" data-pg="3" hidden><h3>Pesquisa de satisfação</h3><div id="g-sat"></div><p style="font-size:11px;color:#605E5C;margin:4px 0 0" id="sat-note"></p></div>
+  <div class="v k4" data-pg="3" hidden><h3>Canal de entrada</h3><div id="g-form"></div></div>
+  <div class="v k4" data-pg="3" hidden><h3>Resolutividade</h3><div id="g-gen"></div></div>
+  <div class="v k4" data-pg="3" hidden><h3>Situação da manifestação</h3><div id="g-raca"></div></div>
+  <div class="v k12" data-pg="3" hidden><h3>Município do local do fato</h3><div id="g-mun"></div><p style="font-size:11px;color:#605E5C;margin:6px 0 0" id="sat-note"></p></div>
   <div class="v k12" data-pg="3" hidden><h3>Notas metodológicas</h3>
     <table><tbody>
-      <tr><td>Fonte</td><td>Base de manifestações de ouvidoria da CGU (Painel Resolveu? / Fala.BR), arquivos anuais 2014–2026. Filtro: órgão "Procuradoria Geral do Estado - PGE", esfera estadual, UF AM.</td></tr>
-      <tr><td>Prazo</td><td>Considerada no prazo a manifestação com data de resposta igual ou anterior à data-limite registrada no sistema. O campo "dias de atraso" vem vazio na base para a PGE.</td></tr>
-      <tr><td>Comparação</td><td>"Órgãos estaduais do AM" reúne as 46.882 manifestações dos 110 órgãos estaduais do Amazonas na mesma base.</td></tr>
-      <tr><td>Acesso à informação</td><td>Esta base cobre manifestações de ouvidoria. Pedidos formais da LAI (e-SIC) ficam em base própria e não estão incluídos; o assunto "Acesso à informação" aqui reúne manifestações de ouvidoria sobre o tema.</td></tr>
+      <tr><td>Fonte</td><td>Exportação do Fala.BR (CGU), uma linha por manifestação com a PGE-AM como órgão destinatário. É a base completa da PGE — bem maior que a do "Painel Resolveu?" que o painel usava antes. Atualizada a partir da exportação do sistema (processada por <code>scripts/ouvidoria_export.py</code>).</td></tr>
+      <tr><td>Composição</td><td>O volume é dominado por <b>Comunicações</b> (916), em boa parte denúncias de crime encaminhadas à PGE pela ouvidoria. Elas entram na contagem total, mas a maioria é apenas arquivada, sem resposta formal — por isso não pesam nas métricas de prazo e tempo de resposta.</td></tr>
+      <tr><td>Prazo e tempo</td><td>Calculados só sobre as manifestações que tiveram resposta registrada (data de conclusão). "No prazo" = resposta até a data-limite do sistema; o tempo é a diferença entre abertura e conclusão.</td></tr>
+      <tr><td>Resolutividade</td><td>Campo preenchido só em parte das manifestações (as concluídas); o indicador considera apenas as que têm resolução informada.</td></tr>
+      <tr><td>Não incluído</td><td>Esta exportação é só da PGE, então não há comparação com outros órgãos do Estado; e não traz gênero, raça, satisfação nem formulário — por isso essas visões saíram do painel. Pedidos formais da LAI (e-SIC) ficam em base própria.</td></tr>
       <tr><td>Dados pessoais</td><td>Somente campos agregados; nenhum manifestante é identificável.</td></tr>
     </tbody></table>
   </div>
@@ -127,7 +127,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 <nav class="pages" role="tablist" aria-label="Páginas do relatório">
   <button role="tab" data-p="1" aria-selected="true">Visão geral</button>
   <button role="tab" data-p="2" aria-selected="false">Prazo e tempo de resposta</button>
-  <button role="tab" data-p="3" aria-selected="false">Perfil e satisfação</button>
+  <button role="tab" data-p="3" aria-selected="false">Canal e resolução</button>
   <span class="info" id="pginfo">Página 1 de 3</span>
 </nav>
 <div class="tip" id="tip"></div>
@@ -203,16 +203,16 @@ function cols(box,labels,vals,hl,color){
 const pc=v=>v.toFixed(1).replace('.',',')+'%';
 let anos;
 function p1(){
- const a=document.getElementById('s-ano').value;const row=D.anos.find(x=>x[0]===a);const E=a?D.anos_estado[a]:null;
+ const a=document.getElementById('s-ano').value;const row=D.anos.find(x=>x[0]===a);
  document.getElementById('k-n').textContent=pt(a?row[1]:D.n);
- document.getElementById('k-n-l').textContent='Manifestações recebidas'+(a?' em '+a:' desde 2018');
- const pz=a?row[3]:D.prazo,pe=a?E[2]:D.prazo_estado,md=a?row[2]:D.med,me=a?E[1]:D.med_estado;
+ document.getElementById('k-n-l').textContent='Manifestações recebidas'+(a?' em '+a:' desde '+D.primeira.slice(0,4));
+ const pz=a?row[3]:D.prazo,md=a?row[2]:D.med;
  document.getElementById('k-pz').textContent=pc(pz);
- const c1=document.getElementById('k-pz-c');c1.textContent=`Órgãos estaduais: ${pc(pe)}`;c1.className='kpi-sub '+(pz>=pe?'up':'dn');
+ const c1=document.getElementById('k-pz-c');c1.textContent='quando houve resposta registrada';c1.className='kpi-sub';
  document.getElementById('k-md').textContent=String(md).replace('.',',');
- const c2=document.getElementById('k-md-c');c2.textContent=`Órgãos estaduais: ${String(me).replace('.',',')} dias`;c2.className='kpi-sub '+(md<=me?'up':'dn');
- document.getElementById('k-rk').textContent=a?pt(E[0]):D.rank+'º';
- document.getElementById('k-rk-l').textContent=a?`Manifestações a todos os órgãos estaduais em ${a}`:`Posição em volume entre ${D.norgaos} órgãos estaduais`;
+ const c2=document.getElementById('k-md-c');c2.textContent='entre abertura e conclusão';c2.className='kpi-sub';
+ document.getElementById('k-rk').textContent=pc(D.resolut_pct);
+ document.getElementById('k-rk-l').textContent=`Resolvidas (de ${pt(D.resolut_base)} com resolução informada)`;
  cols(document.getElementById('g-ano'),anos,D.anos.map(x=>x[1]),a||null,C[0]);
  const tp=a?Object.entries(D.tipo_ano[a]).sort((x,y)=>y[1]-x[1]):D.tipo;
  document.getElementById('h-tipo').textContent='Tipo de manifestação'+(a?' — '+a:'');
@@ -224,26 +224,23 @@ function p1(){
 }
 function p2(){
  document.getElementById('k2-pz').textContent=pc(D.prazo);
- const c=document.getElementById('k2-pz-c');c.textContent=`Órgãos estaduais: ${pc(D.prazo_estado)}`;c.className='kpi-sub dn';
+ const c=document.getElementById('k2-pz-c');c.textContent='quando houve resposta registrada';c.className='kpi-sub';
  document.getElementById('k2-md').textContent=String(D.med).replace('.',',')+' dias';
- const c2=document.getElementById('k2-md-c');c2.textContent=`Órgãos estaduais: ${D.med_estado} dias · média PGE ${String(D.media).replace('.',',')}`;c2.className='kpi-sub dn';
- const f60=D.faixas.find(f=>f[0]==='mais de 60')[1];document.getElementById('k2-60').textContent=pt(f60)+' ('+Math.round(f60/D.n*100)+'%)';
+ const c2=document.getElementById('k2-md-c');c2.textContent=`média ${String(D.media).replace('.',',')} dias`;c2.className='kpi-sub';
+ const f60=D.faixas.find(f=>f[0]==='mais de 60')[1];document.getElementById('k2-60').textContent=pt(f60);
  const yrs=anos.filter(a=>a>='2020');
- lineN(document.getElementById('g-pz'),yrs,[{k:'PGE-AM',c:'#118DFF',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[3])},{k:'Órgãos estaduais',c:'#C8C6C4',v:yrs.map(a=>D.anos_estado[a][2])}],v=>pc(v));
- lineN(document.getElementById('g-md'),yrs,[{k:'PGE-AM',c:'#E66C37',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[2])},{k:'Órgãos estaduais',c:'#C8C6C4',v:yrs.map(a=>D.anos_estado[a][1])}],v=>Math.round(v)+' dias');
+ lineN(document.getElementById('g-pz'),yrs,[{k:'PGE-AM',c:'#118DFF',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[3])}],v=>pc(v));
+ lineN(document.getElementById('g-md'),yrs,[{k:'PGE-AM',c:'#E66C37',v:yrs.map(a=>D.anos.find(x=>x[0]===a)[2])}],v=>Math.round(v)+' dias');
  hbar(document.getElementById('g-fx'),D.faixas.map(([k,v])=>({k:k+' dias',v,c:k==='mais de 60'?C[2]:C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} manifestações`);
  const q=Object.fromEntries(D.tipo);
  document.getElementById('t-td').innerHTML=D.tipo_dias.sort((a,b)=>q[b[0]]-q[a[0]]).map(r=>`<tr><td>${r[0]}</td><td class="r">${q[r[0]]}</td><td class="r">${String(r[1]).replace('.',',')}</td><td class="r">${String(r[2]).replace('.',',')}</td></tr>`).join('');
 }
 function p3(){
- donut(document.getElementById('g-form'),D.form.map(([k,v])=>({k,v})));
- donut(document.getElementById('g-gen'),D.genero.map(([k,v])=>({k:N(k),v})));
- donut(document.getElementById('g-raca'),D.raca.map(([k,v])=>({k:N(k),v})));
- hbar(document.getElementById('g-mun'),D.mun.map(([k,v])=>({k:N(k).replace(/\b\w+/g,w=>w[0]+w.slice(1).toLowerCase()),v,c:k==='Não Informado'?'#C8C6C4':C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)}`);
- const s=D.sat.filter(x=>x[0]!=='Não informado').sort((a,b)=>b[0].localeCompare(a[0]));
- hbar(document.getElementById('g-sat'),s.map(([k,v])=>({k:k.replace(/^\(\d\) /,''),v,c:/Insatisf/.test(k)?C[2]:/Satisf/.test(k)?'#107C10':'#C8C6C4'})),C[0],r=>`<b>${r.k}</b>${pt(r.v)} respostas`);
- const nr=D.n-D.sat.find(x=>x[0]==='Não informado')[1];
- document.getElementById('sat-note').textContent=`Só ${nr} das ${D.n} manifestações (${Math.round(nr/D.n*100)}%) têm pesquisa de satisfação respondida — amostra pequena para conclusões.`;
+ donut(document.getElementById('g-form'),D.canal.map(([k,v])=>({k,v})));
+ donut(document.getElementById('g-gen'),D.resolut.map(([k,v])=>({k,v})));
+ donut(document.getElementById('g-raca'),D.situacao.map(([k,v])=>({k,v})));
+ hbar(document.getElementById('g-mun'),D.mun.map(([k,v])=>({k:N(k).replace(/\b\w+/g,w=>w[0]+w.slice(1).toLowerCase()),v,c:k==='Não informado'?'#C8C6C4':C[0]})),C[0],r=>`<b>${r.k}</b>${pt(r.v)}`);
+ document.getElementById('sat-note').textContent=`Resolutividade informada em ${pt(D.resolut_base)} das ${pt(D.n)} manifestações (nas demais, geralmente arquivadas, o campo não foi preenchido).`;
 }
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
@@ -256,7 +253,7 @@ let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)})
 fetch('data/ouvidoria.json?v='+Date.now()).then(r=>r.json()).then(j=>{D=j;anos=D.anos.map(a=>a[0]);
  document.getElementById('s-ano').innerHTML='<option value="">Todos</option>'+anos.map(a=>`<option>${a}</option>`).join('');
  const fd=d=>d.split('-').reverse().join('/');
- document.querySelector('.ban .r').innerHTML=`Fonte: CGU — Painel Resolveu? / Fala.BR<br>Registros de ${fd(D.primeira)} a ${fd(D.ultima)}`;
+ document.querySelector('.ban .r').innerHTML=`Fonte: Fala.BR (CGU)<br>Registros de ${fd(D.primeira)} a ${fd(D.ultima)}`;
  go('1');}).catch(e=>{document.querySelector('.page').insertAdjacentHTML('beforeend','<div class="foot-note">Falha ao carregar os dados: '+e.message+'</div>')});
 fetch('data/ouvidoria_diario.json?v='+Date.now()).then(r=>r.ok?r.json():Promise.reject()).then(x=>{
  if(!x||!x.total)return;const fd=d=>d.split('-').reverse().join('/');const bd=document.getElementById('ban-dia');

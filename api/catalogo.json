@@ -1,6 +1,6 @@
 {
  "titulo": "API de Dados Abertos da Procuradoria Geral do Estado do Amazonas",
- "gerado_em": "2026-11-18",
+ "gerado_em": "2026-11-25",
  "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
  "conjuntos": [
   {
@@ -60,7 +60,7 @@
    "titulo": "Manifestações de ouvidoria da PGE-AM",
    "descricao": "Manifestações recebidas pela PGE no Fala.BR, agregadas por ano, tipo, assunto e prazo de resposta. Sem dados pessoais.",
    "fonte": "CGU – Painel Resolveu? / Fala.BR",
-   "atualizado_em": "2026-09-29",
+   "atualizado_em": "2026-11-19",
    "periodicidade": "diária (quando a fonte publica)",
    "licenca": "https://creativecommons.org/licenses/by/4.0/deed.pt-br",
    "publicador": "Procuradoria Geral do Estado do Amazonas – Coordenadoria de Transparência e Ouvidoria",
