@@ -140,7 +140,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
     </div>
     <div class="tbl" style="max-height:none"><table><thead><tr><th>Data</th><th>Instância</th><th>Órgão recorrido</th><th>NUP</th><th>Decisão</th><th>Íntegra</th></tr></thead><tbody id="tC"></tbody></table></div>
     <div class="pag"><span id="cnt"></span><button id="ant">‹ Anterior</button><button id="prox">Próxima ›</button></div>
-    <div class="foot-note" style="margin-top:6px">O "abrir" leva à <a href="https://buscaprecedentes.cgu.gov.br/" target="_blank" rel="noopener">Busca de Precedentes da CGU</a> já pesquisando pelo NUP da decisão (a base aberta não traz o link direto do PDF, só o nome do arquivo). As decisões federais não vinculam o Estado do Amazonas: servem como fundamento persuasivo, por analogia.</div>
+    <div class="foot-note" style="margin-top:6px">O "abrir" leva à <a href="https://buscalai.cgu.gov.br/" target="_blank" rel="noopener">Busca LAI da CGU</a> já pesquisando pelo NUP da decisão (a base aberta não traz o link direto do PDF, só o nome do arquivo). As decisões federais não vinculam o Estado do Amazonas: servem como fundamento persuasivo, por analogia.</div>
   </div>
 
   <div class="foot-note">Dados abertos da Controladoria-Geral da União. Tratamento e agregação: Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
@@ -311,7 +311,7 @@ function initPrec(){
   const rC=()=>{const q=norm($('q').value),i=$('fI').value,t=$('fT').value,a=$('fA').value;
    L=CG.filter(r=>(!i||r[4]===i)&&(!t||r[3]===t)&&(!a||r[2].startsWith(a))&&(!q||norm(r[0]+' '+r[1]).includes(q)));pg=Math.min(pg,Math.max(0,Math.ceil(L.length/NN)-1));drw()};
   const drw=()=>{const S=L.slice(pg*NN,pg*NN+NN);
-   $('tC').innerHTML=S.length?S.map(r=>`<tr><td>${fdP(r[2])}</td><td><span class="tag ${isM(r)?'cmri':''}">${escP(r[4])}</span></td><td>${escP(r[1])}</td><td>${escP(r[0])}</td><td class="${cls(r[3])}">${escP(r[3])}</td><td>${r[0]?`<a href="https://buscaprecedentes.cgu.gov.br/?TermoPesquisa=${encodeURIComponent(r[0])}" target="_blank" rel="noopener">abrir</a>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" style="color:#64748b">${CG.length?'Nenhuma decisão com esses filtros.':'A base da CGU será carregada na próxima execução do robô.'}</td></tr>`;
+   $('tC').innerHTML=S.length?S.map(r=>`<tr><td>${fdP(r[2])}</td><td><span class="tag ${isM(r)?'cmri':''}">${escP(r[4])}</span></td><td>${escP(r[1])}</td><td>${escP(r[0])}</td><td class="${cls(r[3])}">${escP(r[3])}</td><td>${r[0]?`<a href="https://buscalai.cgu.gov.br/?termo=${encodeURIComponent(r[0])}&colunaOrdenacao=maisRelevantes" target="_blank" rel="noopener">abrir</a>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" style="color:#64748b">${CG.length?'Nenhuma decisão com esses filtros.':'A base da CGU será carregada na próxima execução do robô.'}</td></tr>`;
    $('cnt').textContent=L.length?`${nf(pg*NN+1)}–${nf(Math.min(L.length,pg*NN+NN))} de ${nf(L.length)}`:'';
    $('ant').disabled=pg===0;$('prox').disabled=(pg+1)*NN>=L.length};
   $('q').oninput=()=>{pg=0;rC()};['fI','fT','fA'].forEach(x=>$(x).onchange=()=>{pg=0;rC()});
