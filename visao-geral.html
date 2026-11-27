@@ -177,10 +177,8 @@ const MODS=[
  ['index','Início','M3 10.5 12 3l9 7.5M5 9v11h14V9'],
  ['processual','Judicialização do Estado','M4 5h16M4 10h16M4 15h10'],
  ['ouvidoria','Ouvidoria e Acesso à Informação','M4 5h16v10H9l-4 4V5z'],
- ['transparencia','Gestão e Transparência','M4 20V8m5 12V4m5 16v-7m5 7V9'],
+ ['gestao','Gestão Administrativa e Planejamento','M4 20V9m5 11V4m5 16v-7m5 7V11'],
  ['contratacoes','Contratações','M8 4h8l2 4v12H6V8l2-4zM9 12h6M9 16h6'],
- ['despesas','Despesas','M3 3v18h18M7 14l3-4 3 3 5-7'],
- ['precos','Pesquisa de preços','M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4'],
  ['api','Dados abertos (API)','M8 9l-3 3 3 3m8-6 3 3-3 3M13 6l-2 12'],
 ];
 document.getElementById('nav').innerHTML=MODS.map(([n,t,d])=>`<a href="${n}.html"${n==='index'?'':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>${t}</a>`).join('');
@@ -224,7 +222,7 @@ function paint(){box.innerHTML=
  modCard('M4 5h16M4 10h16M4 15h10','#eaf1ff','#2563eb',cards.proc,'Ações judiciais (acervo)','processual.html')+
  modCard('M8 4h8l2 4v12H6V8l2-4z','#e9f6f3','#0f766e',cards.cont,'Contratos vigentes','contratacoes.html')+
  modCard('M4 5h16v10H9l-4 4V5z','#fdf1e8','#e66c37',cards.ouv,'Manifestações de ouvidoria','ouvidoria.html')+
- modCard('M7 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM3 20a6 6 0 0 1 12 0','#f6f1e4','#b8860b',cards.bol,'Estagiários e residentes','transparencia.html');}
+ modCard('M7 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM3 20a6 6 0 0 1 12 0','#f6f1e4','#b8860b',cards.bol,'Estagiários e residentes','gestao.html');}
 paint();
 const HOJE=new Date().toISOString().slice(0,10);
 fetch('data/processual.json?v='+Date.now()).then(r=>r.json()).then(p=>{try{cards.proc=pt(Object.values(p.classes).reduce((s,c)=>s+(c.total||0),0));paint()}catch(e){}}).catch(()=>{});

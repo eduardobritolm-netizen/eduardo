@@ -1,6 +1,9 @@
 /* Barra lateral do painel: adiciona o rótulo "Módulos" e um ícone a cada item,
    a partir do data-n do link. Não altera os links (texto/href ficam no HTML). */
 (function(){
+  // Modo embutido (dentro de um iframe, ex.: Gestão Administrativa e Planejamento):
+  // esconde a barra lateral e o deslocamento, deixando só o conteúdo.
+  try{ if(window.self!==window.top){ document.documentElement.classList.add('embed'); return; } }catch(e){ document.documentElement.classList.add('embed'); return; }
   var ICONS={
     index:'M3 10.5 12 3l9 7.5M5 9v11h5v-6h4v6h5V9',
     'visao-geral':'M3 13h8V3H3zM13 21h8V11h-8zM13 3v6h8V3zM3 21h8v-6H3z',
