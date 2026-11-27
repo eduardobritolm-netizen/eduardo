@@ -62,7 +62,7 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
 <link rel="stylesheet" href="assets/redesign.css"></head>
 <body>
 <a class="skip" href="#conteudo">Ir para o conteúdo</a><div class="a11y" role="toolbar" aria-label="Ferramentas de acessibilidade"><span>Acessibilidade</span><button type="button" data-a="menos" aria-label="Diminuir o tamanho da fonte">A-</button><button type="button" data-a="normal" aria-label="Tamanho normal da fonte">A</button><button type="button" data-a="mais" aria-label="Aumentar o tamanho da fonte">A+</button><button type="button" data-a="contraste" aria-pressed="false">Alto contraste</button></div><header class="topnav"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="PGE-AM" class="logo"><span>Painel de Dados</span></a><nav>
-<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precos.html" data-n="precos">Pesquisa de preços</a><a href="precedentes.html" data-n="precedentes">Precedentes LAI</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Inteligência Processual</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria e Acesso à Informação</a><a href="transparencia.html" data-n="transparencia">Gestão e Transparência</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="despesas.html" data-n="despesas">Despesas</a><a href="precos.html" data-n="precos">Pesquisa de preços</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav></header>
 <style>.skip{position:absolute;left:-999px;top:0;background:#14273F;color:#fff;padding:8px 14px;z-index:100}.skip:focus{left:8px}.a11y{background:#0E1B2E;display:flex;gap:6px;align-items:center;justify-content:flex-end;padding:3px 14px;font-family:'Segoe UI',system-ui,sans-serif}.a11y span{color:#9FB2C8;font-size:11px;margin-right:auto}.a11y button{background:#20344F;color:#fff;border:1px solid #33496A;border-radius:3px;font:inherit;font-size:12px;padding:3px 9px;cursor:pointer;line-height:1.3}.a11y button:hover{background:#2C456A}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #F2C811;outline-offset:2px}body.contraste{background:#000}body.contraste .canvas,body.contraste .page{background:#000}body.contraste .v,body.contraste .tile,body.contraste .ban{background:#000!important;border:1px solid #fff!important;color:#fff!important}body.contraste .t,body.contraste .u,body.contraste .s,body.contraste .n,body.contraste h1,body.contraste h3,body.contraste p,body.contraste td,body.contraste th,body.contraste .foot-note,body.contraste .desc,body.contraste label,body.contraste .meta{color:#fff!important}body.contraste table,body.contraste th,body.contraste td{border-color:#fff!important}body.contraste th{background:#000!important}body.contraste a{color:#FFE24B!important}body.contraste .proto{background:#000!important;border-color:#FFE24B!important;color:#fff!important}body.contraste .sel,body.contraste .inp,body.contraste select,body.contraste input{background:#000!important;color:#fff!important;border-color:#fff!important}body.contraste .badge{background:#000!important;color:#fff!important;border:1px solid #fff}.topnav{background:#14273F;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;flex-wrap:wrap;font-family:"Segoe UI",system-ui,sans-serif}.topnav .brand{color:#fff;font-weight:600;text-decoration:none;padding:10px 0;font-size:14px}.topnav nav{display:flex;flex-wrap:wrap}.topnav nav a{color:#C8D3E0;text-decoration:none;font-size:13px;padding:11px 12px;border-bottom:3px solid transparent}.topnav nav a:hover{color:#fff}.topnav nav a.on{color:#fff;border-bottom-color:#F2C811}.topnav .brand{display:flex;align-items:center;gap:10px}.topnav .brand .logo{height:30px;background:#fff;padding:5px 8px;border-radius:5px;display:block}.topnav .brand span{color:#fff;font-weight:600;font-size:14px}</style>
 <script>document.addEventListener('DOMContentLoaded',()=>{const p=(location.pathname.split('/').pop()||'index.html').replace('.html','')||'index';document.querySelectorAll('.topnav nav a').forEach(a=>a.classList.toggle('on',a.dataset.n===p))})</script>
 <div id="conteudo" role="main" class="canvas">
@@ -116,9 +116,31 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
       <tr><td>Composição</td><td>O volume é dominado por <b>Comunicações</b> (916), em boa parte denúncias de crime encaminhadas à PGE pela ouvidoria. Elas entram na contagem total, mas a maioria é apenas arquivada, sem resposta formal — por isso não pesam nas métricas de prazo e tempo de resposta.</td></tr>
       <tr><td>Prazo e tempo</td><td>Calculados só sobre as manifestações que tiveram resposta registrada (data de conclusão). "No prazo" = resposta até a data-limite do sistema; o tempo é a diferença entre abertura e conclusão.</td></tr>
       <tr><td>Resolutividade</td><td>Campo preenchido só em parte das manifestações (as concluídas); o indicador considera apenas as que têm resolução informada.</td></tr>
-      <tr><td>Não incluído</td><td>Esta exportação é só da PGE, então não há comparação com outros órgãos do Estado; e não traz gênero, raça, satisfação nem formulário — por isso essas visões saíram do painel. Pedidos formais da LAI (e-SIC) ficam em base própria.</td></tr>
+      <tr><td>Não incluído</td><td>Esta exportação é só da PGE, então não há comparação com outros órgãos do Estado; e não traz gênero, raça, satisfação nem formulário — por isso essas visões saíram do painel. As decisões recursais da LAI (CGU/CMRI e da PGE) estão na aba <b>Precedentes LAI</b>.</td></tr>
       <tr><td>Dados pessoais</td><td>Somente campos agregados; nenhum manifestante é identificável.</td></tr>
     </tbody></table>
+  </div>
+
+  <!-- PÁGINA 4 — Precedentes LAI -->
+  <div class="v card k3" data-pg="4" hidden><div class="n" id="nP">—</div><div class="l">Decisões da PGE-AM · 1ª e 2ª inst.</div></div>
+  <div class="v card k3" data-pg="4" hidden><div class="n" id="nC">—</div><div class="l">Decisões CGU · 3ª instância</div></div>
+  <div class="v card k3" data-pg="4" hidden><div class="n" id="nM">—</div><div class="l">Decisões CMRI · 4ª instância</div></div>
+  <div class="v card acc k3" data-pg="4" hidden><div class="n" id="pD">—</div><div class="l">Desprovimento na CGU (%)</div></div>
+  <div class="v k12" data-pg="4" hidden><h3>Decisões da PGE-AM</h3>
+    <div class="bx"><label>Buscar<input class="q" id="qP" placeholder="tema, dispositivo, ementa…"></label><label>Resultado<select id="dP"><option value="">Todos</option></select></label></div>
+    <div class="tbl" style="max-height:none"><table><thead><tr><th>Número</th><th>Data</th><th>Instância</th><th>Tema</th><th>Fundamento</th><th>Resultado</th><th>Ementa</th></tr></thead><tbody id="tP"></tbody></table></div>
+    <div class="foot-note" style="margin-top:6px">Cadastro: arquivo <code>fontes/precedentes_pge.csv</code> no GitHub (uma linha por decisão, separador ponto e vírgula).</div>
+  </div>
+  <div class="v k12" data-pg="4" hidden><h3>Precedentes da CGU e da CMRI <span style="font-weight:400;color:#64748b;font-size:12px">— referência por analogia</span></h3>
+    <div class="bx">
+     <label>NUP ou órgão<input class="q" id="q" placeholder="ex.: Ministério da Fazenda, 00106…"></label>
+     <label>Instância<select id="fI"><option value="">Todas</option></select></label>
+     <label>Tipo de decisão<select id="fT"><option value="">Todos</option></select></label>
+     <label>Ano<select id="fA"><option value="">Todos</option></select></label>
+    </div>
+    <div class="tbl" style="max-height:none"><table><thead><tr><th>Data</th><th>Instância</th><th>Órgão recorrido</th><th>NUP</th><th>Decisão</th><th>Íntegra</th></tr></thead><tbody id="tC"></tbody></table></div>
+    <div class="pag"><span id="cnt"></span><button id="ant">‹ Anterior</button><button id="prox">Próxima ›</button></div>
+    <div class="foot-note" style="margin-top:6px">A base aberta da CGU traz os metadados e o link do parecer; a busca por palavra no texto fica na <a href="https://buscalai.cgu.gov.br/" target="_blank" rel="noopener">Busca LAI da CGU</a>. As decisões federais não vinculam o Estado do Amazonas: servem como fundamento persuasivo, por analogia.</div>
   </div>
 
   <div class="foot-note">Dados abertos da Controladoria-Geral da União. Tratamento e agregação: Coordenadoria de Transparência e Ouvidoria da PGE-AM.</div>
@@ -128,8 +150,23 @@ tfoot td{font-weight:600;border-top:1px solid #8A8886;background:#fff!important}
   <button role="tab" data-p="1" aria-selected="true">Visão geral</button>
   <button role="tab" data-p="2" aria-selected="false">Prazo e tempo de resposta</button>
   <button role="tab" data-p="3" aria-selected="false">Canal e resolução</button>
-  <span class="info" id="pginfo">Página 1 de 3</span>
+  <button role="tab" data-p="4" aria-selected="false">Precedentes LAI</button>
+  <span class="info" id="pginfo">Página 1 de 4</span>
 </nav>
+<style>
+.bx{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin-bottom:8px}
+.bx label{font-size:11px;color:#64748b;display:flex;flex-direction:column;gap:3px}
+.bx input,.bx select{font:inherit;font-size:12.5px;padding:7px 9px;border:1px solid #d6e0ea;border-radius:8px;background:#fff;min-width:150px}
+.bx input.q{min-width:280px}
+.tag{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:999px;background:#DEECF9;color:#12239E;white-space:nowrap}
+.tag.cmri{background:#F3E6F5;color:#6B007B}
+.ok{color:#107C10;font-weight:600}.no{color:#A4262C;font-weight:600}.pa{color:#E66C37;font-weight:600}
+.pag{display:flex;gap:6px;align-items:center;justify-content:flex-end;margin-top:8px;font-size:12px}
+.pag button{font:inherit;font-size:12px;padding:5px 12px;border:1px solid #d6e0ea;border-radius:8px;background:#fff;cursor:pointer}
+.pag button:disabled{opacity:.5;cursor:default}
+.ement{font-size:12px;color:#334155;max-width:520px}
+#tC td a,#tP td a{color:#118DFF}
+</style>
 <div class="tip" id="tip"></div>
 <script>
 const pt=n=>n.toLocaleString('pt-BR');
@@ -245,8 +282,42 @@ function p3(){
 let cur='1';
 function go(p){cur=p;document.querySelectorAll('[data-pg]').forEach(e=>e.hidden=e.dataset.pg!==p);
  document.querySelectorAll('.pages button').forEach(b=>b.setAttribute('aria-selected',b.dataset.p===p));
- document.getElementById('pginfo').textContent=`Página ${p} de 3`;draw()}
-function draw(){({1:p1,2:p2,3:p3})[cur]()}
+ document.getElementById('pginfo').textContent=`Página ${p} de 4`;if(p==='4'&&!precLoaded){precLoaded=true;initPrec()}draw()}
+function draw(){(({1:p1,2:p2,3:p3})[cur]||function(){})()}
+let precLoaded=false;
+function initPrec(){
+ const $=id=>document.getElementById(id);
+ const escP=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const fdP=d=>d&&d.length>=10?d.slice(0,10).split('-').reverse().join('/'):(d||'—');
+ const nf=n=>n.toLocaleString('pt-BR');
+ const PBASE='https://dadosabertos-download.cgu.gov.br/BuscaPrecedentes/';
+ const purl=s=>/^https?:/i.test(s)?s:PBASE+encodeURIComponent(s);
+ const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+ const cls=s=>{const t=norm(s);return /desprov|negad|nao conhec|improced/.test(t)?'no':/parcial/.test(t)?'pa':/provid|deferid|proced|perda/.test(t)?'ok':''};
+ fetch('data/precedentes.json?v='+Date.now()).then(r=>r.json()).then(D=>{
+  const CG=D.cgu,P=D.pge.filter(p=>!/^EXEMPLO/i.test(p.numero)||D.pge.length===1);
+  const isM=r=>/cmri|4/i.test(r[4]);
+  $('nP').textContent=nf(P.filter(p=>!/^EXEMPLO/i.test(p.numero)).length);
+  $('nC').textContent=nf(CG.filter(r=>!isM(r)).length);$('nM').textContent=nf(CG.filter(isM).length);
+  const cg=CG.filter(r=>!isM(r));$('pD').textContent=cg.length?(cg.filter(r=>cls(r[3])==='no').length/cg.length*100).toFixed(1).replace('.',',')+'%':'—';
+  [...new Set(P.map(p=>p.decisao).filter(Boolean))].sort().forEach(v=>$('dP').add(new Option(v,v)));
+  const rP=()=>{const q=norm($('qP').value),d=$('dP').value;
+   const L=P.filter(p=>(!d||p.decisao===d)&&(!q||norm(Object.values(p).join(' ')).includes(q)));
+   $('tP').innerHTML=L.length?L.map(p=>`<tr><td>${p.link?`<a href="${escP(purl(p.link))}" target="_blank" rel="noopener">${escP(p.numero)}</a>`:escP(p.numero)}</td><td>${fdP(p.data)}</td><td>${escP(p.instancia)}</td><td>${escP(p.tema)}</td><td>${escP(p.dispositivo)}</td><td class="${cls(p.decisao)}">${escP(p.decisao)}</td><td class="ement">${escP(p.ementa)}</td></tr>`).join(''):'<tr><td colspan="7" style="color:#64748b">Nenhuma decisão encontrada.</td></tr>'};
+  $('qP').oninput=rP;$('dP').onchange=rP;rP();
+  const opt=(id,vals)=>[...new Set(vals.filter(Boolean))].sort().forEach(v=>$(id).add(new Option(v,v)));
+  opt('fI',CG.map(r=>r[4]));opt('fT',CG.map(r=>r[3]));[...new Set(CG.map(r=>r[2].slice(0,4)).filter(Boolean))].sort().reverse().forEach(v=>$('fA').add(new Option(v,v)));
+  let pg=0,L=[];const NN=25;
+  const rC=()=>{const q=norm($('q').value),i=$('fI').value,t=$('fT').value,a=$('fA').value;
+   L=CG.filter(r=>(!i||r[4]===i)&&(!t||r[3]===t)&&(!a||r[2].startsWith(a))&&(!q||norm(r[0]+' '+r[1]).includes(q)));pg=Math.min(pg,Math.max(0,Math.ceil(L.length/NN)-1));drw()};
+  const drw=()=>{const S=L.slice(pg*NN,pg*NN+NN);
+   $('tC').innerHTML=S.length?S.map(r=>`<tr><td>${fdP(r[2])}</td><td><span class="tag ${isM(r)?'cmri':''}">${escP(r[4])}</span></td><td>${escP(r[1])}</td><td>${escP(r[0])}</td><td class="${cls(r[3])}">${escP(r[3])}</td><td>${r[5]?`<a href="${escP(purl(r[5]))}" target="_blank" rel="noopener">abrir</a>`:'—'}</td></tr>`).join(''):`<tr><td colspan="6" style="color:#64748b">${CG.length?'Nenhuma decisão com esses filtros.':'A base da CGU será carregada na próxima execução do robô.'}</td></tr>`;
+   $('cnt').textContent=L.length?`${nf(pg*NN+1)}–${nf(Math.min(L.length,pg*NN+NN))} de ${nf(L.length)}`:'';
+   $('ant').disabled=pg===0;$('prox').disabled=(pg+1)*NN>=L.length};
+  $('q').oninput=()=>{pg=0;rC()};['fI','fT','fA'].forEach(x=>$(x).onchange=()=>{pg=0;rC()});
+  $('ant').onclick=()=>{pg--;drw()};$('prox').onclick=()=>{pg++;drw()};rC();
+ }).catch(()=>{$('tC').innerHTML='<tr><td colspan="6" style="color:#64748b">Falha ao carregar os precedentes.</td></tr>'});
+}
 document.querySelectorAll('.pages button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 document.getElementById('s-ano').onchange=draw;
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(draw,150)});
