@@ -23,11 +23,11 @@ body.contraste #gwrap{background:#000!important;border-color:#fff!important}
 <div id="conteudo" role="main" class="canvas">
  <div class="ban"><div><h1>Gestão Administrativa e Planejamento</h1><div class="s">Procuradoria-Geral do Estado do Amazonas · pessoal e transparência, execução de despesas e planejamento de contratações</div></div></div>
  <div class="gtabs" role="tablist" aria-label="Seções do módulo">
-  <button role="tab" data-src="transparencia.html" aria-selected="true">Pessoal e transparência</button>
-  <button role="tab" data-src="despesas.html" aria-selected="false">Despesas e orçamento</button>
-  <button role="tab" data-src="precos.html" aria-selected="false">Preços e planejamento (PCA)</button>
+  <button role="tab" data-src="transparencia.html?v=2" aria-selected="true">Pessoal e transparência</button>
+  <button role="tab" data-src="despesas.html?v=2" aria-selected="false">Despesas e orçamento</button>
+  <button role="tab" data-src="precos.html?v=2" aria-selected="false">Preços e planejamento (PCA)</button>
  </div>
- <div id="gwrap"><iframe id="gframe" title="Conteúdo da seção" src="transparencia.html"></iframe></div>
+ <div id="gwrap"><iframe id="gframe" title="Conteúdo da seção" src="transparencia.html?v=2"></iframe></div>
  <div class="ginfo">Reúne os antigos módulos Gestão e Transparência, Despesas e Pesquisa de preços. Cada seção abre o painel completo correspondente.</div>
 </div>
 <script>
@@ -35,6 +35,7 @@ const frame=document.getElementById('gframe');
 function resize(){try{const d=frame.contentWindow.document;const h=Math.max(d.documentElement.scrollHeight,d.body.scrollHeight);if(h>120)frame.style.height=h+'px';}catch(e){}}
 let ro=null;
 frame.addEventListener('load',function(){
+ try{frame.contentDocument.documentElement.classList.add('embed');}catch(e){}
  resize();
  // reajusta enquanto a seção carrega dados e muda de altura
  let n=0,iv=setInterval(()=>{resize();if(++n>20)clearInterval(iv);},300);
