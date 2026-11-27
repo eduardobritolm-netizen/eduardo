@@ -8,22 +8,25 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{margin:0!important;background:var(--pge-bg)!important;color:var(--pge-ink)!important;font-family:var(--pge-font)!important;font-size:14px!important;line-height:1.55!important;letter-spacing:.005em}
+body{margin:0!important;background:var(--pge-bg)!important;color:var(--pge-ink)!important;font-family:var(--pge-font)!important;font-size:14px!important;line-height:1.55!important;letter-spacing:.005em;padding-left:248px!important}
 ::selection{background:#dbeafe;color:#10243b}
 .skip{z-index:1000!important;border-radius:8px!important}
-.a11y{position:relative;z-index:30;background:#0b1929!important;padding:7px clamp(14px,3vw,42px)!important;gap:8px!important}
-.a11y span{font-size:11px!important;letter-spacing:.08em;text-transform:uppercase;color:#b7c8da!important;font-weight:700}
-.a11y button{border-radius:7px!important;padding:5px 10px!important;border:1px solid #496078!important;background:#1b344e!important;transition:background .18s,border-color .18s}
-.a11y button:hover{background:#2b4d70!important;border-color:#91a9c2!important}
-.topnav{position:sticky;top:0;z-index:25;min-height:68px;background:rgba(16,36,59,.97)!important;backdrop-filter:blur(14px);box-shadow:0 5px 22px rgba(7,20,35,.16);padding:0 clamp(14px,3vw,42px)!important;gap:22px!important;flex-wrap:nowrap!important}
-.topnav .brand{flex:0 0 auto;padding:12px 0!important;gap:11px!important}
-.topnav .brand .logo{height:38px!important;max-width:48px;object-fit:contain;background:#fff;padding:5px!important;border-radius:9px!important}
-.topnav .brand span{font-size:14px!important;letter-spacing:.01em}
-.topnav nav{flex:1;display:flex;align-items:stretch;gap:2px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#496078 transparent}
-.topnav nav a{display:flex;align-items:center;min-height:68px;padding:0 11px!important;border-bottom:3px solid transparent!important;color:#c5d2df!important;font-size:12px!important;font-weight:600;white-space:nowrap;transition:color .18s,background .18s,border-color .18s}
+.topnav{position:fixed!important;top:0;left:0;width:248px;height:100vh;z-index:40;min-height:0!important;background:linear-gradient(180deg,#0e1b2e 0%,#12273f 62%,#133247 100%)!important;backdrop-filter:none;box-shadow:4px 0 22px rgba(7,20,35,.14);padding:0!important;gap:0!important;flex-direction:column!important;align-items:stretch!important;flex-wrap:nowrap!important;overflow-y:auto}
+.topnav .brand{flex:0 0 auto;padding:18px 18px 10px!important;gap:11px!important}
+.topnav .brand .logo{height:36px!important;max-width:46px;object-fit:contain;background:#fff;padding:5px!important;border-radius:9px!important}
+.topnav .brand span{font-size:14px!important;letter-spacing:.01em;color:#fff!important}
+.topnav .navsec{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6f88a4;padding:12px 20px 6px;font-weight:700}
+.topnav nav{flex:0 0 auto;display:flex!important;flex-direction:column!important;align-items:stretch;gap:2px;overflow:visible}
+.topnav nav a{display:flex;align-items:center;min-height:0!important;padding:10px 20px!important;border-left:3px solid transparent!important;border-bottom:0!important;color:#c5d2df!important;font-size:12.5px!important;font-weight:600;white-space:normal;line-height:1.3;transition:color .18s,background .18s,border-color .18s}
+.topnav nav a svg{width:17px;height:17px;flex:0 0 auto;margin-right:11px;opacity:.85}
 .topnav nav a:hover{color:#fff!important;background:rgba(255,255,255,.06)}
-.topnav nav a.on{color:#fff!important;border-bottom-color:var(--pge-gold)!important;background:rgba(255,255,255,.055)}
-.canvas{width:100%;flex:1;padding:28px clamp(12px,3vw,42px)!important;display:block!important}
+.topnav nav a.on{color:#fff!important;border-left-color:var(--pge-gold)!important;border-bottom-color:transparent!important;background:rgba(255,255,255,.07)}
+.topnav nav a.on svg{opacity:1;color:var(--pge-gold)}
+.a11y{order:9;margin-top:auto!important;position:static!important;z-index:1;background:transparent!important;border-top:1px solid rgba(255,255,255,.08);padding:14px 18px!important;gap:7px!important;display:flex!important;flex-wrap:wrap;align-items:center;justify-content:flex-start!important}
+.a11y span{font-size:10px!important;letter-spacing:.1em;text-transform:uppercase;color:#8fa6bf!important;font-weight:700;width:100%}
+.a11y button{border-radius:7px!important;padding:5px 10px!important;border:1px solid #33496a!important;background:#1b344e!important;transition:background .18s,border-color .18s}
+.a11y button:hover{background:#2b4d70!important;border-color:#91a9c2!important}
+.canvas{width:100%;flex:none;padding:26px clamp(14px,3vw,38px)!important;display:block!important}
 .page{width:100%!important;max-width:1440px!important;margin:0 auto!important;padding:0 0 24px!important;gap:16px!important;background:transparent!important;box-shadow:none!important;align-content:start}
 .ban{position:relative;isolation:isolate;overflow:hidden;min-height:132px;margin:0 0 5px!important;padding:26px 30px!important;border-radius:18px;background:linear-gradient(118deg,#10243b 0%,#183b5b 62%,#145b68 100%)!important;box-shadow:0 14px 30px rgba(16,36,59,.16)}
 .ban:after{content:"";position:absolute;z-index:-1;width:310px;height:310px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:8%;top:-205px;box-shadow:0 0 0 32px rgba(255,255,255,.035),0 0 0 68px rgba(255,255,255,.025)}
@@ -81,7 +84,18 @@ body.contraste .ban{background:#000!important;border:1px solid #fff!important}
 body.contraste .card .n,body.contraste .card .l,body.contraste .tile h3,body.contraste .tile p,body.contraste .tile .kp b,body.contraste .tile .kp span,body.contraste .v h3,body.contraste td,body.contraste th,body.contraste label,body.contraste .foot-note,body.contraste .upd{color:#fff!important}
 body.contraste th,body.contraste td,body.contraste tbody tr:nth-child(even) td{background:#000!important;border-color:#fff!important}
 body.contraste select,body.contraste input,body.contraste textarea{background:#000!important;color:#fff!important;border-color:#fff!important}
-@media(max-width:1050px){.topnav{align-items:flex-start!important;flex-direction:column!important;gap:0!important;padding-top:6px!important}.topnav .brand{padding:5px 0!important}.topnav nav{width:100%;min-height:45px}.topnav nav a{min-height:45px}.canvas{padding-top:18px!important}.ban{min-height:115px}}
+@media(max-width:900px){
+ body{padding-left:0!important}
+ .topnav{position:static!important;width:100%;height:auto;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;overflow:visible;box-shadow:0 4px 18px rgba(7,20,35,.16)}
+ .topnav .brand{padding:9px 14px!important}
+ .topnav .navsec{display:none}
+ .topnav nav{flex:1 1 100%;flex-direction:row!important;overflow-x:auto}
+ .topnav nav a{min-height:44px!important;border-left:0!important;border-bottom:3px solid transparent!important;padding:0 11px!important;white-space:nowrap}
+ .topnav nav a svg{display:none}
+ .topnav nav a.on{border-left:0!important;border-bottom-color:var(--pge-gold)!important}
+ .a11y{order:-1;width:100%;margin:0!important;border-top:0;border-bottom:1px solid rgba(255,255,255,.08);justify-content:flex-end!important}
+ .canvas{padding-top:18px!important}.ban{min-height:115px}
+}
 @media(max-width:700px){.canvas{padding:12px 9px!important}.page{gap:11px!important}.ban{padding:20px!important;border-radius:13px}.ban .r{text-align:left;max-width:none}.v{padding:14px!important;border-radius:12px!important}.card{min-height:104px!important;padding:14px!important}.sl{border-right:0!important;border-bottom:1px solid var(--pge-line)!important;padding:7px 4px!important}.slicers{gap:5px!important;padding:10px!important}.tile{min-height:150px;padding:16px!important}.pages{overflow-x:auto}.pages button{padding:10px 12px!important}.pages .info{display:none}.tbl{overflow-x:auto}table{min-width:560px}}
 @media(max-width:420px){.topnav nav a{font-size:11px!important;padding:0 9px!important}.ban h1{font-size:20px!important}.ban .s{font-size:11px!important}.a11y{justify-content:flex-start!important;flex-wrap:wrap}.a11y span{width:100%;margin:0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
