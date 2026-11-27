@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestão Administrativa e Planejamento — PGE-AM</title>
+<style>
+.skip{position:absolute;left:-999px;top:0;background:#14273F;color:#fff;padding:8px 14px;z-index:1001}
+.skip:focus{left:8px}
+.gtabs{display:flex;gap:6px;border-bottom:1px solid var(--pge-line);margin:16px 0 0;flex-wrap:wrap}
+.gtabs button{all:unset;cursor:pointer;padding:10px 18px;font-size:13.5px;font-weight:650;color:var(--pge-muted);border-bottom:3px solid transparent;border-radius:9px 9px 0 0}
+.gtabs button[aria-selected=true]{color:var(--pge-ink);background:#fff;border-bottom-color:var(--pge-gold)}
+.gtabs button:hover{color:var(--pge-ink)}
+.gtabs button:focus-visible{outline:3px solid var(--pge-gold);outline-offset:-3px}
+#gwrap{background:#fff;border:1px solid var(--pge-line);border-radius:0 14px 14px 14px;box-shadow:var(--pge-shadow);overflow:hidden;margin-bottom:10px}
+#gframe{width:100%;border:0;background:#fff;min-height:72vh;display:block}
+#gload{padding:30px;color:var(--pge-muted);font-size:13px}
+.ginfo{font-size:11px;color:var(--pge-muted);padding:8px 2px 0}
+body.contraste .gtabs button[aria-selected=true]{background:#000!important;color:#fff!important}
+body.contraste #gwrap{background:#000!important;border-color:#fff!important}
+</style>
+<link rel="stylesheet" href="assets/redesign.css"></head><body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+<header class="topnav"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="PGE-AM" class="logo"><span>Painel de Dados</span></a><nav>
+<a href="index.html" data-n="index">Início</a><a href="processual.html" data-n="processual">Judicialização do Estado</a><a href="ouvidoria.html" data-n="ouvidoria">Ouvidoria e Acesso à Informação</a><a href="gestao.html" data-n="gestao">Gestão Administrativa e Planejamento</a><a href="contratacoes.html" data-n="contratacoes">Contratações</a><a href="api.html" data-n="api">Dados abertos (API)</a></nav><div class="a11y" role="toolbar" aria-label="Ferramentas de acessibilidade"><span>Acessibilidade</span><button type="button" data-a="menos" aria-label="Diminuir o tamanho da fonte">A-</button><button type="button" data-a="normal" aria-label="Tamanho normal da fonte">A</button><button type="button" data-a="mais" aria-label="Aumentar o tamanho da fonte">A+</button><button type="button" data-a="contraste" aria-pressed="false">Alto contraste</button></div></header>
+<div id="conteudo" role="main" class="canvas">
+ <div class="ban"><div><h1>Gestão Administrativa e Planejamento</h1><div class="s">Procuradoria-Geral do Estado do Amazonas · pessoal e transparência, execução de despesas e planejamento de contratações</div></div></div>
+ <div class="gtabs" role="tablist" aria-label="Seções do módulo">
+  <button role="tab" data-src="transparencia.html" aria-selected="true">Pessoal e transparência</button>
+  <button role="tab" data-src="despesas.html" aria-selected="false">Despesas e orçamento</button>
+  <button role="tab" data-src="precos.html" aria-selected="false">Preços e planejamento (PCA)</button>
+ </div>
+ <div id="gwrap"><iframe id="gframe" title="Conteúdo da seção" src="transparencia.html"></iframe></div>
+ <div class="ginfo">Reúne os antigos módulos Gestão e Transparência, Despesas e Pesquisa de preços. Cada seção abre o painel completo correspondente.</div>
+</div>
+<script>
+const frame=document.getElementById('gframe');
+function resize(){try{const d=frame.contentWindow.document;const h=Math.max(d.documentElement.scrollHeight,d.body.scrollHeight);if(h>120)frame.style.height=h+'px';}catch(e){}}
+let ro=null;
+frame.addEventListener('load',function(){
+ resize();
+ // reajusta enquanto a seção carrega dados e muda de altura
+ let n=0,iv=setInterval(()=>{resize();if(++n>20)clearInterval(iv);},300);
+ try{if(ro)ro.disconnect();ro=new ResizeObserver(resize);ro.observe(frame.contentWindow.document.body);}catch(e){}
+});
+document.querySelectorAll('.gtabs button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.gtabs button').forEach(x=>x.setAttribute('aria-selected',x===b?'true':'false'));
+ frame.style.height='72vh';frame.src=b.dataset.src;
+}});
+addEventListener('resize',resize);
+</script>
+<script src="assets/nav.js"></script>
+<script>(function(){var d=document;function setZoom(z){z=Math.max(0.8,Math.min(1.6,z));d.body.style.zoom=z;try{localStorage.setItem('pge_zoom',z)}catch(e){}}var z=parseFloat((function(){try{return localStorage.getItem('pge_zoom')}catch(e){return null}})())||1;setZoom(z);var ct=(function(){try{return localStorage.getItem('pge_contraste')==='1'}catch(e){return false}})();var btnC=d.querySelector('[data-a=contraste]');function setCt(v){d.body.classList.toggle('contraste',v);btnC&&btnC.setAttribute('aria-pressed',v?'true':'false');try{localStorage.setItem('pge_contraste',v?'1':'0')}catch(e){}}setCt(ct);d.querySelectorAll('.a11y button').forEach(function(b){b.addEventListener('click',function(){var a=b.dataset.a;if(a==='mais')setZoom((parseFloat(d.body.style.zoom)||1)+0.1);else if(a==='menos')setZoom((parseFloat(d.body.style.zoom)||1)-0.1);else if(a==='normal')setZoom(1);else if(a==='contraste')setCt(!d.body.classList.contains('contraste'));})});})();</script>
+</body></html>

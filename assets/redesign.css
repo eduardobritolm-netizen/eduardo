@@ -27,6 +27,11 @@ body{margin:0!important;background:var(--pge-bg)!important;color:var(--pge-ink)!
 .a11y button{border-radius:7px!important;padding:5px 10px!important;border:1px solid #33496a!important;background:#1b344e!important;transition:background .18s,border-color .18s}
 .a11y button:hover{background:#2b4d70!important;border-color:#91a9c2!important}
 .canvas{width:100%;flex:none;padding:26px clamp(14px,3vw,38px)!important;display:block!important}
+html.embed body{padding-left:0!important}
+html.embed .topnav,html.embed .skip{display:none!important}
+html.embed .canvas{padding:10px clamp(8px,2vw,16px) 0!important}
+html.embed .ban{display:none!important}
+html.embed .pages{position:static!important}
 .page{width:100%!important;max-width:1440px!important;margin:0 auto!important;padding:0 0 24px!important;gap:16px!important;background:transparent!important;box-shadow:none!important;align-content:start}
 .ban{position:relative;isolation:isolate;overflow:hidden;min-height:132px;margin:0 0 5px!important;padding:26px 30px!important;border-radius:18px;background:linear-gradient(118deg,#10243b 0%,#183b5b 62%,#145b68 100%)!important;box-shadow:0 14px 30px rgba(16,36,59,.16)}
 .ban:after{content:"";position:absolute;z-index:-1;width:310px;height:310px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:8%;top:-205px;box-shadow:0 0 0 32px rgba(255,255,255,.035),0 0 0 68px rgba(255,255,255,.025)}
